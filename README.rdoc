@@ -1,10 +1,12 @@
 = Mods
 
-A Ruby gem to parse MODS (Metadata Object Description Schema) records.  More information about MODS can be found at http://www.loc.gov/standards/mods/registry.php.
+{<img src="https://secure.travis-ci.org/sul-dlss/mods.png?branch=master" alt="Build Status" />}[http://travis-ci.org/sul-dlss/mods]
+
+A Gem to parse MODS (Metadata Object Description Schema) records.  More information about MODS can be found at http://www.loc.gov/standards/mods/registry.php.
 
 Source code at https://github.com/sul-dlss/mods/
 
-Generated API docs at  http://rubydoc.info/gems/mods/
+Generated API docs at  http://rubydoc.info/github/sul-dlss/mods/
 
 == Installation
 
@@ -35,5 +37,6 @@ TODO: Write usage instructions here
 
 == Releases
 
+0.0.3 something
 0.0.2 Set up rake tasks, publishing rdoc, and continuous integration.
 0.0.1 Grab the name
