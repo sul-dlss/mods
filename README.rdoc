@@ -1,8 +1,12 @@
-# Mods
+= Mods
 
 A Ruby gem to parse MODS (Metadata Object Description Schema) records.  More information about MODS can be found at http://www.loc.gov/standards/mods/registry.php.
 
-## Installation
+Source code at https://github.com/sul-dlss/mods/
+
+Generated API docs at  http://rubydoc.info/gems/mods/
+
+== Installation
 
 Add this line to your application's Gemfile:
 
@@ -16,11 +20,11 @@ Or install it yourself as:
 
     $ gem install mods
 
-## Usage
+== Usage
 
 TODO: Write usage instructions here
 
-## Contributing
+== Contributing
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
@@ -29,6 +33,7 @@ TODO: Write usage instructions here
 5. Push to the branch (`git push origin my-new-feature`)
 6. Create new Pull Request
 
-## Releases
+== Releases
 
+0.0.2 Set up rake tasks, publishing rdoc, and continuous integration.
 0.0.1 Grab the name

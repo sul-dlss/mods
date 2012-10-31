@@ -1,0 +1,3 @@
+--title 'Ruby Mods Gem Documentation'
+lib/**/*.rb -
+README.rdoc LICENSE 

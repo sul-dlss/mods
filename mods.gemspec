@@ -14,4 +14,20 @@ Gem::Specification.new do |gem|
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
+  
+  # Runtime dependencies
+  gem.add_dependency 'nokogiri'
+
+  # Bundler will install these gems too if you've checked out solrmarc-wrapper source from git and run 'bundle install'
+  # It will not add these as dependencies if you require solrmarc-wrapper for other projects
+  gem.add_development_dependency "rake"
+  # docs
+  gem.add_development_dependency "rdoc"
+  gem.add_development_dependency "yard"
+  # tests
+	gem.add_development_dependency 'rspec'
+	gem.add_development_dependency 'simplecov'
+	gem.add_development_dependency 'simplecov-rcov'
+	# gem.add_development_dependency 'ruby-debug19'
+  
 end
