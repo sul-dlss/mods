@@ -13,14 +13,15 @@ Gem::Specification.new do |gem|
   gem.extra_rdoc_files = ["LICENSE", "README.rdoc"]
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
-  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
+  gem.test_files    = gem.files.grep(%r{^spec/})
   gem.require_paths = ["lib"]
   
   gem.add_dependency 'nokogiri'
 
   # Runtime dependencies
-  # gem.add_runtime_dependency 'glah'
+  # gem.add_runtime_dependency 'nokogiri'
 
+  # Development dependencies
   # Bundler will install these gems too if you've checked out solrmarc-wrapper source from git and run 'bundle install'
   # It will not add these as dependencies if you require solrmarc-wrapper for other projects
   gem.add_development_dependency "rake"
