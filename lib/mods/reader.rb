@@ -1,11 +1,15 @@
 module Mods
   class Reader
+    
+    DEFAULT_NS_AWARE = false
 
+    # true if the XML parsing should be strict about using namespaces. 
     attr_accessor :namespace_aware
     attr_reader :mods_ng_xml
     
-    def initialize
-      @namespace_aware = false
+    # @param ns_aware true if the XML parsing should be strict about using namespaces.  Default is false
+    def initialize(ns_aware = DEFAULT_NS_AWARE)
+      @namespace_aware = ns_aware
     end
     
     # @param str - a string containing mods xml
@@ -16,7 +20,7 @@ module Mods
       @mods_ng_xml
     end
   
-    # @param url - url that has mods xml as its content
+    # @param url (String) - url that has mods xml as its content
     # @return a Nokogiri::XML::Document object
     def from_url(url, encoding = nil, options = Nokogiri::XML::ParseOptions::DEFAULT_XML)
       require 'open-uri'

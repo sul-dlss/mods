@@ -8,6 +8,19 @@ module Mods
 
   DOC_URL = "http://www.loc.gov/standards/mods/"
 
+  TOP_LEVEL_ELEMENTS_SIMPLE = [
+    'abstract',
+    'accessCondition',
+    'classification',
+    'extension',
+    'genre',
+    'identifier',
+    'note',
+    'tableOfContents',
+    'targetAudience',
+    'typeOfResource',
+    ]
+
   TOP_LEVEL_ELEMENTS = [
     'abstract', 
     'accessCondition', 
@@ -28,7 +41,7 @@ module Mods
     'tableOfContents',
     'targetAudience',
     'titleInfo',
-    'typeOfResource']
+    'typeOfResource' ]
 
   # enumerated attribute values
   TITLE_INFO_TYPE_ATTR_VALUES = ['abbreviated', 'translated', 'alternative', 'uniform']
