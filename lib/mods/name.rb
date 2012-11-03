@@ -8,15 +8,23 @@ module Mods
     
     NS_HASH = {'m' => MODS_NS_V3}
     SUBELEMENTS = ['namePart', 'displayForm', 'affiliation', 'role', 'description']
-    
-    
+        
     # attributes on name node
-    attr_accessor :type, :authority, :authorityURI, :valueURI, :displayLabel, :usage, :altRepGroup, :nameTitleGroup
-    
+    ATTRIBUTES = ['type', 'authority', 'authorityURI', 'valueURI', 'displayLabel', 'usage', 'altRepGroup', 'nameTitleGroup']
 
-    # NAOMI_MUST_COMMENT_THIS_METHOD
+    # valid values for type attribute on name node <name type="val"/>
+    NAME_TYPES = ['personal', 'corporate', 'conference', 'family']
+    # valid values for type attribute on namePart node <name><namePart type="val"/></name>
+    NAME_PART_TYPES = ['date', 'family', 'given', 'termsOfAddress']
+
+    # @param (Nokogiri::XML::Node) the mods:name node, as a Nokogiri::XML::Node object
     def initialize(name_node)
       @ng_node = name_node
+    end
+    
+    # calls Nokogiri::Node.text on the mods:name node
+    def text
+      @ng_node.text.to_s
     end
     
     #  access child elements
@@ -25,6 +33,9 @@ module Mods
       if SUBELEMENTS.include?(method_name_as_str)
 # FIXME: this needs to cope with namespace aware, too
         @ng_node.xpath("#{method_name_as_str}").map { |node| node.text  }
+# FIXME: need test
+      elsif ATTRIBUTES.include?(method_name_as_str)
+        @ng_node.xpath("@#{method_name_as_str}").map { |attr| node.text  }
       else 
         super.method_missing(method_name, *args)
       end

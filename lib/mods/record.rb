@@ -30,11 +30,10 @@ module Mods
       #   put value in array return the value
 # FIXME: this needs to cope with namespace aware, too
       names = @mods_ng_xml.xpath("/mods/name").map { |node| 
+        Mods::Name.new(node)
         n = Mods::Name.new(node)
-        if n.ng_node.children.size == 0
-          n.text.to_s
-        else
-          n
+        if n.ng_node.element_children.size == 0
+          n = n.text
         end
       }
       names

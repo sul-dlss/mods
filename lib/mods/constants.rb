@@ -39,8 +39,6 @@ module Mods
 
   # enumerated attribute values
   TITLE_INFO_TYPES = ['abbreviated', 'translated', 'alternative', 'uniform']
-  NAME_TYPES = ['personal', 'corporate', 'conference', 'family']
-  NAME_PART_TYPES = ['date', 'family', 'given', 'termsOfAddress']
   RELATED_ITEM_TYPES = [
     'preceding', 'succeeding', 'original', 'host', 'constituent', 'series', 
     'otherVersion', 'otherFormat', 'isReferencedBy', 'references', 'reviewOf'
