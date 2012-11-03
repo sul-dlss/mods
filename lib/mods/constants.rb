@@ -5,9 +5,10 @@ module Mods
   MODS_NS_V3 = "http://www.loc.gov/mods/v3"
   MODS_NS = MODS_NS_V3
   MODS_XSD = "http://www.loc.gov/standards/mods/mods.xsd"
-
+  
   DOC_URL = "http://www.loc.gov/standards/mods/"
 
+  # top level elements that cannot have subelement children
   TOP_LEVEL_ELEMENTS_SIMPLE = [
     'abstract',
     'accessCondition',
@@ -21,32 +22,26 @@ module Mods
     'typeOfResource',
     ]
 
-  TOP_LEVEL_ELEMENTS = [
-    'abstract', 
-    'accessCondition', 
-    'classification',
-    'extension', 
-    'genre',
-    'identifier',
+  # top level elements that can have subelement children
+  TOP_LEVEL_ELEMENTS_COMPLEX = [
     'language',
     'location',
     'name',
-    'note', 
     'originInfo',
     'part',
     'physicalDescription',
     'recordInfo',
     'relatedItem',
     'subject',
-    'tableOfContents',
-    'targetAudience',
-    'titleInfo',
-    'typeOfResource' ]
+    'titleInfo' ]
+
+  TOP_LEVEL_ELEMENTS = Array.new(TOP_LEVEL_ELEMENTS_SIMPLE).concat(TOP_LEVEL_ELEMENTS_COMPLEX)
 
   # enumerated attribute values
-  TITLE_INFO_TYPE_ATTR_VALUES = ['abbreviated', 'translated', 'alternative', 'uniform']
-  NAME_TYPE_ATTR_VALUES = ['personal', 'corporate', 'conference', 'family']
-  RELATED_ITEM_TYPE_ATTR_VALUES = [
+  TITLE_INFO_TYPES = ['abbreviated', 'translated', 'alternative', 'uniform']
+  NAME_TYPES = ['personal', 'corporate', 'conference', 'family']
+  NAME_PART_TYPES = ['date', 'family', 'given', 'termsOfAddress']
+  RELATED_ITEM_TYPES = [
     'preceding', 'succeeding', 'original', 'host', 'constituent', 'series', 
     'otherVersion', 'otherFormat', 'isReferencedBy', 'references', 'reviewOf'
     ]
