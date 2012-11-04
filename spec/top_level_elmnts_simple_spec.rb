@@ -28,7 +28,7 @@ describe "Mods Top Level Elements that do not have Sub Elements" do
   end
   
   it "should deal with camelcase vs. ruby underscore convention" do
-    pending "to be implemented"
+    pending "need to implement ruby style version of (element/attribute) method names"
   end
   
 end

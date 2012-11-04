@@ -46,6 +46,6 @@ describe "Mods::Reader" do
   end
   
   it "should do something useful when it gets unparseable XML" do
-    pending "to be implemented"
+    pending "need to implement error handling for bad xml"
   end
 end
