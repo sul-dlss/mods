@@ -13,8 +13,8 @@ describe "Mods Name Elements" do
       @mods.name.should == ["Mr. Foo Bar"]
     end
     it "should return an array of values when there are multiple name elements" do
-      str =  '<mods><name><displayForm>Mr. Foo Bar</displayForm></name><name><displayForm>Mrs. I. Bert</displayForm></name></mods>'
-      @mods.from_str(str)
+      s = '<mods><name><displayForm>Mr. Foo Bar</displayForm></name><name><displayForm>Mrs. I. Bert</displayForm></name></mods>'
+      @mods.from_str(s)
       @mods.name.should == ["Mr. Foo Bar", "Mrs. I. Bert"]
     end
     it "should allow individual subelements to be accessed" do
@@ -27,9 +27,9 @@ describe "Mods Name Elements" do
     end
     context "attributes" do
       it "should recognize attributes on name node" do
-        Mods::NAME::ATTRIBUTES.each { |attrb|  
+        Mods::Name::ATTRIBUTES.each { |attrb|  
           @mods.from_str("<mods><name #{attrb}='hello'>q</name></mods>")
-          @mods.name.type.should == 'hello'
+          @mods.name.send(attrb.to_sym).should == 'hello'
         }
       end
       it "should do something with unexpected attributes" do
@@ -62,7 +62,7 @@ describe "Mods Name Elements" do
   context "name subelements" do
     it "should get the text contents of any subelement" do
       Mods::Name::SUBELEMENTS.each { |elname|
-        @mods.name.from_str("<mods><name><#{elname}>hi</#{elname}></name></mods>")
+        @mods.from_str("<mods><name><#{elname}>hi</#{elname}></name></mods>")
         @mods.name.send(elname.to_sym).should == ["hi"]
       }
     end
