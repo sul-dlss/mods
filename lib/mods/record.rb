@@ -5,6 +5,8 @@ module Mods
     attr_reader :mods_ng_xml
 
     NS_HASH = {'m' => MODS_NS_V3}
+    
+    ATTRIBUTES = ['id', 'version']
 
     def initialize
     end
@@ -38,7 +40,9 @@ module Mods
     # method for accessing simple top level elements
     def method_missing method_name, *args
       method_name_as_str = method_name.to_s
-      if Mods::TOP_LEVEL_ELEMENTS.include?(method_name_as_str)
+      if ATTRIBUTES.include?(method_name_as_str)
+        @mods_ng_xml.xpath("/mods/@#{method_name_as_str}").text.to_s
+      elsif Mods::TOP_LEVEL_ELEMENTS.include?(method_name_as_str)
 # FIXME: this needs to cope with namespace aware, too
         @mods_ng_xml.xpath("/mods/#{method_name_as_str}").map { |node| node.text  }
       else 
