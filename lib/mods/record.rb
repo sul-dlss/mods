@@ -30,11 +30,11 @@ module Mods
       #   put value in array return the value
 # FIXME: this needs to cope with namespace aware, too
       names = @mods_ng_xml.xpath("/mods/name").map { |node| 
-        Mods::Name.new(node)
         n = Mods::Name.new(node)
         if n.ng_node.element_children.size == 0
           n = n.text
         end
+        n
       }
       names
     end
@@ -58,7 +58,8 @@ class Array
   def method_missing method_name, *args
     if !self.empty? && self.first.class == Mods::Name
       self.each_with_index { |name, i| 
-        self[i] = name.send(method_name, *args).join(' ') 
+        r = name.send(method_name, *args)
+        self[i] = r.is_a?(Array) ? r.join(' ') : r
       }
     else
       super.method_missing(method_name, *args)

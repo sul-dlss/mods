@@ -35,6 +35,9 @@ describe "Mods Name Elements" do
       it "should do something with unexpected attributes" do
         pending "to be implemented"
       end
+      it "should cope with attributes on an element that has no subelements" do
+        pending "to be implemented"
+      end
     end
   end
   

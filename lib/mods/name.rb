@@ -32,15 +32,14 @@ module Mods
       method_name_as_str = method_name.to_s
       if SUBELEMENTS.include?(method_name_as_str)
 # FIXME: this needs to cope with namespace aware, too
-        @ng_node.xpath("#{method_name_as_str}").map { |node| node.text  }
-# FIXME: need test
-      elsif ATTRIBUTES.include?(method_name_as_str)
-        @ng_node.xpath("@#{method_name_as_str}").map { |attr| node.text  }
+        @ng_node.xpath("#{method_name_as_str}").map { |node| node.text.to_s  }
+      elsif ATTRIBUTES.include?(method_name_as_str) 
+        # attributes (which are unrepeatable) on name node 
+        @ng_node.at_xpath("@#{method_name_as_str}").text.to_s
       else 
         super.method_missing(method_name, *args)
       end
-    end
-    
+    end    
         
   end
   
