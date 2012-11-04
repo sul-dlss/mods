@@ -31,12 +31,8 @@ module Mods
 # FIXME: this needs to cope with namespace aware, too
       names = @mods_ng_xml.xpath("/mods/name").map { |node| 
         n = Mods::Name.new(node)
-        if n.ng_node.element_children.size == 0
-          n = n.text
-        end
-        n
+        n.ng_node.element_children.size == 0 ? n.text.to_s : n
       }
-      names
     end
 
     # method for accessing simple top level elements
