@@ -3,12 +3,20 @@ module Mods
   class Record
 
     attr_reader :mods_ng_xml
+    # string to use when combining a title and subtitle, e.g. 
+    #  for title "MODS" and subtitle "Metadata Odious Delimited Stuff" and delimiter " : "
+    #  we get "MODS : Metadata Odious Delimited Stuff"
+    attr_accessor :title_delimiter
 
     NS_HASH = {'m' => MODS_NS_V3}
     
     ATTRIBUTES = ['id', 'version']
 
-    def initialize
+    # @param (String) what to use when combining a title and subtitle, e.g. 
+    #  for title "MODS" and subtitle "Metadata Odious Delimited Stuff" and delimiter " : "
+    #  we get "MODS : Metadata Odious Delimited Stuff"
+    def initialize(title_delimiter = Mods::TitleInfo::DEFAULT_TITLE_DELIM)
+      @title_delimiter = title_delimiter
     end
 
     # convenience method to call Mods::Reader.new.from_str and to nom
@@ -35,10 +43,16 @@ module Mods
       end
     end
 
+    # return an array of Strings, each containing the text contents of <mods><titleInfo><title>  elements
     def titles
       @mods_ng_xml.title_info.title.map { |n| n.text }
     end
-
+    
+    # return an array of Strings, each containing the text contents of <mods><titleInfo @type="alternative"><title>  elements
+    def alternative_titles
+      @mods_ng_xml.alternative_title.map { |n| n.text }
+    end
+    
     # NAOMI_MUST_COMMENT_THIS_METHOD
     def name(*args, &proc)
       # we create a name object for each name, and then 

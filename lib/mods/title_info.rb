@@ -12,6 +12,8 @@ module Mods
     # valid values for type attribute on titleInfo node <titleInfo type="val">
     TYPES = ['abbreviated', 'translated', 'alternative', 'uniform']
     
+    DEFAULT_TITLE_DELIM = ' '
+    
     # @param (Nokogiri::XML::Node) mods:titleInfo node
     def initialize(title_info_node)
       @ng_node = title_info_node

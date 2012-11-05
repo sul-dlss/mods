@@ -29,7 +29,7 @@ describe "Mods Title" do
     
     it "should ignore alternative title, if it exists" do
       @mods_rec.from_str('<mods><titleInfo type="alternative"><title>ta da!</title></titleInfo></mods>')
-      @mods_rec.title_info.title.text.should == []
+      @mods_rec.title.text.should == []
     end
 
     it "should get any non-alternative title" do
@@ -82,21 +82,30 @@ describe "Mods Title" do
       @mods_rec.sort_title.text.should == ["Jerk A Tale of Tourettes"]
     end
     it "should have a configurable delimiter between title and subtitle" do
-      pending "sort_title needs configurable delimiter between title and subtitle"
+      m = Mods::Record.new(' : ')
+      m.from_str('<mods><titleInfo><title>Jerk</title><subTitle>A Tale of Tourettes</subTitle><nonSort>The</nonSort></titleInfo></mods>')
+      m.sort_title.text.should == ["Jerk : A Tale of Tourettes"]
     end
   end
   
   context "alternative_title" do
     it "should get an alternative title, if it exists" do
       @mods_rec.from_str('<mods><titleInfo type="alternative"><title>ta da!</title></titleInfo></mods>')
-      @mods_rec.alternative_title.text.should == ["ta da!"]
+      @mods_rec.alternative_title.text.should == "ta da!"
+    end
+
+    it "should have convenience methods for getting an Array of alternative titles when there are multiple elements" do
+      @mods_rec.from_str("<mods><titleInfo type='alternative'><title>1</title><title>2</title></titleInfo></mods>")
+      @mods_rec.alternative_titles.should == ['1', '2']
+      @mods_rec.from_str("<mods><titleInfo type='alternative'><title>1</title></titleInfo><titleInfo type='alternative'><title>2</title></titleInfo></mods>")
+      @mods_rec.alternative_titles.should == ['1', '2']
     end
 
     it "should not get an alternative title, if it doesn't exist" do
       @mods_rec.from_str('<mods><titleInfo><title>ta da!</title></titleInfo></mods>')
-      @mods_rec.alternative_title.text.should == []
+      @mods_rec.alternative_title.should be_empty
       @mods_rec.from_str('<mods><titleInfo type="uniform"><title>ta da!</title></titleInfo></mods>')
-      @mods_rec.alternative_title.text.should == []
+      @mods_rec.alternative_title.should be_empty
     end
   end
       

@@ -10,12 +10,20 @@ module Mods
         # note - titleInfo can be a top level element or a sub-element of subject and relatedItem
         t.title_info :path => '/mods/titleInfo' do |n|
           n.title :path => 'title'
+# FIXME: may want to deal with camelcase vs. underscore in method_missing          
           n.subTitle :path => 'subTitle'
+#          n.sub_title :path => 'subTitle'
           n.nonSort :path => 'nonSort'
+#          n.non_sort :path => 'nonSort'
           n.partNumber :path => 'partNumber'
+#          n.part_number :path => 'partNumber'
           n.partName :path => 'partName'
+#          n.part_name :path => 'partName'
           n.type :path => '@type'
+          n.sort_title :path => '.', :accessor => lambda { |node| node.title.text + (node.subTitle? ? "#{@title_delimiter}#{node.sub_title.text}" : "" ) }
         end
+        t.alternative_title :path => '/mods/titleInfo[@type="alternative"]/title'
+        t.title :path => '/mods/titleInfo[not(@type="alternative")]/title'
 
         t.author :path => '/mods/name' do |n|
           n.valueURI :path => '@valueURI'
@@ -30,7 +38,7 @@ module Mods
           n.displayForm :path => 'displayForm'
           n.family_name :path => 'namePart[@type="family"]'
           n.given_name :path => 'namePart[@type="given"]'
-          n.display_strings :path => '.', :access => lambda { |node| node.displayForm.nil? ? node.family_name + ', ' + node.given_name : node.displayName }
+          n.display_strings :path => '.', :accessor => lambda { |node| node.displayForm.nil? ? node.family_name + ', ' + node.given_name : node.displayName }
         end
 
         t.language :path => '/mods/language' do |n|
