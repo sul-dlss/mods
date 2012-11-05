@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'mods'
 
 describe "Mods Top Level Elements that do not have Sub Elements" do
 

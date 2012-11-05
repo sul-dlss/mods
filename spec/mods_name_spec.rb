@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'mods'
 
 describe "Mods Name Elements" do
   
@@ -88,7 +87,7 @@ describe "Mods Name Elements" do
 
       it "should recognize type attribute on namePart element" do
         Mods::Name::NAME_PART_TYPES.each { |t|  
-          @mods.from_str("<mods><name><namePart type='#{t}'>hi</namePart></name</mods>")
+          @mods.from_str("<mods><name><namePart type='#{t}'>hi</namePart></name></mods>")
           @mods.name.namePart.type.should == t
         }
       end

@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'mods'
 
 describe "Mods::Reader" do
   before(:all) do
