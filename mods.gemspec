@@ -17,6 +17,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   
   gem.add_dependency 'nokogiri'
+  gem.add_dependency 'nom-xml'
 
   # Runtime dependencies
   # gem.add_runtime_dependency 'nokogiri'

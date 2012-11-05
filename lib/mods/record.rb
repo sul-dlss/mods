@@ -11,18 +11,32 @@ module Mods
     def initialize
     end
 
-    # convenience method to call Mods::Reader.new.from_str
+    # convenience method to call Mods::Reader.new.from_str and to nom
     # @param ns_aware true if the XML parsing should be strict about using namespaces.  Default is false
     # @param str - a string containing mods xml
     def from_str(str, ns_aware = false)
       @mods_ng_xml = Mods::Reader.new(ns_aware).from_str(str)
+      if ns_aware
+        set_terminology_ns(@mods_ng_xml)
+      else
+        set_terminology_no_ns(@mods_ng_xml)
+      end
     end
 
-    # convenience method to call Mods::Reader.new.from_url
+    # convenience method to call Mods::Reader.new.from_url and to nom
     # @param ns_aware true if the XML parsing should be strict about using namespaces.  Default is false
     # @param url (String) - url that has mods xml as its content
     def from_url(url, namespace_aware = false)
       @mods_ng_xml = Mods::Reader.new(ns_aware).from_url(url)
+      if ns_aware
+        set_terminology_ns(@mods_ng_xml)
+      else
+        set_terminology_no_ns(@mods_ng_xml)
+      end
+    end
+
+    def titles
+      @mods_ng_xml.title_info.title.map { |n| n.text }
     end
 
     # NAOMI_MUST_COMMENT_THIS_METHOD
@@ -39,13 +53,20 @@ module Mods
 
     # method for accessing simple top level elements
     def method_missing method_name, *args
-      method_name_as_str = method_name.to_s
-      if ATTRIBUTES.include?(method_name_as_str)
-        @mods_ng_xml.xpath("/mods/@#{method_name_as_str}").text.to_s
-      elsif Mods::TOP_LEVEL_ELEMENTS.include?(method_name_as_str)
-# FIXME: this needs to cope with namespace aware, too
-        @mods_ng_xml.xpath("/mods/#{method_name_as_str}").map { |node| node.text  }
-      else 
+      if mods_ng_xml.respond_to?(method_name)
+        mods_ng_xml.send(method_name, *args)
+      else
+=begin
+        method_name_as_str = method_name.to_s
+        if ATTRIBUTES.include?(method_name_as_str)
+          @mods_ng_xml.xpath("/mods/@#{method_name_as_str}").text.to_s
+        elsif Mods::TOP_LEVEL_ELEMENTS.include?(method_name_as_str)
+  # FIXME: this needs to cope with namespace aware, too
+          @mods_ng_xml.xpath("/mods/#{method_name_as_str}").map { |node| node.text  }
+        else 
+          super.method_missing(method_name, *args)
+        end
+=end      
         super.method_missing(method_name, *args)
       end
     end
