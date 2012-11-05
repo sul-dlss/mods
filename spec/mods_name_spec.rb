@@ -28,15 +28,19 @@ describe "Mods Name Elements" do
     context "attributes" do
       it "should recognize attributes on name node" do
         Mods::Name::ATTRIBUTES.each { |attrb|  
+          @mods.from_str("<mods><name #{attrb}='hello'><displayForm>q</displayForm></name></mods>")
+          @mods.name.send(attrb.to_sym).should == ['hello']
+        }
+      end
+      it "should raise NoMethodError for incorrect attributes" do
+        @mods.from_str("<mods><name wrong='ignore'><displayForm>q</displayForm></name></mods>")
+        expect { @mods.name.wrong }.to raise_error(NoMethodError, /undefined method.*wrong/)
+      end
+      it "should cope with attributes on a name element that has no subelements" do
+        Mods::Name::ATTRIBUTES.each { |attrb|  
           @mods.from_str("<mods><name #{attrb}='hello'>q</name></mods>")
           @mods.name.send(attrb.to_sym).should == 'hello'
         }
-      end
-      it "should do something with unexpected attributes" do
-        pending "to be implemented"
-      end
-      it "should cope with attributes on an element that has no subelements" do
-        pending "to be implemented"
       end
     end
   end
@@ -73,6 +77,11 @@ describe "Mods Name Elements" do
     it "should return an array of strings when there are multiple occurrences of subelements" do
       @mods.from_str('<mods><name><namePart>hi</namePart><namePart>hello</namePart></name</mods>')
       @mods.name.namePart.should == ["hi", "hello"]
+    end
+    
+    it "should raise NoMethodError for incorrect subelements" do
+      @mods.from_str("<mods><name><wrong>ignore</wrong></name></mods>")
+      expect { @mods.name.wrong }.to raise_error(NoMethodError, /undefined method.*wrong/)
     end
     
     context "namePart subelement" do
