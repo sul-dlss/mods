@@ -43,14 +43,19 @@ module Mods
       end
     end
 
-    # return an array of Strings, each containing the text contents of <mods><titleInfo><title>  elements
+    # @return Array of Strings, each containing the text contents of <mods><titleInfo><title>  elements
     def titles
       @mods_ng_xml.title_info.title.map { |n| n.text }
     end
     
-    # return an array of Strings, each containing the text contents of <mods><titleInfo @type="alternative"><title>  elements
+    # @return Array of Strings, each containing the text contents of <mods><titleInfo @type="alternative"><title>  elements
     def alternative_titles
       @mods_ng_xml.alternative_title.map { |n| n.text }
+    end
+    
+    # @return String containing sortable title for this mods record
+    def sort_title
+      @mods_ng_xml.title_info.sort_title.first
     end
     
     # NAOMI_MUST_COMMENT_THIS_METHOD

@@ -20,7 +20,7 @@ module Mods
           n.partName :path => 'partName'
 #          n.part_name :path => 'partName'
           n.type :path => '@type'
-          n.sort_title :path => '.', :accessor => lambda { |node| node.title.text + (node.subTitle? ? "#{@title_delimiter}#{node.sub_title.text}" : "" ) }
+          n.sort_title :path => '.', :accessor => lambda { |node| node.title.text + (!node.subTitle.text.empty? ? "#{@title_delimiter}#{node.subTitle.text}" : "" ) }
         end
         t.alternative_title :path => '/mods/titleInfo[@type="alternative"]/title'
         t.title :path => '/mods/titleInfo[not(@type="alternative")]/title'

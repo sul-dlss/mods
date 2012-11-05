@@ -73,18 +73,19 @@ describe "Mods Title" do
   context "sort_title" do
     it "should skip nonSort element" do
       @mods_rec.from_str('<mods><titleInfo><title>Jerk</title><nonSort>The</nonSort></titleInfo></mods>')
-      @mods_rec.title_info.sort_title.text.should == ["Jerk"]
-      @mods_rec.sort_title.text.should == ["Jerk"]
+      @mods_rec.title_info.sort_title.should == ["Jerk"]
+      @mods_rec.sort_title.should == "Jerk"
     end
     it "should contain title and subtitle" do
       @mods_rec.from_str('<mods><titleInfo><title>Jerk</title><subTitle>A Tale of Tourettes</subTitle><nonSort>The</nonSort></titleInfo></mods>')
-      @mods_rec.title_info.sort_title.text.should == ["Jerk A Tale of Tourettes"]
-      @mods_rec.sort_title.text.should == ["Jerk A Tale of Tourettes"]
+      @mods_rec.title_info.sort_title.should == ["Jerk A Tale of Tourettes"]
+      @mods_rec.sort_title.should == "Jerk A Tale of Tourettes"
     end
     it "should have a configurable delimiter between title and subtitle" do
       m = Mods::Record.new(' : ')
       m.from_str('<mods><titleInfo><title>Jerk</title><subTitle>A Tale of Tourettes</subTitle><nonSort>The</nonSort></titleInfo></mods>')
-      m.sort_title.text.should == ["Jerk : A Tale of Tourettes"]
+      m.title_info.sort_title.should == ["Jerk : A Tale of Tourettes"]
+      m.sort_title.should == "Jerk : A Tale of Tourettes"
     end
   end
   
