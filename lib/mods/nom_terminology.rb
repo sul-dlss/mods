@@ -7,7 +7,24 @@ module Mods
     def set_terminology_no_ns(mods_ng_xml)
       mods_ng_xml.set_terminology() do |t|
 
-# FIXME: may want to deal with camelcase vs. underscore in method_missing          
+# FIXME: may want to deal with camelcase vs. underscore in method_missing 
+ 
+        # These elements have no subelements - w00t!
+#        Mods::TOP_LEVEL_ELEMENTS_SIMPLE.each { |elname|
+#          t.elname :path => "/mods/#{elname}"
+#        }
+#=begin        
+        t.abstract :path => '/mods/abstract/text()', :accessor => lambda { |n| n.text }
+        t.accessCondition :path => '/mods/accessCondition', :accessor => lambda { |n| n.text }
+        t.classification :path => '/mods/classification', :accessor => lambda { |n| n.text }
+        t.extension :path => '/mods/extension', :accessor => lambda { |n| n.text }
+        t.genre :path => '/mods/genre', :accessor => lambda { |n| n.text }
+        t.identifier :path => '/mods/identifier', :accessor => lambda { |n| n.text }
+        t.note :path => '/mods/note', :accessor => lambda { |n| n.text }
+        t.tableOfContents :path => '/mods/tableOfContents', :accessor => lambda { |n| n.text }
+        t.targetAudience :path => '/mods/targetAudience', :accessor => lambda { |n| n.text }
+        t.typeOfResource :path => '/mods/typeOfResource', :accessor => lambda { |n| n.text }
+#=end        
 
         # note - titleInfo can be a top level element or a sub-element of relatedItem 
         #   (<titleInfo> as subelement of <subject> is not part of the MODS namespace)
@@ -56,9 +73,9 @@ module Mods
           n.display_strings :path => '.', :accessor => lambda { |node| node.displayForm.nil? ? node.family_name + ', ' + node.given_name : node.displayName }
         end
 
-        t.language :path => '/mods/language' do |n|
-          n.value :path => 'languageTerm', :accessor => :text
-        end
+#        t.language :path => '/mods/language' do |n|
+#          n.value :path => 'languageTerm', :accessor => :text
+#        end
 
       end
 
