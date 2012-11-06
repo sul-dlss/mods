@@ -64,15 +64,28 @@ module Mods
       @mods_ng_xml.title_info.sort_title.find { |n| !n.nil? }
     end
     
+    
+    # use the displayForm of a personal name if present
+    #   if no displayForm, try to make a string from family name and given name "family_name, given_name"
+    #   otherwise, return all nameParts concatenated together
+    # @return Array of Strings, each containing ...
+    def personal_names
+      @mods_ng_xml.personal_name.map { |n|
+        if n.displayForm.size > 0
+          n.displayForm.text
+        elsif n.family_name.size > 0
+          n.given_name.size > 0 ? n.family_name.text + ', ' + n.given_name.text : n.family_name.text
+        else
+          n.namePart.text
+        end
+      }
+    end
+
     # @return Array of Strings, each containing ...
     def corporate_names
       @mods_ng_xml.corporate_name.map { |n| n.text }
     end
 
-    # @return Array of Strings, each containing ...
-    def personal_names
-      @mods_ng_xml.personal_name.map { |n| n.text }
-    end
 
 =begin    
     # NAOMI_MUST_COMMENT_THIS_METHOD

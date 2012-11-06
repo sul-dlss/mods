@@ -69,8 +69,8 @@ module Mods
               rt.authority :path => "@authority"
             end
           end
-          n.personal :path => '.', :accessor => lambda { |node| node.text }
-          n.display_string :path => '.', :accessor => lambda { |node| node.displayForm.nil? ? node.family_name + ', ' + node.given_name : node.displayName }
+#          n.personal :path => '.', :accessor => lambda { |node| node.text }
+#          n.display_string :path => '.', :accessor => lambda { |node| node.displayForm.nil? ? node.family_name + ', ' + node.given_name : node.displayForm }
         end
 =end        
         t.personal_name :path => '/mods/name[@type="personal"]' do |n|
@@ -79,7 +79,7 @@ module Mods
           n.given_name :path => 'namePart[@type="given"]'
           n.termsOfAddress :path => 'namePart[@type="termsOfAddress"]'
           n.date :path => 'namePart[@type="date"]'
-          n.displayForm :path => 'dislayForm'
+          n.displayForm :path => 'displayForm'
         end
         t.corporate_name :path => '/mods/name[@type="corporate"]' do |n|
           n.namePart :path => 'namePart'
