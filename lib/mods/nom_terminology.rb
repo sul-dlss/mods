@@ -80,6 +80,19 @@ module Mods
           n.termsOfAddress :path => 'namePart[@type="termsOfAddress"]'
           n.date :path => 'namePart[@type="date"]'
           n.displayForm :path => 'displayForm'
+          n.affiliation :path => 'affiliation'
+          n.description :path => 'description'
+# FIXME:  this should work - it's a NOM bug          
+#          n.role :path => 'role/roleTerm' do |r|
+#            r.type :path => "@type"
+#            r.authority :path => "@authority"
+#          end
+          n.role :path => 'role' do |r|
+            r.roleTerm :path => "roleTerm" do |rt|
+              rt.type :path => "@type"
+              rt.authority :path => "@authority"
+            end
+          end
         end
         t.corporate_name :path => '/mods/name[@type="corporate"]' do |n|
           n.namePart :path => 'namePart'

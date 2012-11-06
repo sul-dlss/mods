@@ -1,21 +1,6 @@
-# encoding: utf-8
 require 'spec_helper'
 
 describe "Mods Name" do
-  
-  it "should recognize subelements" do
-    Mods::Name::SUBELEMENTS.each { |e|
-      @mods_rec.from_str("<mods><name><#{e}>oofda</#{e}></name></mods>")
-      @mods_rec.name.send(e).text.should == 'oofda'
-    }
-  end
-
-  it "should recognize attributes on name node" do
-    Mods::Name::ATTRIBUTES.each { |attrb|  
-      @mods.from_str("<mods><name #{attrb}='hello'><displayForm>q</displayForm></name></mods>")
-      @mods.name.send(attrb).should == 'hello'
-    }
-  end
   
   before(:all) do
     @mods_rec = Mods::Record.new
@@ -25,27 +10,24 @@ describe "Mods Name" do
       <role><roleTerm type='text'>lithographer</roleTerm></role></name></mods>"
     @pers_name = 'Crusty'
     @mods_w_pers_name = "<mods><name type='personal'><namePart>#{@pers_name}</namePart></name></mods>"
-    @pers_role = 'creator'
-    @mods_w_pers_name_role = "<mods><name type='personal'><namePart>#{@pers_name}</namePart>
-      <role><roleTerm authority='marcrelator' type='text'>#{@pers_role}</roleTerm><role></name></mods>"
     @mods_w_both = "<mods>
       <name type='corporate'><namePart>#{@corp_name}</namePart></name>
       <name type='personal'><namePart>#{@pers_name}</namePart></name></mods>"
-
-      s = '<mods:name authority="local" type="personal">
-        <mods:role>
-          <mods:roleTerm authority="marcrelator" type="text">creator</mods:roleTerm>
-        </mods:role>
-        <mods:namePart>Gravé par Denise Macquart.</mods:namePart>
-      </mods:name>
-      '
-      s = '<mods:name authority="local" type="personal">
-        <mods:namePart>Buffier, Claude</mods:namePart>
-      </mods:name>
-      '
   end
   
   context "personal_author" do
+    before(:all) do
+      @pers_role = 'creator'
+      @mods_w_pers_name_role = "<mods><name type='personal'><namePart>#{@pers_name}</namePart>
+        <role><roleTerm authority='marcrelator' type='text'>#{@pers_role}</roleTerm><role></name></mods>"
+      @mods_w_pers_name_role_code = '<mods><name type="personal"><namePart type="given">John</namePart>
+          	<namePart type="family">Huston</namePart>
+          	<role>
+          	  	<roleTerm type="code" authority="marcrelator">drt</roleTerm>
+          	</role>
+        </name></mods>'
+      s = '<mods><name authority="local" type="personal"><namePart>Buffier, Claude</namePart></name></mods>'
+    end
     
     it "should recognize subelements" do
       Mods::Name::SUBELEMENTS.each { |e|
@@ -62,6 +44,30 @@ describe "Mods Name" do
       @mods_rec.from_str(@mods_w_corp_name)
       @mods_rec.personal_name.namePart.text.should == ""
       @mods_rec.from_str(@mods_w_both).personal_name.namePart.text.should_not match(@corp_name)
+    end
+    
+    context "roles" do
+      it "should be possible to access a personal_name role easily" do
+        @mods_rec.from_str(@mods_w_pers_name_role)
+        @mods_rec.personal_name.role.text.should include(@pers_role)
+      end
+
+      it "should get role type" do
+        @mods_rec.from_str(@mods_w_pers_name_role)
+        @mods_rec.personal_name.role.roleTerm.type.text.should == "text"
+        @mods_rec.from_str(@mods_w_pers_name_role_code)
+        @mods_rec.personal_name.role.roleTerm.type.text.should == "code"
+      end
+      
+      it "should get role authority" do
+        @mods_rec.from_str(@mods_w_pers_name_role)
+        @mods_rec.personal_name.role.roleTerm.authority.text.should == "marcrelator"
+      end
+      
+      it "should be able to translate the marc relator code into text" do
+        @mods_rec.from_str(@mods_w_pers_name_role_code)
+        MARC_RELATOR[@mods_rec.personal_name.role.roleTerm.text].should == "Director"
+      end
     end
     
     context "personal_names convenience method" do
@@ -131,7 +137,9 @@ describe "Mods Name" do
   end # personal_name
   
   context "sort_author" do
-    
+    it "should do something" do
+      pending "sort_author to be implemented"
+    end
   end
   
   context "corporate_author" do
@@ -157,52 +165,53 @@ describe "Mods Name" do
     end
   end  
   
-  context "namePart subelement" do
+  context "(plain) name element access" do
+    context "namePart subelement" do
 
-    it "should recognize type attribute on namePart element" do
-      Mods::Name::NAME_PART_TYPES.each { |t|  
-        @mods.from_str("<mods><name><namePart type='#{t}'>hi</namePart></name></mods>")
-        @mods.name.namePart.type.should == t
+      it "should recognize type attribute on namePart element" do
+        Mods::Name::NAME_PART_TYPES.each { |t|  
+          @mods.from_str("<mods><name><namePart type='#{t}'>hi</namePart></name></mods>")
+          @mods.name.namePart.type.should == t
+        }
+      end
+
+    end
+
+    context "value for mods.name" do
+      it "should prefer displayForm subelement value to concat of namePart subelement values" do
+        str =  '<mods><name><displayForm>Mr. Foo Bar</displayForm><namePart>a</namePart><namePart>b</namePart></name></mods>'
+        @mods.from_str(str)
+        @mods.name.displayForm.should == ["Mr. Foo Bar"]
+        @mods.name.should == ["Mr. Foo Bar"]
+      end
+      it "should give concat of nameParts if there is no displayForm subelement" do
+        @mods.from_str('<mods><name><namePart>a</namePart><namePart>b</namePart></name></mods>')
+        @mods.name.should == ["a b"]
+      end
+      it "should order the namePart elements according to their type attribute, if present" do
+        pending "to be implemented"
+      end
+      it "should combine any and all subelements into a useful string" do
+        pending "to be implemented"
+        @mods.name.should == ["first name pieces", "second name pieces"]
+      end
+
+    end
+
+    it "should recognize subelements" do
+      Mods::Name::SUBELEMENTS.each { |e|
+        @mods_rec.from_str("<mods><name><#{e}>oofda</#{e}></name></mods>")
+        @mods_rec.name.send(e).text.should == 'oofda'
       }
     end
 
-  end
-
-  context "role subelement" do
-    it "should work when there is no subelement" do
-      pending "to be implemented"
-    end
-    it "should work when there is a roleTerm subelement" do
-      pending "to be implemented"
-    end
-    it "should do something when there is some other illegal subelement" do
-      pending "to be implemented"
-    end
-    it "should translate the marc relator code into text" do
-      pending "to be implemented"
-    end
-  end
-  
-  context "value for mods.name" do
-    it "should prefer displayForm subelement value to concat of namePart subelement values" do
-      str =  '<mods><name><displayForm>Mr. Foo Bar</displayForm><namePart>a</namePart><namePart>b</namePart></name></mods>'
-      @mods.from_str(str)
-      @mods.name.displayForm.should == ["Mr. Foo Bar"]
-      @mods.name.should == ["Mr. Foo Bar"]
-    end
-    it "should give concat of nameParts if there is no displayForm subelement" do
-      @mods.from_str('<mods><name><namePart>a</namePart><namePart>b</namePart></name></mods>')
-      @mods.name.should == ["a b"]
-    end
-    it "should order the namePart elements according to their type attribute, if present" do
-      pending "to be implemented"
-    end
-    it "should combine any and all subelements into a useful string" do
-      pending "to be implemented"
-      @mods.name.should == ["first name pieces", "second name pieces"]
+    it "should recognize attributes on name node" do
+      Mods::Name::ATTRIBUTES.each { |attrb|  
+        @mods.from_str("<mods><name #{attrb}='hello'><displayForm>q</displayForm></name></mods>")
+        @mods.name.send(attrb).should == 'hello'
+      }
     end
     
-  end
-  
+  end # plain name
   
 end
