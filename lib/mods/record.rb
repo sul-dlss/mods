@@ -64,6 +64,12 @@ module Mods
       @mods_ng_xml.title_info.sort_title.first
     end
     
+    # @return Array of Strings, each containing ...
+    def corporate_names
+      @mods_ng_xml.corporate_name.map { |n| n.text }
+    end
+
+=begin    
     # NAOMI_MUST_COMMENT_THIS_METHOD
     def name(*args, &proc)
       # we create a name object for each name, and then 
@@ -75,6 +81,7 @@ module Mods
         n.ng_node.element_children.size == 0 ? n.text.to_s : n
       }
     end
+=end
 
     # method for accessing simple top level elements
     def method_missing method_name, *args

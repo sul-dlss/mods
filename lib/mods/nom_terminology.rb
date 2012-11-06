@@ -29,12 +29,12 @@ module Mods
         # note - titleInfo can be a top level element or a sub-element of relatedItem 
         #   (<titleInfo> as subelement of <subject> is not part of the MODS namespace)
         t.title_info :path => '/mods/titleInfo' do |n|
+          n.type :path => '@type'
           n.title :path => 'title'
           n.subTitle :path => 'subTitle'
           n.nonSort :path => 'nonSort'
           n.partNumber :path => 'partNumber'
           n.partName :path => 'partName'
-          n.type :path => '@type'
           n.sort_title :path => '.', :accessor => lambda { |node| 
             node.title.text + (!node.subTitle.text.empty? ? "#{@title_delimiter}#{node.subTitle.text}" : "" ) 
           }
@@ -57,26 +57,48 @@ module Mods
           }
         end
 
-        t.author :path => '/mods/name' do |n|
-          n.valueURI :path => '@valueURI'
-          n.namePart :path => 'namePart', :single => true
+=begin
+        t.name :path => '/mods/name' do |n|
+          n.type :path => '@type'
+          n.authority :path => '@authority'
+          n.namePart :path => 'namePart' do |np|
+            np.type :path => '@type'
+          end
+          n.displayForm :path => 'dislayForm'
+          n.affiliation :path => 'affiliation'
+          n.description :path => 'description'
+          n.role :path => 'role' do |r|
+            r.roleTerm :path => "roleTerm" do |rt|
+              rt.type :path => "@type"
+              rt.authority :path => "@authority"
+            end
+          end
+          n.personal :path => '.', :accessor => lambda { |node| node.text }
+          n.display_string :path => '.', :accessor => lambda { |node| node.displayForm.nil? ? node.family_name + ', ' + node.given_name : node.displayName }
         end
-#        t.author_names_as_array :path '/mods/name', :accessor => lambda {|node| }
-
-        t.corporate_authors :path => '/mods/name[@type="corporate"]'
-        t.personal_authors :path => '/mods/name[@type="personal"]' do |n|
-          n.roleTerm :path => 'role/roleTerm'
-          n.name_role_pair :path => '.', :accessor => lambda { |node| node.roleTerm.text + ": " + node.namePart.text }
-          n.displayForm :path => 'displayForm'
+=end        
+=begin        
+        t.personal_name :path => '/mods/name[@type="personal"]' do |n|
+          n.namePart :path => 'namePart'
           n.family_name :path => 'namePart[@type="family"]'
           n.given_name :path => 'namePart[@type="given"]'
-          n.display_strings :path => '.', :accessor => lambda { |node| node.displayForm.nil? ? node.family_name + ', ' + node.given_name : node.displayName }
+          n.termsOfAddress :path => 'namePart[@type="termsOfAddress"]'
+          n.date :path => 'namePart[@type="date"]'
+          n.displayForm :path => 'dislayForm'
         end
+=end
+        t.corporate_name :path => '/mods/name[@type="corporate"]' do |n|
+          n.namePart :path => 'namePart'
+          n.roleTerm :path => 'role/roleTerm[@type="text"]'
+        end
+=begin        
+        t.conference_name :path => '/mods/name[@type="conference"]'
 
-#        t.language :path => '/mods/language' do |n|
-#          n.value :path => 'languageTerm', :accessor => :text
-#        end
 
+        t.language :path => '/mods/language' do |n|
+          n.value :path => 'languageTerm', :accessor => :text
+        end
+=end
       end
 
       mods_ng_xml.nom!

@@ -13,7 +13,7 @@ module Mods
     ATTRIBUTES = ['type', 'authority', 'authorityURI', 'valueURI', 'displayLabel', 'usage', 'altRepGroup', 'nameTitleGroup']
 
     # valid values for type attribute on name node <name type="val"/>
-    NAME_TYPES = ['personal', 'corporate', 'conference', 'family']
+    TYPES = ['personal', 'corporate', 'conference', 'family']
     # valid values for type attribute on namePart node <name><namePart type="val"/></name>
     NAME_PART_TYPES = ['date', 'family', 'given', 'termsOfAddress']
 
