@@ -48,6 +48,12 @@ module Mods
       @mods_ng_xml.title_info.title.map { |n| n.text }
     end
     
+    # @return Array of Strings, each containing the text contents of <mods><titleInfo>   <nonSort> + ' ' + <title> + (delim) + <subTitle> elements
+    def full_titles
+      @mods_ng_xml.title_info.full_title.map { |n| n }
+    end
+    
+    
     # @return Array of Strings, each containing the text contents of <mods><titleInfo @type="alternative"><title>  elements
     def alternative_titles
       @mods_ng_xml.alternative_title.map { |n| n.text }

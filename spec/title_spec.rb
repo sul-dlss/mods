@@ -58,16 +58,15 @@ describe "Mods Title" do
   context "full_title" do
     it "should start with nonSort element" do
       @mods_rec.from_str('<mods><titleInfo><title>Jerk</title><nonSort>The</nonSort></titleInfo></mods>')
-      @mods_rec.title_info.title.text.should == ["The Jerk"]
-      @mods_rec.title.text.should == ["The Jerk"]
+      @mods_rec.title_info.full_title.should == ["The Jerk"]
+      @mods_rec.full_titles.should == ["The Jerk"]
     end
     
     it "should include subtitle" do
       @mods_rec.from_str('<mods><titleInfo><title>Jerk</title><subTitle>A Tale of Tourettes</subTitle><nonSort>The</nonSort></titleInfo></mods>')
-      @mods_rec.title_info.title.text.should == ["The Jerk A Tale of Tourettes"]
-      @mods_rec.title.text.should == ["The Jerk A Tale of Tourettes"]
+      @mods_rec.title_info.full_title.should == ["The Jerk A Tale of Tourettes"]
+      @mods_rec.full_titles.should == ["The Jerk A Tale of Tourettes"]
     end
-        
   end
 
   context "sort_title" do
