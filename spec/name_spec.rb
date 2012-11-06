@@ -15,7 +15,7 @@ describe "Mods Name" do
       <name type='personal'><namePart>#{@pers_name}</namePart></name></mods>"
   end
   
-  context "personal_author" do
+  context "personal name" do
     before(:all) do
       @pers_role = 'creator'
       @mods_w_pers_name_role = "<mods><name type='personal'><namePart>#{@pers_name}</namePart>
@@ -134,7 +134,7 @@ describe "Mods Name" do
         @mods_rec.personal_names.first.should_not match(/Mr./)
       end      
     end # personal_names convenience method
-  end # personal_name
+  end # personal name
   
   context "sort_author" do
     it "should do something" do
@@ -142,7 +142,21 @@ describe "Mods Name" do
     end
   end
   
-  context "corporate_author" do
+  context "corporate name" do
+    before(:all) do
+      @corp_role = 'lithographer'
+      @mods_w_corp_name_role = "<mods><name type='corporate'><namePart>#{@corp_name}</namePart>
+        <role><roleTerm type='text'>#{@corp_role}</roleTerm></role></name></mods>"
+      s = '<mods><name type="corporate"><namePart>Sherman &amp; Smith</namePart>
+           <role><roleTerm authority="marcrelator" type="text">creator</roleTerm></role></name></mods>'
+    end
+    
+    it "should recognize subelements" do
+      Mods::Name::SUBELEMENTS.each { |e|
+        @mods_rec.from_str("<mods><name><#{e}>oofda</#{e}></name></mods>")
+        @mods_rec.corporate_name.send(e).text.should == 'oofda'
+      }
+    end
     it "should include name elements with type attr = corporate" do
       @mods_rec.from_str(@mods_w_corp_name)
       @mods_rec.corporate_name.namePart.text.should == @corp_name
@@ -153,17 +167,26 @@ describe "Mods Name" do
       @mods_rec.corporate_name.namePart.text.should == ""
       @mods_rec.from_str(@mods_w_both).corporate_name.namePart.text.should_not match(@pers_name)
     end
-    it "should not include the role text" do
-      @mods_rec.from_str(@mods_w_corp_name_role)      
-      @mods_rec.corporate_name.namePart.text.should == @corp_name
-      pending "need to work on this"
-    end
-    it "convenience method corporate_names in Mods::Record should return an Array of Strings" do
-      pending "to be implemented"
-      @mods_rec.from_str('<mods><titleInfo><title>Jerk</title><nonSort>The</nonSort></titleInfo><titleInfo><title>Joke</title></titleInfo></mods>')
-      @mods_rec.corporate_names.should == ["The Jerk", "Joke"]
-    end
-  end  
+
+    context "corporate_names convenience method" do
+      it "should return an Array of Strings" do
+        @mods_rec.from_str(@mods_w_corp_name)
+        @mods_rec.corporate_names.should == [@corp_name]
+      end
+
+      it "should not include the role text" do
+        @mods_rec.from_str(@mods_w_corp_name_role)      
+        @mods_rec.corporate_names.first.should_not match(@corp_role)
+      end
+      
+      it "should prefer displayForm over namePart pieces" do
+        display_form_and_name_parts = '<mods><name type="corporate"><namePart>Food, Inc.</namePart>
+                                <displayForm>display form</displayForm></name></mods>'        
+        @mods_rec.from_str(display_form_and_name_parts)
+        @mods_rec.corporate_names.should include("display form")
+      end
+    end # corporate_names convenience method
+  end # corporate name
   
   context "(plain) name element access" do
     context "namePart subelement" do

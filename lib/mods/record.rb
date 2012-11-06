@@ -83,7 +83,13 @@ module Mods
 
     # @return Array of Strings, each containing ...
     def corporate_names
-      @mods_ng_xml.corporate_name.map { |n| n.text }
+      @mods_ng_xml.corporate_name.map { |n|
+        if n.displayForm.size > 0
+          n.displayForm.text
+        else
+          n.namePart.text 
+        end
+      }
     end
 
 

@@ -14,6 +14,7 @@ module Mods
           t.send elname, :path => "/mods/#{elname}", :accessor => lambda { |n| n.text }
         }
 
+        # TITLE_INFO
         # note - titleInfo can be a top level element or a sub-element of relatedItem 
         #   (<titleInfo> as subelement of <subject> is not part of the MODS namespace)
         t.title_info :path => '/mods/titleInfo' do |n|
@@ -46,21 +47,21 @@ module Mods
             end
           }
         end
-
+        
         # current way to do short_title correctly
 #        t.short_title :path => '/mods/titleInfo[not(@type=alternative)]', :accessor => lambda { |node|  
 #            (!node.nonSort.text.empty? ? "#{node.nonSort.text} " : "" ) + 
 #            node.title.text
 #          }
 
-=begin
-        t.name :path => '/mods/name' do |n|
-          n.type :path => '@type'
-          n.authority :path => '@authority'
+
+        # NAME -------------
+
+        t.plain_name :path => '/mods/name' do |n|
           n.namePart :path => 'namePart' do |np|
             np.type :path => '@type'
           end
-          n.displayForm :path => 'dislayForm'
+          n.displayForm :path => 'displayForm'
           n.affiliation :path => 'affiliation'
           n.description :path => 'description'
           n.role :path => 'role' do |r|
@@ -69,39 +70,19 @@ module Mods
               rt.authority :path => "@authority"
             end
           end
-#          n.personal :path => '.', :accessor => lambda { |node| node.text }
-#          n.display_string :path => '.', :accessor => lambda { |node| node.displayForm.nil? ? node.family_name + ', ' + node.given_name : node.displayForm }
         end
-=end        
+
         t.personal_name :path => '/mods/name[@type="personal"]' do |n|
-          n.namePart :path => 'namePart'
           n.family_name :path => 'namePart[@type="family"]'
           n.given_name :path => 'namePart[@type="given"]'
           n.termsOfAddress :path => 'namePart[@type="termsOfAddress"]'
           n.date :path => 'namePart[@type="date"]'
-          n.displayForm :path => 'displayForm'
-          n.affiliation :path => 'affiliation'
-          n.description :path => 'description'
-# FIXME:  this should work - it's a NOM bug          
-#          n.role :path => 'role/roleTerm' do |r|
-#            r.type :path => "@type"
-#            r.authority :path => "@authority"
-#          end
-          n.role :path => 'role' do |r|
-            r.roleTerm :path => "roleTerm" do |rt|
-              rt.type :path => "@type"
-              rt.authority :path => "@authority"
-            end
-          end
         end
-        t.corporate_name :path => '/mods/name[@type="corporate"]' do |n|
-          n.namePart :path => 'namePart'
-          n.roleTerm :path => 'role/roleTerm[@type="text"]'
-        end
-=begin        
+        
+        t.corporate_name :path => '/mods/name[@type="corporate"]'
         t.conference_name :path => '/mods/name[@type="conference"]'
 
-
+=begin
         t.language :path => '/mods/language' do |n|
           n.value :path => 'languageTerm', :accessor => :text
         end
