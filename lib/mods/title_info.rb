@@ -1,7 +1,7 @@
 module Mods
   # NAOMI_MUST_COMMENT_THIS_CLASS
   class TitleInfo
-    attr_reader :ng_node
+#    attr_reader :ng_node
     
     NS_HASH = {'m' => MODS_NS_V3}
     SUBELEMENTS = ['title', 'subTitle', 'partNumber', 'partName', 'nonSort']
@@ -15,9 +15,9 @@ module Mods
     DEFAULT_TITLE_DELIM = ' '
     
     # @param (Nokogiri::XML::Node) mods:titleInfo node
-    def initialize(title_info_node)
-      @ng_node = title_info_node
-    end
+#    def initialize(title_info_node)
+#      @ng_node = title_info_node
+#    end
     
   end
   

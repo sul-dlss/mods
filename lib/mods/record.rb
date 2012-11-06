@@ -61,7 +61,7 @@ module Mods
     
     # @return String containing sortable title for this mods record
     def sort_title
-      @mods_ng_xml.title_info.sort_title.first
+      @mods_ng_xml.title_info.sort_title.find { |n| !n.nil? }
     end
     
     # @return Array of Strings, each containing ...
@@ -71,7 +71,7 @@ module Mods
 
     # @return Array of Strings, each containing ...
     def personal_names
-      @mods_ng_xml.person_name.map { |n| n.text }
+      @mods_ng_xml.personal_name.map { |n| n.text }
     end
 
 =begin    

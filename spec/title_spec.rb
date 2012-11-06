@@ -65,14 +65,25 @@ describe "Mods Title" do
       @mods_rec.from_str('<mods><titleInfo><title>Jerk</title><subTitle>A Tale of Tourettes</subTitle><nonSort>The</nonSort></titleInfo></mods>')
       @mods_rec.title_info.sort_title.should == ["Jerk A Tale of Tourettes"]
     end
+    it "should be an alternative title if there are no other choices" do
+      @mods_rec.from_str("<mods><titleInfo type='alternative'><title>1</title></titleInfo></mods>")
+      @mods_rec.title_info.sort_title.should == ['1']
+    end
+    it "should not be an alternative title if there are other choices" do
+      @mods_rec.from_str("<mods><titleInfo type='alternative'><title>1</title></titleInfo><titleInfo><title>2</title></titleInfo></mods>")
+      @mods_rec.title_info.sort_title.should == [nil, '2']
+      @mods_rec.sort_title.should == '2'
+    end
     it "should have a configurable delimiter between title and subtitle" do
       m = Mods::Record.new(' : ')
       m.from_str('<mods><titleInfo><title>Jerk</title><subTitle>A Tale of Tourettes</subTitle><nonSort>The</nonSort></titleInfo></mods>')
       m.title_info.sort_title.should == ["Jerk : A Tale of Tourettes"]
     end
-    it "convenience method sort_title in Mods::Record should return a string" do
-      @mods_rec.from_str('<mods><titleInfo><title>Jerk</title><subTitle>A Tale of Tourettes</subTitle><nonSort>The</nonSort></titleInfo></mods>')
-      @mods_rec.sort_title.should == "Jerk A Tale of Tourettes"
+    context "sort_title convenience method in Mods::Record" do
+      it "convenience method sort_title in Mods::Record should return a string" do
+        @mods_rec.from_str('<mods><titleInfo><title>Jerk</title><subTitle>A Tale of Tourettes</subTitle><nonSort>The</nonSort></titleInfo></mods>')
+        @mods_rec.sort_title.should == "Jerk A Tale of Tourettes"
+      end
     end
   end
   

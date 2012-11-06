@@ -36,7 +36,9 @@ module Mods
           n.partNumber :path => 'partNumber'
           n.partName :path => 'partName'
           n.sort_title :path => '.', :accessor => lambda { |node| 
-            node.title.text + (!node.subTitle.text.empty? ? "#{@title_delimiter}#{node.subTitle.text}" : "" ) 
+            if node.type.text != "alternative" || (node.type.text == "alternative" && mods_ng_xml.xpath('/mods/titleInfo').size == 1)
+              node.title.text + (!node.subTitle.text.empty? ? "#{@title_delimiter}#{node.subTitle.text}" : "" ) 
+            end
           }
           n.full_title :path => '.', :accessor => lambda { |node| 
              (!node.nonSort.text.empty? ? "#{node.nonSort.text} " : "" ) + 
@@ -56,6 +58,12 @@ module Mods
             end
           }
         end
+
+        # current way to do short_title correctly
+#        t.short_title :path => '/mods/titleInfo[not(@type=alternative)]', :accessor => lambda { |node|  
+#            (!node.nonSort.text.empty? ? "#{node.nonSort.text} " : "" ) + 
+#            node.title.text
+#          }
 
 =begin
         t.name :path => '/mods/name' do |n|
