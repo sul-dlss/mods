@@ -58,6 +58,11 @@ module Mods
         # NAME -------------
 
         t.plain_name :path => '/mods/name' do |n|
+          
+          Mods::Name::ATTRIBUTES.each { |attr_name|
+            t.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |n| n.text }
+          }
+          
           n.namePart :path => 'namePart' do |np|
             np.type :path => '@type'
           end
@@ -66,8 +71,8 @@ module Mods
           n.description :path => 'description'
           n.role :path => 'role' do |r|
             r.roleTerm :path => "roleTerm" do |rt|
-              rt.type :path => "@type"
-              rt.authority :path => "@authority"
+              rt.type :path => "@type", :accessor => lambda { |n| n.text }
+              rt.authority :path => "@authority", :accessor => lambda { |n| n.text }
             end
           end
         end

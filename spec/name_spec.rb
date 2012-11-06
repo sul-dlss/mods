@@ -31,7 +31,7 @@ describe "Mods Name" do
     
     it "should recognize subelements" do
       Mods::Name::SUBELEMENTS.each { |e|
-        @mods_rec.from_str("<mods><name><#{e}>oofda</#{e}></name></mods>")
+        @mods_rec.from_str("<mods><name type='personal'><#{e}>oofda</#{e}></name></mods>")
         @mods_rec.personal_name.send(e).text.should == 'oofda'
       }
     end
@@ -54,14 +54,14 @@ describe "Mods Name" do
 
       it "should get role type" do
         @mods_rec.from_str(@mods_w_pers_name_role)
-        @mods_rec.personal_name.role.roleTerm.type.text.should == "text"
+        @mods_rec.personal_name.role.roleTerm.type.should == ["text"]
         @mods_rec.from_str(@mods_w_pers_name_role_code)
-        @mods_rec.personal_name.role.roleTerm.type.text.should == "code"
+        @mods_rec.personal_name.role.roleTerm.type.should == ["code"]
       end
       
       it "should get role authority" do
         @mods_rec.from_str(@mods_w_pers_name_role)
-        @mods_rec.personal_name.role.roleTerm.authority.text.should == "marcrelator"
+        @mods_rec.personal_name.role.roleTerm.authority.should == ["marcrelator"]
       end
       
       it "should be able to translate the marc relator code into text" do
@@ -153,7 +153,7 @@ describe "Mods Name" do
     
     it "should recognize subelements" do
       Mods::Name::SUBELEMENTS.each { |e|
-        @mods_rec.from_str("<mods><name><#{e}>oofda</#{e}></name></mods>")
+        @mods_rec.from_str("<mods><name type='corporate'><#{e}>oofda</#{e}></name></mods>")
         @mods_rec.corporate_name.send(e).text.should == 'oofda'
       }
     end
@@ -198,7 +198,7 @@ describe "Mods Name" do
     end
 
     it "should recognize attributes on name node" do
-      Mods::Name::ATTRIBUTES.each { |attrb|  
+      Mods::Name::ATTRIBUTES.each { |attrb| 
         @mods_rec.from_str("<mods><name #{attrb}='hello'><displayForm>q</displayForm></name></mods>")
         @mods_rec.plain_name.send(attrb).should == 'hello'
       }
