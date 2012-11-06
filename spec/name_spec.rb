@@ -189,52 +189,36 @@ describe "Mods Name" do
   end # corporate name
   
   context "(plain) name element access" do
-    context "namePart subelement" do
-
-      it "should recognize type attribute on namePart element" do
-        Mods::Name::NAME_PART_TYPES.each { |t|  
-          @mods.from_str("<mods><name><namePart type='#{t}'>hi</namePart></name></mods>")
-          @mods.name.namePart.type.should == t
-        }
-      end
-
-    end
-
-    context "value for mods.name" do
-      it "should prefer displayForm subelement value to concat of namePart subelement values" do
-        str =  '<mods><name><displayForm>Mr. Foo Bar</displayForm><namePart>a</namePart><namePart>b</namePart></name></mods>'
-        @mods.from_str(str)
-        @mods.name.displayForm.should == ["Mr. Foo Bar"]
-        @mods.name.should == ["Mr. Foo Bar"]
-      end
-      it "should give concat of nameParts if there is no displayForm subelement" do
-        @mods.from_str('<mods><name><namePart>a</namePart><namePart>b</namePart></name></mods>')
-        @mods.name.should == ["a b"]
-      end
-      it "should order the namePart elements according to their type attribute, if present" do
-        pending "to be implemented"
-      end
-      it "should combine any and all subelements into a useful string" do
-        pending "to be implemented"
-        @mods.name.should == ["first name pieces", "second name pieces"]
-      end
-
-    end
 
     it "should recognize subelements" do
       Mods::Name::SUBELEMENTS.each { |e|
         @mods_rec.from_str("<mods><name><#{e}>oofda</#{e}></name></mods>")
-        @mods_rec.name.send(e).text.should == 'oofda'
+        @mods_rec.plain_name.send(e).text.should == 'oofda'
       }
     end
 
     it "should recognize attributes on name node" do
       Mods::Name::ATTRIBUTES.each { |attrb|  
-        @mods.from_str("<mods><name #{attrb}='hello'><displayForm>q</displayForm></name></mods>")
-        @mods.name.send(attrb).should == 'hello'
+        @mods_rec.from_str("<mods><name #{attrb}='hello'><displayForm>q</displayForm></name></mods>")
+        @mods_rec.plain_name.send(attrb).should == 'hello'
       }
     end
     
+    context "namePart subelement" do
+      it "should recognize type attribute on namePart element" do
+        Mods::Name::NAME_PART_TYPES.each { |t|  
+          @mods_rec.from_str("<mods><name><namePart type='#{t}'>hi</namePart></name></mods>")
+          @mods_rec.plain_name.namePart.type.text.should == t
+        }
+      end
+    end
+    
+    context "role subelement" do
+      it "should do something" do
+        pending "to be implemented"
+      end
+    end
+
   end # plain name
   
 end
