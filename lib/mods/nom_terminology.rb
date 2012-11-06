@@ -77,7 +77,6 @@ module Mods
           n.display_string :path => '.', :accessor => lambda { |node| node.displayForm.nil? ? node.family_name + ', ' + node.given_name : node.displayName }
         end
 =end        
-=begin        
         t.personal_name :path => '/mods/name[@type="personal"]' do |n|
           n.namePart :path => 'namePart'
           n.family_name :path => 'namePart[@type="family"]'
@@ -86,7 +85,6 @@ module Mods
           n.date :path => 'namePart[@type="date"]'
           n.displayForm :path => 'dislayForm'
         end
-=end
         t.corporate_name :path => '/mods/name[@type="corporate"]' do |n|
           n.namePart :path => 'namePart'
           n.roleTerm :path => 'role/roleTerm[@type="text"]'

@@ -17,14 +17,27 @@ describe "Mods Name" do
     }
   end
   
+  before(:all) do
+    @mods_rec = Mods::Record.new
+    @corp_name = 'ABC corp'
+    @mods_w_corp_name = "<mods><name type='corporate'><namePart>#{@corp_name}</namePart></name></mods>"
+    @mods_w_corp_name_role = "<mods><name type='corporate'><namePart>#{@corp_name}</namePart><role><roleTerm type='text'>lithographer</roleTerm></role></name></mods>"
+    @pers_name = 'Crusty'
+    @mods_w_pers_name = "<mods><name type='personal'><namePart>#{@pers_name}</namePart></name></mods>"
+    @mods_w_both = "<mods><name type='corporate'><namePart>#{@corp_name}</namePart></name><name type='personal'><namePart>#{@pers_name}</namePart></name></mods>"
+  end
+  
   context "personal_author" do
-    s = '<mods:name authority="local" type="personal">
-      <mods:role>
-        <mods:roleTerm authority="marcrelator" type="text">creator</mods:roleTerm>
-      </mods:role>
-      <mods:namePart>Gravé par Denise Macquart.</mods:namePart>
-    </mods:name>
-    '
+    it "should do something" do
+      s = '<mods:name authority="local" type="personal">
+        <mods:role>
+          <mods:roleTerm authority="marcrelator" type="text">creator</mods:roleTerm>
+        </mods:role>
+        <mods:namePart>Gravé par Denise Macquart.</mods:namePart>
+      </mods:name>
+      '
+      pending "to be implemented"
+    end
     
     it "should do soemthing" do
       s = '<mods:name authority="local" type="personal">
@@ -50,16 +63,39 @@ describe "Mods Name" do
       '
       pending "to be implemented"
     end
+    
+    it "should include name elements with type attr = personal" do
+      @mods_rec.from_str(@mods_w_pers_name)
+      @mods_rec.personal_name.namePart.text.should == @pers_name
+      @mods_rec.from_str(@mods_w_both).personal_name.namePart.text.should == @pers_name
+    end
+    it "should not include name elements with type attr != personal" do
+      @mods_rec.from_str(@mods_w_corp_name)
+      @mods_rec.personal_name.namePart.text.should == ""
+      @mods_rec.from_str(@mods_w_both).personal_name.namePart.text.should_not match(@corp_name)
+    end
+    it "should not include the role text" do
+      @mods_rec.from_str(@mods_w_pers_name_role)
+      @mods_rec.personal_name.namePart.text.should == @corp_name
+      pending "need to work on this"
+    end
+    
+    it "convenience method personal_names in Mods::Record should return an Array of Strings" do
+      pending "to be implemented"
+      @mods_rec.from_str('<mods><titleInfo><title>Jerk</title><nonSort>The</nonSort></titleInfo><titleInfo><title>Joke</title></titleInfo></mods>')
+      @mods_rec.personal_names.should == ["The Jerk", "Joke"]
+    end
+
+    context "namePart pieces" do
+      it "should join them together in a useful way" do
+        pending "to be implemented"
+      end
+    end
+    
   end
   
-  before(:all) do
-    @mods_rec = Mods::Record.new
-    @corp_name = 'ABC corp'
-    @mods_w_corp_name = "<mods><name type='corporate'><namePart>#{@corp_name}</namePart></name></mods>"
-    @corp_name_role = '<mods><name type="corporate"><namePart>DEF corp</namePart><role><roleTerm type="text">lithographer</roleTerm></role></name></mods>'
-    @pers_name = 'Crusty'
-    @mods_w_pers_name = "<mods><name type='personal'><namePart>#{@pers_name}</namePart></name></mods>"
-    @mods_w_both = "<mods><name type='corporate'><namePart>#{@corp_name}</namePart></name><name type='personal'><namePart>#{@pers_name}</namePart></name></mods>"
+  context "sort_author" do
+    
   end
   
   context "corporate_author" do
@@ -72,6 +108,16 @@ describe "Mods Name" do
       @mods_rec.from_str(@mods_w_pers_name)
       @mods_rec.corporate_name.namePart.text.should == ""
       @mods_rec.from_str(@mods_w_both).corporate_name.namePart.text.should_not match(@pers_name)
+    end
+    it "should not include the role text" do
+      @mods_rec.from_str(@mods_w_corp_name_role)      
+      @mods_rec.corporate_name.namePart.text.should == @corp_name
+      pending "need to work on this"
+    end
+    it "convenience method corporate_names in Mods::Record should return an Array of Strings" do
+      pending "to be implemented"
+      @mods_rec.from_str('<mods><titleInfo><title>Jerk</title><nonSort>The</nonSort></titleInfo><titleInfo><title>Joke</title></titleInfo></mods>')
+      @mods_rec.corporate_names.should == ["The Jerk", "Joke"]
     end
   end  
   

@@ -69,6 +69,11 @@ module Mods
       @mods_ng_xml.corporate_name.map { |n| n.text }
     end
 
+    # @return Array of Strings, each containing ...
+    def personal_names
+      @mods_ng_xml.person_name.map { |n| n.text }
+    end
+
 =begin    
     # NAOMI_MUST_COMMENT_THIS_METHOD
     def name(*args, &proc)
