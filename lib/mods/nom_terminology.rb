@@ -7,18 +7,16 @@ module Mods
     def set_terminology_no_ns(mods_ng_xml)
       mods_ng_xml.set_terminology() do |t|
 
-        # note - titleInfo can be a top level element or a sub-element of subject and relatedItem
+# FIXME: may want to deal with camelcase vs. underscore in method_missing          
+
+        # note - titleInfo can be a top level element or a sub-element of relatedItem 
+        #   (<titleInfo> as subelement of <subject> is not part of the MODS namespace)
         t.title_info :path => '/mods/titleInfo' do |n|
           n.title :path => 'title'
-# FIXME: may want to deal with camelcase vs. underscore in method_missing          
           n.subTitle :path => 'subTitle'
-#          n.sub_title :path => 'subTitle'
           n.nonSort :path => 'nonSort'
-#          n.non_sort :path => 'nonSort'
           n.partNumber :path => 'partNumber'
-#          n.part_number :path => 'partNumber'
           n.partName :path => 'partName'
-#          n.part_name :path => 'partName'
           n.type :path => '@type'
           n.sort_title :path => '.', :accessor => lambda { |node| 
             node.title.text + (!node.subTitle.text.empty? ? "#{@title_delimiter}#{node.subTitle.text}" : "" ) 
@@ -27,10 +25,20 @@ module Mods
              (!node.nonSort.text.empty? ? "#{node.nonSort.text} " : "" ) + 
              node.title.text + 
              (!node.subTitle.text.empty? ? "#{@title_delimiter}#{node.subTitle.text}" : "" ) 
-           }
+          }
+          n.short_title :path => '.', :accessor => lambda { |node|  
+            if node.type.text != "alternative"
+              (!node.nonSort.text.empty? ? "#{node.nonSort.text} " : "" ) + 
+              node.title.text
+            end
+          }
+          n.alternative_title :path => '.', :accessor => lambda { |node|  
+            if node.type.text == "alternative"
+              (!node.nonSort.text.empty? ? "#{node.nonSort.text} " : "" ) + 
+              node.title.text
+            end
+          }
         end
-        t.alternative_title :path => '/mods/titleInfo[@type="alternative"]/title'
-        t.title :path => '/mods/titleInfo[not(@type="alternative")]/title'
 
         t.author :path => '/mods/name' do |n|
           n.valueURI :path => '@valueURI'
