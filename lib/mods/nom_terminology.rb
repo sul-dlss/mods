@@ -61,7 +61,11 @@ module Mods
         t.plain_name :path => '/mods/name' do |n|
           
           Mods::Name::ATTRIBUTES.each { |attr_name|
-            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            if attr_name != 'type'
+              n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            else
+              n.type_at :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            end
           }
           
           n.namePart :path => 'namePart' do |np|
@@ -114,7 +118,7 @@ module Mods
           n.reformattingQuality :path => 'reformattingQuality', :accessor => lambda { |e| e.text }
         end
         
-        # PHYSICAL_DESCRIPTION -------------------------------------------------------------------
+        # LOCATION -------------------------------------------------------------------------------
         t.location :path => '/mods/location' do |n|
           n.physicalLocation :path => 'physicalLocation' do |e|
             e.authority :path => '@authority', :accessor => lambda { |a| a.text }
