@@ -69,11 +69,9 @@ module Mods
           n.displayForm :path => 'displayForm'
           n.affiliation :path => 'affiliation'
           n.description :path => 'description'
-          n.role :path => 'role' do |r|
-            r.roleTerm :path => "roleTerm" do |rt|
-              rt.type :path => "@type", :accessor => lambda { |n| n.text }
-              rt.authority :path => "@authority", :accessor => lambda { |n| n.text }
-            end
+          n.role :path => 'role/roleTerm' do |r|
+            r.type :path => "@type", :accessor => lambda { |n| n.text }
+            r.authority :path => "@authority", :accessor => lambda { |n| n.text }
           end
         end
 

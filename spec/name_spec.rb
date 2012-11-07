@@ -30,7 +30,7 @@ describe "Mods Name" do
     end
     
     it "should recognize subelements" do
-      Mods::Name::SUBELEMENTS.each { |e|
+      Mods::Name::SUBELEMENTS.reject{|e| e == "role"}.each { |e|
         @mods_rec.from_str("<mods><name type='personal'><#{e}>oofda</#{e}></name></mods>")
         @mods_rec.personal_name.send(e).text.should == 'oofda'
       }
@@ -54,20 +54,16 @@ describe "Mods Name" do
 
       it "should get role type" do
         @mods_rec.from_str(@mods_w_pers_name_role)
-        @mods_rec.personal_name.role.roleTerm.type.should == ["text"]
+        @mods_rec.personal_name.role.type.should == ["text"]
         @mods_rec.from_str(@mods_w_pers_name_role_code)
-        @mods_rec.personal_name.role.roleTerm.type.should == ["code"]
+        @mods_rec.personal_name.role.type.should == ["code"]
       end
       
       it "should get role authority" do
         @mods_rec.from_str(@mods_w_pers_name_role)
-        @mods_rec.personal_name.role.roleTerm.authority.should == ["marcrelator"]
+        @mods_rec.personal_name.role.authority.should == ["marcrelator"]
       end
       
-      it "should be able to translate the marc relator code into text" do
-        @mods_rec.from_str(@mods_w_pers_name_role_code)
-        MARC_RELATOR[@mods_rec.personal_name.role.roleTerm.text].should == "Director"
-      end
     end
     
     context "personal_names convenience method" do
@@ -152,7 +148,7 @@ describe "Mods Name" do
     end
     
     it "should recognize subelements" do
-      Mods::Name::SUBELEMENTS.each { |e|
+      Mods::Name::SUBELEMENTS.reject{|e| e == "role"}.each { |e|
         @mods_rec.from_str("<mods><name type='corporate'><#{e}>oofda</#{e}></name></mods>")
         @mods_rec.corporate_name.send(e).text.should == 'oofda'
       }
@@ -191,7 +187,7 @@ describe "Mods Name" do
   context "(plain) name element access" do
 
     it "should recognize subelements" do
-      Mods::Name::SUBELEMENTS.each { |e|
+      Mods::Name::SUBELEMENTS.reject{|e| e == "role"}.each { |e|
         @mods_rec.from_str("<mods><name><#{e}>oofda</#{e}></name></mods>")
         @mods_rec.plain_name.send(e).text.should == 'oofda'
       }
@@ -220,5 +216,9 @@ describe "Mods Name" do
     end
 
   end # plain name
+  
+  it "should be able to translate the marc relator code into text" do
+    MARC_RELATOR['drt'].should == "Director"
+  end
   
 end
