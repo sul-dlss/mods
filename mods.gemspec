@@ -18,6 +18,7 @@ Gem::Specification.new do |gem|
   
   gem.add_dependency 'nokogiri'
   gem.add_dependency 'nom-xml'
+  gem.add_dependency 'iso-639'
 
   # Runtime dependencies
   # gem.add_runtime_dependency 'nokogiri'

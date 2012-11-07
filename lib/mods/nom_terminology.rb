@@ -14,9 +14,10 @@ module Mods
           t.send elname, :path => "/mods/#{elname}", :accessor => lambda { |n| n.text }
         }
 
-        # TITLE_INFO
+        # TITLE_INFO ----------------------------------------------------------------------------
         # note - titleInfo can be a top level element or a sub-element of relatedItem 
         #   (<titleInfo> as subelement of <subject> is not part of the MODS namespace)
+        
         t.title_info :path => '/mods/titleInfo' do |n|
           n.type :path => '@type'
           n.title :path => 'title'
@@ -55,7 +56,7 @@ module Mods
 #          }
 
 
-        # NAME -------------
+        # NAME ------------------------------------------------------------------------------------
 
         t.plain_name :path => '/mods/name' do |n|
           
@@ -85,11 +86,18 @@ module Mods
         t.corporate_name :path => '/mods/name[@type="corporate"]'
         t.conference_name :path => '/mods/name[@type="conference"]'
 
-=begin
+        # LANGUAGE -------------------------------------------------------------------------------
+
         t.language :path => '/mods/language' do |n|
-          n.value :path => 'languageTerm', :accessor => :text
+          n.languageTerm :path => 'languageTerm' do |lt|
+            lt.type :path => '@type', :accessor => lambda { |n| n.text }
+            lt.authority :path => '@authority', :accessor => lambda { |n| n.text }
+          end
+          n.code_term :path => 'languageTerm[@type="code"]'
+          n.text_term :path => 'languageTerm[@type="text"]'
+          n.scriptTerm :path => 'scriptTerm'
         end
-=end
+
       end
 
       mods_ng_xml.nom!
