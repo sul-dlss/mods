@@ -142,6 +142,18 @@ describe "Mods Name" do
         <role><roleTerm type='text'>#{@corp_role}</roleTerm></role></name></mods>"
       s = '<mods><name type="corporate"><namePart>Sherman &amp; Smith</namePart>
            <role><roleTerm authority="marcrelator" type="text">creator</roleTerm></role></name></mods>'
+      @mult_corps = '<mods>     <name type="corporate">
+               <namePart>Henry Bill, New York</namePart>
+               <role><roleTerm type="text">publisher</roleTerm></role>
+             </name>
+             <name type="corporate">
+               <namePart>T. Sinclair&apos;s, Philadelphia</namePart>
+               <role><roleTerm type="text">lithographer</roleTerm></role>
+             </name>
+               <name type="corporate">
+               <namePart>Potter Collection</namePart>
+               <role><roleTerm type="text">former owner</roleTerm></role>
+             </name></mods>'
     end
     
     it "should recognize subelements" do
