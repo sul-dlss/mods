@@ -60,7 +60,7 @@ module Mods
         t.plain_name :path => '/mods/name' do |n|
           
           Mods::Name::ATTRIBUTES.each { |attr_name|
-            t.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |n| n.text }
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |n| n.text }
           }
           
           n.namePart :path => 'namePart' do |np|

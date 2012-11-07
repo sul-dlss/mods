@@ -196,7 +196,7 @@ describe "Mods Name" do
     it "should recognize attributes on name node" do
       Mods::Name::ATTRIBUTES.each { |attrb| 
         @mods_rec.from_str("<mods><name #{attrb}='hello'><displayForm>q</displayForm></name></mods>")
-        @mods_rec.plain_name.send(attrb).should == 'hello'
+        @mods_rec.plain_name.send(attrb).should == ['hello']
       }
     end
     
