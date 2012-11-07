@@ -15,8 +15,8 @@ describe "Mods Language" do
     before(:all) do
       @mods_rec.from_str(@iso639_2b_code)
     end
-    it "should understand languageTerm.type attribute" do
-      @mods_rec.language.languageTerm.type.should == ["code"]
+    it "should understand languageTerm.type_at attribute" do
+      @mods_rec.language.languageTerm.type_at.should == ["code"]
     end
     it "should understand languageTerm.authority attribute" do
       @mods_rec.language.languageTerm.authority.should == ["iso639-2b"]

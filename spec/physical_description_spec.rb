@@ -55,7 +55,7 @@ describe "Mods Physical description" do
         @mods_rec.physical_description.form.authority.should == ["smd"]
       end
       it "should understand type attribute on form element" do
-        @mods_rec.physical_description.form.type.should == ["material"]
+        @mods_rec.physical_description.form.type_at.should == ["material"]
       end
     end
 

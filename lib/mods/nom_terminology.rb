@@ -19,14 +19,14 @@ module Mods
         #   (<titleInfo> as subelement of <subject> is not part of the MODS namespace)
         
         t.title_info :path => '/mods/titleInfo' do |n|
-          n.type :path => '@type'
+          n.type_at :path => '@type'
           n.title :path => 'title'
           n.subTitle :path => 'subTitle'
           n.nonSort :path => 'nonSort'
           n.partNumber :path => 'partNumber'
           n.partName :path => 'partName'
           n.sort_title :path => '.', :accessor => lambda { |node| 
-            if node.type.text != "alternative" || (node.type.text == "alternative" && mods_ng_xml.xpath('/mods/titleInfo').size == 1)
+            if node.type_at.text != "alternative" || (node.type_at.text == "alternative" && mods_ng_xml.xpath('/mods/titleInfo').size == 1)
               node.title.text + (!node.subTitle.text.empty? ? "#{@title_delimiter}#{node.subTitle.text}" : "" ) 
             end
           }
@@ -36,13 +36,13 @@ module Mods
              (!node.subTitle.text.empty? ? "#{@title_delimiter}#{node.subTitle.text}" : "" ) 
           }
           n.short_title :path => '.', :accessor => lambda { |node|  
-            if node.type.text != "alternative"
+            if node.type_at.text != "alternative"
               (!node.nonSort.text.empty? ? "#{node.nonSort.text} " : "" ) + 
               node.title.text
             end
           }
           n.alternative_title :path => '.', :accessor => lambda { |node|  
-            if node.type.text == "alternative"
+            if node.type_at.text == "alternative"
               (!node.nonSort.text.empty? ? "#{node.nonSort.text} " : "" ) + 
               node.title.text
             end
@@ -65,13 +65,13 @@ module Mods
           }
           
           n.namePart :path => 'namePart' do |np|
-            np.type :path => '@type'
+            np.type_at :path => '@type'
           end
           n.displayForm :path => 'displayForm'
           n.affiliation :path => 'affiliation'
           n.description :path => 'description'
           n.role :path => 'role/roleTerm' do |r|
-            r.type :path => "@type", :accessor => lambda { |a| a.text }
+            r.type_at :path => "@type", :accessor => lambda { |a| a.text }
             r.authority :path => "@authority", :accessor => lambda { |a| a.text }
           end
         end
@@ -90,7 +90,7 @@ module Mods
 
         t.language :path => '/mods/language' do |n|
           n.languageTerm :path => 'languageTerm' do |lt|
-            lt.type :path => '@type', :accessor => lambda { |a| a.text }
+            lt.type_at :path => '@type', :accessor => lambda { |a| a.text }
             lt.authority :path => '@authority', :accessor => lambda { |a| a.text }
           end
           n.code_term :path => 'languageTerm[@type="code"]'
@@ -104,14 +104,32 @@ module Mods
           n.extent :path => 'extent'
           n.form :path => 'form' do |f|
             f.authority :path => '@authority', :accessor => lambda { |a| a.text }
-            f.type :path => '@type', :accessor => lambda { |a| a.text }
+            f.type_at :path => '@type', :accessor => lambda { |a| a.text }
           end
           n.internetMediaType :path => 'internetMediaType'
           n.note :path => 'note' do |nn|
             nn.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
-            nn.type :path => '@type', :accessor => lambda { |a| a.text }
+            nn.type_at :path => '@type', :accessor => lambda { |a| a.text }
           end
           n.reformattingQuality :path => 'reformattingQuality', :accessor => lambda { |e| e.text }
+        end
+        
+        # PHYSICAL_DESCRIPTION -------------------------------------------------------------------
+        t.location :path => '/mods/location' do |n|
+          n.physicalLocation :path => 'physicalLocation' do |e|
+            e.authority :path => '@authority', :accessor => lambda { |a| a.text }
+            e.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+          end
+          n.shelfLocator :path => 'shelfLocator'
+          n.url :path => 'url' do |e|
+            e.dateLastAccessed :path => '@dateLastAccessed', :accessor => lambda { |a| a.text }
+            e.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+            e.note :path => '@note', :accessor => lambda { |a| a.text }
+            e.access :path => '@access', :accessor => lambda { |a| a.text }
+            e.usage :path => '@usage', :accessor => lambda { |a| a.text }
+          end
+          n.holdingSimple :path => 'holdingSimple'
+          n.holdingExternal :path => 'holdingExternal'
         end
         
       end # terminology
@@ -141,7 +159,7 @@ module Mods
           n.nonSort :path => 'm:nonSort'
           n.partNumber :path => 'm:partNumber'
           n.partName :path => 'm:partName'
-          n.type :path => '@type'
+          n.type_at :path => '@type'
         end
 
         t.author :path => '//m:name' do |n|
