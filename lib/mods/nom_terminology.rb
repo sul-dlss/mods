@@ -11,7 +11,7 @@ module Mods
  
         # These elements have no subelements - w00t!
         Mods::TOP_LEVEL_ELEMENTS_SIMPLE.each { |elname|
-          t.send elname, :path => "/mods/#{elname}", :accessor => lambda { |n| n.text }
+          t.send elname, :path => "/mods/#{elname}", :accessor => lambda { |e| e.text }
         }
 
         # TITLE_INFO ----------------------------------------------------------------------------
@@ -61,7 +61,7 @@ module Mods
         t.plain_name :path => '/mods/name' do |n|
           
           Mods::Name::ATTRIBUTES.each { |attr_name|
-            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |n| n.text }
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
           }
           
           n.namePart :path => 'namePart' do |np|
@@ -71,8 +71,8 @@ module Mods
           n.affiliation :path => 'affiliation'
           n.description :path => 'description'
           n.role :path => 'role/roleTerm' do |r|
-            r.type :path => "@type", :accessor => lambda { |n| n.text }
-            r.authority :path => "@authority", :accessor => lambda { |n| n.text }
+            r.type :path => "@type", :accessor => lambda { |a| a.text }
+            r.authority :path => "@authority", :accessor => lambda { |a| a.text }
           end
         end
 
@@ -90,20 +90,43 @@ module Mods
 
         t.language :path => '/mods/language' do |n|
           n.languageTerm :path => 'languageTerm' do |lt|
-            lt.type :path => '@type', :accessor => lambda { |n| n.text }
-            lt.authority :path => '@authority', :accessor => lambda { |n| n.text }
+            lt.type :path => '@type', :accessor => lambda { |a| a.text }
+            lt.authority :path => '@authority', :accessor => lambda { |a| a.text }
           end
           n.code_term :path => 'languageTerm[@type="code"]'
           n.text_term :path => 'languageTerm[@type="text"]'
           n.scriptTerm :path => 'scriptTerm'
         end
 
-      end
+        # PHYSICAL_DESCRIPTION -------------------------------------------------------------------
+        t.physical_description :path => '/mods/physicalDescription' do |n|
+          n.digitalOrigin :path => 'digitalOrigin', :accessor => lambda { |e| e.text }
+          n.extent :path => 'extent'
+          n.form :path => 'form' do |f|
+            f.authority :path => '@authority', :accessor => lambda { |a| a.text }
+            f.type :path => '@type', :accessor => lambda { |a| a.text }
+          end
+          n.internetMediaType :path => 'internetMediaType'
+          n.note :path => 'note' do |nn|
+            nn.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+            nn.type :path => '@type', :accessor => lambda { |a| a.text }
+          end
+          n.reformattingQuality :path => 'reformattingQuality', :accessor => lambda { |e| e.text }
+        end
+        
+      end # terminology
 
       mods_ng_xml.nom!
 
       mods_ng_xml
     end # set_terminology_no_ns
+
+# TODO: common top level element attributes:  ID; xlink; lang; xml:lang; script; transliteration 
+#       authority, authorityURI, valueURI
+#       displayLabel, usage altRepGroup
+#       type
+# TODO:   common subelement attributes:   lang, xml:lang, script, transliteration
+# TODO: other common attribute:  supplied
     
     
     # set the NOM terminology, with namespaces
