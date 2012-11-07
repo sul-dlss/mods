@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Mods Physical description" do
+describe "Mods <physicalDescription> Element" do
   before(:all) do
     @mods_rec = Mods::Record.new
     @extent_only = '<mods><physicalDescription><extent>extent</extent></physicalDescription></mods>'
@@ -22,17 +22,17 @@ describe "Mods Physical description" do
                 </physicalDescription></mods>'
   end
 
-  context "basic physicalDescription terminology pieces" do
+  context "basic physical_description terminology pieces" do
     before(:all) do
       @mods_rec.from_str(@form_and_extent)
     end
     
-    it "should understand extent element" do
+    it "extent child element" do
       @mods_rec.from_str(@extent_only)
       @mods_rec.physical_description.extent.map { |n| n.text }.should == ["extent"]
     end
 
-    context "note element" do
+    context "note child element" do
       before(:all) do
         @mods_rec.from_str(@forms_and_notes)
       end
@@ -44,7 +44,7 @@ describe "Mods Physical description" do
       end
     end
 
-    context "form element" do
+    context "form child element" do
       before(:all) do
         @mods_rec.from_str(@form_and_extent)
       end
@@ -63,13 +63,13 @@ describe "Mods Physical description" do
       before(:all) do
         @mods_rec.from_str(@digital)
       end
-      it "should understand reformattingQuality element" do
+      it "should understand reformattingQuality child element" do
         @mods_rec.physical_description.reformattingQuality.should == ["preservation"]
       end
-      it "should understand digitalOrigin element" do
+      it "should understand digitalOrigin child element" do
         @mods_rec.physical_description.digitalOrigin.should == ["reformatted digital"]
       end
-      it "should understand internetMediaType element" do
+      it "should understand internetMediaType child element" do
         @mods_rec.physical_description.internetMediaType.map { |n| n.text }.should == ["image/jp2"]
       end
     end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Mods Location" do
+describe "Mods <location> Element" do
   before(:all) do
     @mods_rec = Mods::Record.new
     @url_and_phys = '<mods><location>

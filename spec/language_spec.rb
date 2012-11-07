@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Mods Language" do
+describe "Mods <language> Element" do
   before(:all) do
     @mods_rec = Mods::Record.new
     @simple = '<mods><language>Greek</language></mods>'
@@ -41,7 +41,7 @@ describe "Mods Language" do
     end
   end
   
-  context "languages convenience method" do
+  context "Mods::Record.languages convenience method" do
     
     it "should translate iso639-2b codes to English" do
       @mods_rec.from_str(@iso639_2b_code)

@@ -1,19 +1,19 @@
 require 'spec_helper'
 
-describe "Mods Top Level Elements that do not have Sub Elements" do
+describe "Mods Top Level Elements that do not have Child Elements" do
 
   before(:all) do
     @mods = Mods::Record.new
   end
 
-  it "should get the text contents of any single simple (cannot have subelements) top level element" do
+  it "should get the text contents of any single simple (cannot have child elements) top level element" do
     Mods::TOP_LEVEL_ELEMENTS_SIMPLE.each { |elname|
       @mods.from_str("<mods><#{elname}>hi</#{elname}></mods>")
       @mods.send(elname.to_sym).should == ["hi"]
     }
   end
   
-  it "should get the text contents of any single complex top level element with no subelements" do
+  it "should get the text contents of any single complex top level element instance with no child elements" do
     pending "to be implemented"
     Mods::TOP_LEVEL_ELEMENTS_COMPLEX.each { |elname|
       @mods.from_str("<mods><#{elname}>hi</#{elname}></mods>")

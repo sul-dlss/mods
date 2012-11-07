@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Mods Title" do
+describe "Mods <titleInfo> element" do
   
   before(:all) do
     @mods_rec = Mods::Record.new
@@ -29,7 +29,7 @@ describe "Mods Title" do
       @mods_rec.from_str('<mods><titleInfo><title>Jerk</title><subTitle>A Tale of Tourettes</subTitle><nonSort>The</nonSort></titleInfo></mods>')
       @mods_rec.title_info.short_title.should == ["The Jerk"]
     end
-    it "convenience method short_titles in Mods::Record should return an Array (multiple titles are legal in Mods)" do
+    it "Mods::Record.short_titles convenience method should return an Array (multiple titles are legal in Mods)" do
       @mods_rec.from_str('<mods><titleInfo><title>Jerk</title><nonSort>The</nonSort></titleInfo><titleInfo><title>Joke</title></titleInfo></mods>')
       @mods_rec.short_titles.should == ["The Jerk", "Joke"]
     end
@@ -50,7 +50,7 @@ describe "Mods Title" do
       @mods_rec.from_str('<mods><titleInfo><title>Jerk</title><subTitle>A Tale of Tourettes</subTitle><nonSort>The</nonSort></titleInfo></mods>')
       @mods_rec.title_info.full_title.should == ["The Jerk A Tale of Tourettes"]
     end
-    it "convenience method full_titles in Mods::Record should return an Array (multiple titles are legal in Mods)" do
+    it "Mods::Record.full_titles convenience method should return an Array (multiple titles are legal in Mods)" do
       @mods_rec.from_str('<mods><titleInfo><title>Jerk</title><nonSort>The</nonSort></titleInfo><titleInfo><title>Joke</title></titleInfo></mods>')
       @mods_rec.full_titles.should == ["The Jerk", "Joke"]
     end
@@ -79,7 +79,7 @@ describe "Mods Title" do
       m.from_str('<mods><titleInfo><title>Jerk</title><subTitle>A Tale of Tourettes</subTitle><nonSort>The</nonSort></titleInfo></mods>')
       m.title_info.sort_title.should == ["Jerk : A Tale of Tourettes"]
     end
-    context "sort_title convenience method in Mods::Record" do
+    context "Mods::Record.sort_title convenience method" do
       it "convenience method sort_title in Mods::Record should return a string" do
         @mods_rec.from_str('<mods><titleInfo><title>Jerk</title><subTitle>A Tale of Tourettes</subTitle><nonSort>The</nonSort></titleInfo></mods>')
         @mods_rec.sort_title.should == "Jerk A Tale of Tourettes"
@@ -92,7 +92,7 @@ describe "Mods Title" do
       @mods_rec.from_str('<mods><titleInfo type="alternative"><title>ta da!</title></titleInfo></mods>')
       @mods_rec.title_info.alternative_title.should == ["ta da!"]
     end
-    it "should have convenience methods for getting an Array of alternative titles when there are multiple elements" do
+    it "Mods::Record.alternative_titles convenience method for getting an Array of alternative titles when there are multiple elements" do
       @mods_rec.from_str("<mods><titleInfo type='alternative'><title>1</title></titleInfo><titleInfo type='alternative'><title>2</title></titleInfo></mods>")
       @mods_rec.alternative_titles.should == ['1', '2']
       @mods_rec.from_str("<mods><titleInfo type='alternative'><title>1</title><title>2</title></titleInfo></mods>")

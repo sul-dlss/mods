@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Mods Name" do
+describe "Mods <name> Element" do
   
   before(:all) do
     @mods_rec = Mods::Record.new
@@ -63,7 +63,7 @@ describe "Mods Name" do
       
     end
     
-    context "personal_names convenience method" do
+    context "Mods::Record.personal_names convenience method" do
       before(:all) do
         @given_family = '<mods><name type="personal"><namePart type="given">Jorge Luis</namePart>
                                 <namePart type="family">Borges</namePart></name></mods>'        
@@ -173,7 +173,7 @@ describe "Mods Name" do
       @mods_rec.from_str(@mods_w_both).corporate_name.namePart.text.should_not match(@pers_name)
     end
 
-    context "corporate_names convenience method" do
+    context "Mods::Record.corporate_names convenience method" do
       it "should return an Array of Strings" do
         @mods_rec.from_str(@mods_w_corp_name)
         @mods_rec.corporate_names.should == [@corp_name]
@@ -193,7 +193,7 @@ describe "Mods Name" do
     end # corporate_names convenience method
   end # corporate name
   
-  context "(plain) name element access" do
+  context "(plain) <name> element terminology pieces" do
 
     it "should recognize subelements" do
       Mods::Name::SUBELEMENTS.reject{|e| e == "role"}.each { |e|
