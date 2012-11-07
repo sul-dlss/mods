@@ -71,7 +71,7 @@ describe "Mods Title" do
     end
     it "should not be an alternative title if there are other choices" do
       @mods_rec.from_str("<mods><titleInfo type='alternative'><title>1</title></titleInfo><titleInfo><title>2</title></titleInfo></mods>")
-      @mods_rec.title_info.sort_title.should == [nil, '2']
+      @mods_rec.title_info.sort_title.should == ['2']
       @mods_rec.sort_title.should == '2'
     end
     it "should have a configurable delimiter between title and subtitle" do

@@ -46,17 +46,17 @@ module Mods
     # @return Array of Strings, each containing the text contents of <mods><titleInfo>   <nonSort> + ' ' + <title> elements
     #  but not including any titleInfo elements with type="alternative"
     def short_titles
-      @mods_ng_xml.title_info.short_title.reject { |n| n.nil? }
+      @mods_ng_xml.title_info.short_title.map { |n| n }
     end
 
     # @return Array of Strings, each containing the text contents of <mods><titleInfo>   <nonSort> + ' ' + <title> + (delim) + <subTitle> elements
     def full_titles
-      @mods_ng_xml.title_info.full_title.reject { |n| n.nil? }
+      @mods_ng_xml.title_info.full_title.map { |n| n }
     end
         
     # @return Array of Strings, each containing the text contents of <mods><titleInfo @type="alternative"><title>  elements
     def alternative_titles
-      @mods_ng_xml.title_info.alternative_title.reject { |n| n.nil? }
+      @mods_ng_xml.title_info.alternative_title.map { |n| n }
     end
     
     # @return String containing sortable title for this mods record
