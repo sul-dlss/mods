@@ -14,6 +14,7 @@ describe "Mods Top Level Elements that do not have Sub Elements" do
   end
   
   it "should get the text contents of any single complex top level element with no subelements" do
+    pending "to be implemented"
     Mods::TOP_LEVEL_ELEMENTS_COMPLEX.each { |elname|
       @mods.from_str("<mods><#{elname}>hi</#{elname}></mods>")
       @mods.send(elname.to_sym).should == ["hi"]
