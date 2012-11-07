@@ -13,21 +13,18 @@ describe "Mods Name" do
     @mods_w_both = "<mods>
       <name type='corporate'><namePart>#{@corp_name}</namePart></name>
       <name type='personal'><namePart>#{@pers_name}</namePart></name></mods>"
+    @pers_role = 'creator'
+    @mods_w_pers_name_role = "<mods><name type='personal'><namePart>#{@pers_name}</namePart>
+      <role><roleTerm authority='marcrelator' type='text'>#{@pers_role}</roleTerm><role></name></mods>"
+    @mods_w_pers_name_role_code = '<mods><name type="personal"><namePart type="given">John</namePart>
+        	<namePart type="family">Huston</namePart>
+        	<role>
+        	  	<roleTerm type="code" authority="marcrelator">drt</roleTerm>
+        	</role>
+      </name></mods>'
   end
   
   context "personal name" do
-    before(:all) do
-      @pers_role = 'creator'
-      @mods_w_pers_name_role = "<mods><name type='personal'><namePart>#{@pers_name}</namePart>
-        <role><roleTerm authority='marcrelator' type='text'>#{@pers_role}</roleTerm><role></name></mods>"
-      @mods_w_pers_name_role_code = '<mods><name type="personal"><namePart type="given">John</namePart>
-          	<namePart type="family">Huston</namePart>
-          	<role>
-          	  	<roleTerm type="code" authority="marcrelator">drt</roleTerm>
-          	</role>
-        </name></mods>'
-      s = '<mods><name authority="local" type="personal"><namePart>Buffier, Claude</namePart></name></mods>'
-    end
     
     it "should recognize subelements" do
       Mods::Name::SUBELEMENTS.reject{|e| e == "role"}.each { |e|
@@ -210,8 +207,16 @@ describe "Mods Name" do
     end
     
     context "role subelement" do
-      it "should do something" do
-        pending "to be implemented"
+      it "should get role type" do
+        @mods_rec.from_str(@mods_w_pers_name_role)
+        @mods_rec.plain_name.role.type.should == ["text"]
+        @mods_rec.from_str(@mods_w_pers_name_role_code)
+        @mods_rec.plain_name.role.type.should == ["code"]
+      end
+
+      it "should get role authority" do
+        @mods_rec.from_str(@mods_w_pers_name_role)
+        @mods_rec.plain_name.role.authority.should == ["marcrelator"]
       end
     end
 
