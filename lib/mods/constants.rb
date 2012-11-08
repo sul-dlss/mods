@@ -54,5 +54,7 @@ module Mods
   'software', 
   'multimedia',
   'mixed material']
+  
+  ORIGIN_INFO_DATE_ELEMENTS = ['dateIssued', 'dateCreated', 'dateCaptured', 'dateValid', 'dateModified', 'copyrightDate', 'dateOther']
 
 end
