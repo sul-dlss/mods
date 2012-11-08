@@ -32,7 +32,9 @@ module Mods
         # note - titleInfo can be a top level element or a sub-element of relatedItem 
         #   (<titleInfo> as subelement of <subject> is not part of the MODS namespace)
         
-        t.title_info :path => '/mods/titleInfo' do |n|
+        t.title_info :path => '/mods/titleInfo'
+        
+        t._title_info :path => '//titleInfo' do |n|
           n.type_at :path => '@type'
           n.title :path => 'title'
           n.subTitle :path => 'subTitle'
@@ -71,8 +73,9 @@ module Mods
 
 
         # NAME ------------------------------------------------------------------------------------
+        t.plain_name :path => '/mods/name'
 
-        t.plain_name :path => '/mods/name' do |n|
+        t._plain_name :path => '//name' do |n|
           
           Mods::Name::ATTRIBUTES.each { |attr_name|
             if attr_name != 'type'
