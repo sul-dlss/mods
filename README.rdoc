@@ -37,6 +37,7 @@ TODO: Write usage instructions here
 
 == Releases
 
+0.0.4 implement language, location, origin_info, physical_description
 0.0.3 use nom-xml gem and make this more nokogiri-ish; implement name, title, and simple top level elements with no subelements
 0.0.2 Set up rake tasks, publishing rdoc, and continuous integration.
 0.0.1 Grab the name
