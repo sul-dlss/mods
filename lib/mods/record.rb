@@ -103,7 +103,7 @@ module Mods
       @mods_ng_xml.language.each { |n| 
         # get languageTerm codes and add their translations to the result
         n.code_term.each { |ct| 
-          if ct.authority.first.match(/^iso639/)
+          if ct.authority.match(/^iso639/)
             begin
               vals = ct.text.split(/[,|\ ]/).reject {|x| x.strip.length == 0 } 
               vals.each do |v|
