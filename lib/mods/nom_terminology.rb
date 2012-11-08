@@ -1,5 +1,19 @@
 module Mods
   
+  # from:  http://www.loc.gov/standards/mods/v3/mods-userguide-generalapp.html
+  
+  LANG_ATTRIBS = ['lang', 'xml:lang', 'script', 'transliteration']
+  
+  LINKING_ATTRIBS = ['xlink', 'ID']
+
+  DATE_ATTRIBS = ['encoding', 'point', 'keyDate', 'qualifier']
+  ENCODING_ATTRIB_VALUES = ['w3cdtf', 'iso8601', 'marc']
+  POINT_ATTRIB_VALUES = ['start', 'end']
+  KEY_DATE_ATTRIB_VALUEs = ['yes']
+  QUALIFIER_ATTRIB_VALUES = ['approximate', 'inferred', 'questionable']
+  
+  AUTHORITY_ATTRIBS = ['authority', 'authorityURI', 'valueURI']
+
   class Record
     
     # set the NOM terminology;  do NOT use namespaces

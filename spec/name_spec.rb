@@ -27,7 +27,7 @@ describe "Mods <name> Element" do
   context "personal name" do
     
     it "should recognize child elements" do
-      Mods::Name::SUBELEMENTS.reject{|e| e == "role"}.each { |e|
+      Mods::Name::CHILD_ELEMENTS.reject{|e| e == "role"}.each { |e|
         @mods_rec.from_str("<mods><name type='personal'><#{e}>oofda</#{e}></name></mods>")
         if e == 'description'
           @mods_rec.personal_name.description_el.text.should == 'oofda'
@@ -161,7 +161,7 @@ describe "Mods <name> Element" do
     end
     
     it "should recognize child elements" do
-      Mods::Name::SUBELEMENTS.reject{|e| e == "role" }.each { |e|
+      Mods::Name::CHILD_ELEMENTS.reject{|e| e == "role" }.each { |e|
         @mods_rec.from_str("<mods><name type='corporate'><#{e}>oofda</#{e}></name></mods>")
         if e == 'description'
           @mods_rec.corporate_name.description_el.text.should == 'oofda'
@@ -204,7 +204,7 @@ describe "Mods <name> Element" do
   context "(plain) <name> element terminology pieces" do
 
     it "should recognize child elements" do
-      Mods::Name::SUBELEMENTS.reject{|e| e == "role"}.each { |e|
+      Mods::Name::CHILD_ELEMENTS.reject{|e| e == "role"}.each { |e|
         @mods_rec.from_str("<mods><name><#{e}>oofda</#{e}></name></mods>")
         if e == 'description'
           @mods_rec.plain_name.description_el.text.should == 'oofda'
@@ -225,7 +225,7 @@ describe "Mods <name> Element" do
       }
     end
     
-    context "namePart subelement" do
+    context "namePart child element" do
       it "should recognize type attribute on namePart element" do
         Mods::Name::NAME_PART_TYPES.each { |t|  
           @mods_rec.from_str("<mods><name><namePart type='#{t}'>hi</namePart></name></mods>")
@@ -234,7 +234,7 @@ describe "Mods <name> Element" do
       end
     end
     
-    context "role subelement" do
+    context "role child element" do
       it "should get role type" do
         @mods_rec.from_str(@mods_w_pers_name_role)
         @mods_rec.plain_name.role.type_at.should == ["text"]

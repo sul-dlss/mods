@@ -14,7 +14,7 @@ describe "Mods <titleInfo> element" do
   end
   
   it "should recognize subelements" do
-    Mods::TitleInfo::SUBELEMENTS.each { |e|
+    Mods::TitleInfo::CHILD_ELEMENTS.each { |e|
       @mods_rec.from_str("<mods><titleInfo><#{e}>oofda</#{e}></titleInfo></mods>")
       @mods_rec.title_info.send(e).text.should == 'oofda'
     }

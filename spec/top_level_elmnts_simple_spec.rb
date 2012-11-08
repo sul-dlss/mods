@@ -29,4 +29,11 @@ describe "Mods Top Level Elements that do not have Child Elements" do
     pending "need to implement ruby style version of (element/attribute) method names"
   end
   
+  it "<genre> element should recognize authority attributes" do
+    pending "to be implemented"
+    Mods::AUTHORITY_ATTRIBS.each { |a|  
+      @mods_rec.from_str("<mods><genre #{a}='attr_val'>Graphic Novels</genre></mods>").genre.send(a.to_sym).should == 'attr_val'
+    }
+  end
+  
 end

@@ -1,7 +1,7 @@
 require 'mods/constants'
+require 'mods/nom_terminology'
 require 'mods/marc_relator_codes'
 require 'mods/name'
-require 'mods/nom_terminology'
 require 'mods/reader'
 require 'mods/record'
 require 'mods/title_info'
