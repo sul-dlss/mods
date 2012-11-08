@@ -11,10 +11,8 @@ module Mods
  
         # These elements have no subelements - w00t!
         Mods::TOP_LEVEL_ELEMENTS_SIMPLE.each { |elname|
-          t.send elname, :path => "/mods/#{elname}", :accessor => lambda { |e| e.text }
+          t.send elname, :path => "/mods/#{elname}"
         }
-
-# FIXME:  do NOT do e.text for elements -- it's too confusing
 
         # TITLE_INFO ----------------------------------------------------------------------------
         # note - titleInfo can be a top level element or a sub-element of relatedItem 
@@ -106,7 +104,7 @@ module Mods
 
         # PHYSICAL_DESCRIPTION -------------------------------------------------------------------
         t.physical_description :path => '/mods/physicalDescription' do |n|
-          n.digitalOrigin :path => 'digitalOrigin', :accessor => lambda { |e| e.text }
+          n.digitalOrigin :path => 'digitalOrigin'
           n.extent :path => 'extent'
           n.form :path => 'form' do |f|
             f.authority :path => '@authority', :accessor => lambda { |a| a.text }
@@ -117,7 +115,7 @@ module Mods
             nn.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
             nn.type_at :path => '@type', :accessor => lambda { |a| a.text }
           end
-          n.reformattingQuality :path => 'reformattingQuality', :accessor => lambda { |e| e.text }
+          n.reformattingQuality :path => 'reformattingQuality'
         end
         
         # LOCATION -------------------------------------------------------------------------------

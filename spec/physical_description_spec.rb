@@ -64,10 +64,10 @@ describe "Mods <physicalDescription> Element" do
         @mods_rec.from_str(@digital)
       end
       it "should understand reformattingQuality child element" do
-        @mods_rec.physical_description.reformattingQuality.should == ["preservation"]
+        @mods_rec.physical_description.reformattingQuality.map { |n| n.text }.should == ["preservation"]
       end
       it "should understand digitalOrigin child element" do
-        @mods_rec.physical_description.digitalOrigin.should == ["reformatted digital"]
+        @mods_rec.physical_description.digitalOrigin.map { |n| n.text }.should == ["reformatted digital"]
       end
       it "should understand internetMediaType child element" do
         @mods_rec.physical_description.internetMediaType.map { |n| n.text }.should == ["image/jp2"]
