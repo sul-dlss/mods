@@ -14,6 +14,8 @@ module Mods
           t.send elname, :path => "/mods/#{elname}", :accessor => lambda { |e| e.text }
         }
 
+# FIXME:  do NOT do e.text for elements -- it's too confusing
+
         # TITLE_INFO ----------------------------------------------------------------------------
         # note - titleInfo can be a top level element or a sub-element of relatedItem 
         #   (<titleInfo> as subelement of <subject> is not part of the MODS namespace)
@@ -134,6 +136,33 @@ module Mods
           end
           n.holdingSimple :path => 'holdingSimple'
           n.holdingExternal :path => 'holdingExternal'
+        end
+        
+        # ORIGIN_INFO --------------------------------------------------------------------------
+        t.origin_info :path => '/mods/originInfo' do |n|
+          n.place :path => 'place' do |e|
+            e.placeTerm :path => 'placeTerm' do |ee|
+              ee.type_at :path => '@type', :accessor => lambda { |a| a.text }
+              ee.authority :path => '@authority', :accessor => lambda { |a| a.text }
+            end
+          end
+          n.publisher :path => 'publisher'
+          Mods::ORIGIN_INFO_DATE_ELEMENTS.each { |date_el|
+            n.send date_el, :path => "#{date_el}" do |d|
+              d.encoding :path => '@encoding', :accessor => lambda { |a| a.text }
+              d.point :path => '@point', :accessor => lambda { |a| a.text }
+              d.keyDate :path => '@keyDate', :accessor => lambda { |a| a.text }
+              d.qualifier :path => '@qualifier', :accessor => lambda { |a| a.text }
+              if date_el == 'dateOther'
+                d.type_at :path => '@type', :accessor => lambda { |a| a.text }
+              end
+            end
+          }
+          n.edition :path => 'edition'
+          n.issuance :path => 'issuance'
+          n.frequency :path => 'frequency' do |f|
+            f.authority :path => '@authority', :accessor => lambda { |a| a.text }
+          end
         end
         
       end # terminology

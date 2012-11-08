@@ -153,6 +153,13 @@ describe "Mods <originInfo> Element" do
     
   end
 
+  context "parsing date values" do
+    it "should cope with slop" do
+      pending "to be implemented"
+    end
+    
+  end
+
   context "basic origin_info terminology pieces" do
     before(:all) do
       @mods_rec.from_str(@form_and_extent)
@@ -203,7 +210,7 @@ describe "Mods <originInfo> Element" do
       end
       it "should get element values" do
         vals = @mods_rec.from_str('<mods><originInfo><publisher>Olney</publisher></origin_info></mods>').origin_info.publisher
-        vals.should == ["Olney"]
+        vals.map { |n| n.text }.should == ["Olney"]
       end
       it "should ignore s.n. value (from MARC)" do
         pending "to be implemented"
@@ -217,7 +224,7 @@ describe "Mods <originInfo> Element" do
       it "should recognize each element" do
         Mods::ORIGIN_INFO_DATE_ELEMENTS.each { |elname|
           @mods_rec.from_str("<mods><originInfo><#{elname}>date</#{elname}></originInfo></mods>")
-          @mods_rec.origin_info.send(elname.to_sym).should == ["date"]
+          @mods_rec.origin_info.send(elname.to_sym).map { |n| n.text }.should == ["date"]
         }
       end
       it "should recognize encoding attribute on each element" do
@@ -270,27 +277,35 @@ describe "Mods <originInfo> Element" do
     end
     
     it "edition child element" do
-      pending "to be implemented"
+      xml = '<mods><originInfo><edition>7th ed.</edition></originInfo></mods>'
+      @mods_rec.from_str(xml).origin_info.edition.map { |n| n.text }.should == ['7th ed.']
     end
     
     context "issuance child element" do
-      
+      before(:all) do
+        @ex = '<mods><originInfo><issuance>monographic</issuance></originInfo></mods>'
+      end
+      it "should get element value" do
+        @mods_rec.from_str(@ex).origin_info.issuance.map { |n| n.text }.should == ['monographic']
+      end
       it "should know the only valid values are: continuing, monographic, single unit, multipart monograph, serial, integrating resource" do
         pending "to be implemented"
       end
     end
     
     context "frequency child element" do
-      
+      before(:all) do
+        xml = '<mods><originInfo><frequency authority="marcfrequency">Annual</frequency></originInfo></mods>'
+        @origin_info = @mods_rec.from_str(xml).origin_info
+      end
+      it "should get element value" do
+        @origin_info.frequency.map { |n| n.text }.should == ["Annual"]
+      end
+      it "should recognize the authority attribute" do
+        @origin_info.frequency.authority.should == ["marcfrequency"]
+      end
     end
   end # basic terminology
-
-  context "parsing date values" do
-    it "should cope with slop" do
-      pending "to be implemented"
-    end
-    
-  end
 
 
 end
