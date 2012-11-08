@@ -27,14 +27,14 @@ describe "Mods <name> Element" do
   context "personal name" do
     
     it "should recognize child elements" do
-      Mods::Name::SUBELEMENTS.reject{|e| e == "role" || "description"}.each { |e|
+      Mods::Name::SUBELEMENTS.reject{|e| e == "role"}.each { |e|
         @mods_rec.from_str("<mods><name type='personal'><#{e}>oofda</#{e}></name></mods>")
-        @mods_rec.personal_name.send(e).text.should == 'oofda'
+        if e == 'description'
+          @mods_rec.personal_name.description_el.text.should == 'oofda'
+        else
+          @mods_rec.personal_name.send(e).text.should == 'oofda'
+        end
       }
-    end
-    it "description child element (_description to avoid clash with Nokogiri)" do
-      @mods_rec.from_str("<mods><name type='personal'><description>oofda</description></name></mods>")
-      @mods_rec.personal_name._description.text.should == 'oofda'
     end
     it "should include name elements with type attr = personal" do
       @mods_rec.from_str(@mods_w_pers_name)
@@ -161,14 +161,14 @@ describe "Mods <name> Element" do
     end
     
     it "should recognize child elements" do
-      Mods::Name::SUBELEMENTS.reject{|e| e == "role" || "description" }.each { |e|
+      Mods::Name::SUBELEMENTS.reject{|e| e == "role" }.each { |e|
         @mods_rec.from_str("<mods><name type='corporate'><#{e}>oofda</#{e}></name></mods>")
-        @mods_rec.corporate_name.send(e).text.should == 'oofda'
+        if e == 'description'
+          @mods_rec.corporate_name.description_el.text.should == 'oofda'
+        else
+          @mods_rec.corporate_name.send(e).text.should == 'oofda'
+        end
       }
-    end
-    it "description child element (_description to avoid clash with Nokogiri)" do
-      @mods_rec.from_str("<mods><name type='corporate'><description>oofda</description></name></mods>")
-      @mods_rec.corporate_name._description.text.should == 'oofda'
     end
     it "should include name elements with type attr = corporate" do
       @mods_rec.from_str(@mods_w_corp_name)
@@ -204,14 +204,14 @@ describe "Mods <name> Element" do
   context "(plain) <name> element terminology pieces" do
 
     it "should recognize child elements" do
-      Mods::Name::SUBELEMENTS.reject{|e| e == "role" || "description"}.each { |e|
+      Mods::Name::SUBELEMENTS.reject{|e| e == "role"}.each { |e|
         @mods_rec.from_str("<mods><name><#{e}>oofda</#{e}></name></mods>")
-        @mods_rec.plain_name.send(e).text.should == 'oofda'
+        if e == 'description'
+          @mods_rec.plain_name.description_el.text.should == 'oofda'
+        else
+          @mods_rec.plain_name.send(e).text.should == 'oofda'
+        end
       }
-    end
-    it "description child element (_description to avoid clash with Nokogiri)" do
-      @mods_rec.from_str("<mods><name><description>oofda</description></name></mods>")
-      @mods_rec.plain_name._description.text.should == 'oofda'
     end
 
     it "should recognize attributes on name node" do

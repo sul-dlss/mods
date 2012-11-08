@@ -73,7 +73,7 @@ module Mods
           end
           n.displayForm :path => 'displayForm'
           n.affiliation :path => 'affiliation'
-          n._description :path => 'description' # description is used by Nokogiri
+          n.description_el :path => 'description' # description is used by Nokogiri
           n.role :path => 'role/roleTerm' do |r|
             r.type_at :path => "@type", :accessor => lambda { |a| a.text }
             r.authority :path => "@authority", :accessor => lambda { |a| a.text }
