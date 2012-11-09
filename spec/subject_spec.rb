@@ -434,7 +434,6 @@ describe "Mods <subject> Element" do
       
     end # <occupation>
     
-    
   end # basic subject terminology
   
 end
