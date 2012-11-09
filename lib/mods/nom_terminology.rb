@@ -35,7 +35,13 @@ module Mods
         t.title_info :path => '/mods/titleInfo'
         
         t._title_info :path => '//titleInfo' do |n|
-          n.type_at :path => '@type', :accessor => lambda { |a| a.text }
+          Mods::TitleInfo::ATTRIBUTES.each { |attr_name|
+            if attr_name != 'type'
+              n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            else
+              n.type_at :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            end
+          }          
           n.title :path => 'title'
           n.subTitle :path => 'subTitle'
           n.nonSort :path => 'nonSort'
@@ -203,13 +209,21 @@ module Mods
             Mods::AUTHORITY_ATTRIBS.each { |attr_name|
               n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
+            Mods::DATE_ATTRIBS.each { |attr_name|
+              n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
           end
           n.titleInfo :path => 'titleInfo' do |t|
             Mods::AUTHORITY_ATTRIBS.each { |attr_name|
               t.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
           end
-#          n.name :path => 'name' 
+          # Note:  'name' is used by Nokogiri
+          n.name_ :path => 'name' do |t|
+            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+              t.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+          end
           n.geographicCode :path => 'geographicCode' do |g|
             Mods::AUTHORITY_ATTRIBS.each { |attr_name|
               g.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
@@ -220,7 +234,7 @@ module Mods
               n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
           end
-          n.hierarchicalGeographic :path => 'hierarchicalGeograpic' do |n|
+          n.hierarchicalGeographic :path => 'hierarchicalGeographic' do |n|
             Mods::Subject::HIER_GEO_CHILD_ELEMENTS.each { |elname|
               n.send elname, :path => "#{elname}"
             }

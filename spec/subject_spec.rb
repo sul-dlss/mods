@@ -212,10 +212,10 @@ describe "Mods <subject> Element" do
       end
       
       it "should recognize the date attributes" do
+        @temporal.encoding.should == ['iso8601']
         Mods::DATE_ATTRIBS.each { |a| 
-          @mods_rec.from_str("<mods><subject><temporal #{a}='val'>now</temporal></subject></mods>").subject.temporal.send(a.to_sym).should == 'val'
+          @mods_rec.from_str("<mods><subject><temporal #{a}='val'>now</temporal></subject></mods>").subject.temporal.send(a.to_sym).should == ['val']
         }
-        @temporal.encoding.should == 'iso8601'
       end
       it "should be a NodeSet" do
         @lcsh_subject.temporal.should be_an_instance_of(Nokogiri::XML::NodeSet)
@@ -313,17 +313,22 @@ describe "Mods <subject> Element" do
     context "<name> child element" do
       it "should understand all attributes allowed on a <name> element" do
         Mods::Name::ATTRIBUTES.each { |a|
-          name = @mods_rec.from_str("<mods><subject><name #{a}='attr_val'>Obadiah</name></subject></mods>").subject.name
+          name = @mods_rec.from_str("<mods><subject><name #{a}='attr_val'>Obadiah</name></subject></mods>").subject.name_
           if (a == 'type')
-            name.type_at.should == 'attr_val'
+            name.type_at.should == ['attr_val']
           else
-            name.send(a.to_sym).should == 'attr_val'
+            name.send(a.to_sym).should == ['attr_val']
           end
         }
       end
       it "should understand all immediate child elements allowed on a <name> element" do
         Mods::Name::CHILD_ELEMENTS.each { |e|  
-          @mods_rec.from_str("<mods><subject><name><#{e}>el_val</#{e}></name></subject></mods>").subject.name.send(e.to_sym).text.should == 'el_val'
+          name = @mods_rec.from_str("<mods><subject><name><#{e}>el_val</#{e}></name></subject></mods>").subject.name_
+          if (e == 'description')
+            name.description_el.text.should == 'el_val'
+          elsif (e != 'role')
+            name.send(e.to_sym).text.should == 'el_val'
+          end
         }
       end
       it "should recognize authority attribute on the <name> element" do
@@ -331,7 +336,7 @@ describe "Mods <subject> Element" do
            <name type="personal" authority="lcsh">
              <namePart>Nahl, Charles Christian</namePart>
              <namePart type="date">1818-1878</namePart>
-           </name></mods>').subject.name.authority.should == "lcsh"
+           </name></mods>').subject.name_.authority.should == ["lcsh"]
       end
     end # <name>
      
