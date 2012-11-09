@@ -7,7 +7,7 @@ module Mods
   LINKING_ATTRIBS = ['xlink', 'ID']
 
   DATE_ATTRIBS = ['encoding', 'point', 'keyDate', 'qualifier']
-  ENCODING_ATTRIB_VALUES = ['w3cdtf', 'iso8601', 'marc']
+  ENCODING_ATTRIB_VALUES = ['w3cdtf', 'iso8601', 'marc', 'edtf', 'temper']
   POINT_ATTRIB_VALUES = ['start', 'end']
   KEY_DATE_ATTRIB_VALUEs = ['yes']
   QUALIFIER_ATTRIB_VALUES = ['approximate', 'inferred', 'questionable']
@@ -114,15 +114,17 @@ module Mods
         t.conference_name :path => '/mods/name[@type="conference"]'
 
         # LANGUAGE -------------------------------------------------------------------------------
-
         t.language :path => '/mods/language' do |n|
-          n.languageTerm :path => 'languageTerm' do |lt|
-            lt.type_at :path => '@type', :accessor => lambda { |a| a.text }
-            lt.authority :path => '@authority', :accessor => lambda { |a| a.text }
-          end
+          n.languageTerm :path => 'languageTerm'
           n.code_term :path => 'languageTerm[@type="code"]'
           n.text_term :path => 'languageTerm[@type="text"]'
           n.scriptTerm :path => 'scriptTerm'
+        end
+        t._languageTerm :path => '//languageTerm' do |lt|
+          lt.type_at :path => '@type', :accessor => lambda { |a| a.text }
+          Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+            lt.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
         end
 
         # PHYSICAL_DESCRIPTION -------------------------------------------------------------------
@@ -256,6 +258,49 @@ module Mods
             }
           end
         end
+        
+        # RECORD_INFO --------------------------------------------------------------------------
+        t.record_info :path => '/mods/recordInfo'
+        t._record_info :path => '//recordInfo' do |n|
+          # attributes
+          n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+          Mods::LANG_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
+          # child elements
+          n.recordContentSource :path => 'recordContentSource' do |r|
+            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+              r.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+          end
+          n.recordCreationDate :path => 'recordCreationDate' do |r|
+            Mods::DATE_ATTRIBS.each { |attr_name|
+              r.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+          end
+          n.recordChangeDate :path => 'recordChangeDate' do |r|
+            Mods::DATE_ATTRIBS.each { |attr_name|
+              r.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+          end
+          n.recordIdentifier :path => 'recordIdentifier' do |r|
+            r.source :path => '@source', :accessor => lambda { |a| a.text }
+          end
+          n.recordOrigin :path => 'recordOrigin'
+          n.languageOfCataloging :path => 'languageOfCataloging' do |r|
+            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+              r.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+            r.languageTerm :path => 'languageTerm'
+            r.scriptTerm :path => 'scriptTerm'
+          end
+          n.descriptionStandard :path => 'descriptionStandard' do |r|
+            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+              r.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+          end
+        end
+        
         
       end # terminology
 
