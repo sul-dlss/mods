@@ -37,6 +37,7 @@ TODO: Write usage instructions here
 
 == Releases
 
+0.0.6 implement recordInfo, fix to work under jruby
 0.0.5 implement subject, change a few constants
 0.0.4 implement language, location, origin_info, physical_description
 0.0.3 use nom-xml gem and make this more nokogiri-ish; implement name, title, and simple top level elements with no subelements
