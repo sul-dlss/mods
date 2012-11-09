@@ -9,7 +9,7 @@ describe "Mods <titleInfo> element" do
   it "should recognize type attribute on titleInfo element" do
     Mods::TitleInfo::TYPES.each { |t|
       @mods_rec.from_str("<mods><titleInfo type='#{t}'>hi</titleInfo></mods>")
-      @mods_rec.title_info.type_at.text.should == t
+      @mods_rec.title_info.type_at.should == [t]
     }
   end
   

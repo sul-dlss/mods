@@ -226,8 +226,8 @@ describe "Mods <subject> Element" do
         @temporal.size.should == 1
       end
       it "text should get element value" do
-        @lcsh_subject.temporal.text.should == ['500-1400']
-        @temporal.text.should == ['20010203T040506+0700']
+        @lcsh_subject.temporal.map { |n| n.text }.should == ['500-1400']
+        @temporal.map { |n| n.text }.should == ['20010203T040506+0700']
       end
     end # <temporal>
     
@@ -241,8 +241,8 @@ describe "Mods <subject> Element" do
         @four_subjects.genre.size.should == 4
       end
       it "text should get element value" do
-        @lcsh_subject.genre.text.should == ['Maps']
-        @four_subjects.genre.text.should include("Pictorial works")
+        @lcsh_subject.genre.map { |n| n.text }.should == ['Maps']
+        @four_subjects.genre.map { |n| n.text }.should include("Pictorial works")
       end
     end # <genre>
     
@@ -254,7 +254,7 @@ describe "Mods <subject> Element" do
         @geo_code_subject.geographicCode.size.should == 1
       end
       it "text should get element value" do
-        @geo_code_subject.geographicCode.text.should == ['f------']
+        @geo_code_subject.geographicCode.map { |n| n.text }.should == ['f------']
       end
       it "should recognize authority attributes" do
         Mods::AUTHORITY_ATTRIBS.each { |a|  
@@ -289,9 +289,9 @@ describe "Mods <subject> Element" do
         Mods::TitleInfo::ATTRIBUTES.each { |a|
           ti = @mods_rec.from_str("<mods><subject><titleInfo #{a}='attr_val'>THE</titleInfo></subject></mods>").subject.titleInfo
           if (a == 'type')
-            ti.type_at.should == 'attr_val'
+            ti.type_at.should == ['attr_val']
           else
-            ti.send(a.to_sym).should == 'attr_val'
+            ti.send(a.to_sym).should == ['attr_val']
           end
         }
       end
@@ -299,14 +299,14 @@ describe "Mods <subject> Element" do
         Mods::TitleInfo::CHILD_ELEMENTS.each { |e|  
           @mods_rec.from_str("<mods><subject><titleInfo><#{e}>el_val</#{e}></titleInfo></subject></mods>").subject.titleInfo.send(e.to_sym).text.should == 'el_val'
         }
-        @title_info.nonSort.should == ["The"]
+        @title_info.nonSort.map {|n| n.text}.should == ["The"]
       end
       
       it "should recognize authority attribute on the <titleInfo> element" do
         @mods_rec.from_str('<mods><subject>
           	<titleInfo type="uniform" authority="naf">
           	  	<title>Missale Carnotense</title>
-          	</titleInfo></subject></mods>').subject.titleInfo.authority.should == "naf"
+          	</titleInfo></subject></mods>').subject.titleInfo.authority.should == ["naf"]
       end
     end # <titleInfo>
     
@@ -399,11 +399,11 @@ describe "Mods <subject> Element" do
         @multi_carto.coordinates.size == 2
       end
       it "should be able to get the value of populated elements" do
-        @carto_scale.scale.text.should == ['[ca.1:90,000,000], [173']
-        @carto_empties.coordinates.text.should == ['W1730000 W0100000 N840000 N071000']
+        @carto_scale.scale.map { |n| n.text }.should == ['[ca.1:90,000,000], [173']
+        @carto_empties.coordinates.map { |n| n.text }.should == ['W1730000 W0100000 N840000 N071000']
       end
       it "should get the empty string for empty elements?" do
-        @carto_empties.projection.text.should == ['']
+        @carto_empties.projection.map { |n| n.text }.should == ['']
       end
     end # <cartographics>
     
@@ -418,7 +418,7 @@ describe "Mods <subject> Element" do
         @occupation.size.should == 1
       end
       it "text should get element value" do
-        @occupation.text.should == ['Migrant laborers']
+        @occupation.map { |n| n.text }.should == ['Migrant laborers']
       end
       it "should recognize authority attributes" do
         Mods::AUTHORITY_ATTRIBS.each { |a|  

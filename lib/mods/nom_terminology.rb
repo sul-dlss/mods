@@ -35,14 +35,14 @@ module Mods
         t.title_info :path => '/mods/titleInfo'
         
         t._title_info :path => '//titleInfo' do |n|
-          n.type_at :path => '@type'
+          n.type_at :path => '@type', :accessor => lambda { |a| a.text }
           n.title :path => 'title'
           n.subTitle :path => 'subTitle'
           n.nonSort :path => 'nonSort'
           n.partNumber :path => 'partNumber'
           n.partName :path => 'partName'
           n.sort_title :path => '.', :accessor => lambda { |node| 
-            if node.type_at.text != "alternative" || (node.type_at.text == "alternative" && mods_ng_xml.xpath('/mods/titleInfo').size == 1)
+            if node.type_at != "alternative" || (node.type_at == "alternative" && mods_ng_xml.xpath('/mods/titleInfo').size == 1)
               node.title.text + (!node.subTitle.text.empty? ? "#{@title_delimiter}#{node.subTitle.text}" : "" ) 
             end
           }
@@ -52,13 +52,13 @@ module Mods
              (!node.subTitle.text.empty? ? "#{@title_delimiter}#{node.subTitle.text}" : "" ) 
           }
           n.short_title :path => '.', :accessor => lambda { |node|  
-            if node.type_at.text != "alternative"
+            if node.type_at != "alternative"
               (!node.nonSort.text.empty? ? "#{node.nonSort.text} " : "" ) + 
               node.title.text
             end
           }
           n.alternative_title :path => '.', :accessor => lambda { |node|  
-            if node.type_at.text == "alternative"
+            if node.type_at == "alternative"
               (!node.nonSort.text.empty? ? "#{node.nonSort.text} " : "" ) + 
               node.title.text
             end
@@ -204,8 +204,12 @@ module Mods
               n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
           end
-#          n.titleInfo :path => 'titleInfo'
-#          n.name :path => 'name'
+          n.titleInfo :path => 'titleInfo' do |t|
+            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+              t.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+          end
+#          n.name :path => 'name' 
           n.geographicCode :path => 'geographicCode' do |g|
             Mods::AUTHORITY_ATTRIBS.each { |attr_name|
               g.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
@@ -218,7 +222,10 @@ module Mods
           end
           n.hierarchicalGeographic :path => 'hierarchicalGeograpic' do |n|
             Mods::Subject::HIER_GEO_CHILD_ELEMENTS.each { |elname|
-              t.send elname, :path => "#{elname}"
+              n.send elname, :path => "#{elname}"
+            }
+            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+              n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
           end
           n.cartographics :path => 'cartographics' do |n|
@@ -226,7 +233,7 @@ module Mods
             n.projection :path => 'projection'
             n.coordinates :path => 'coordinates'
             Mods::Subject::CARTOGRAPHICS_CHILD_ELEMENTS.each { |elname|
-              t.send elname, :path => "#{elname}"
+              n.send elname, :path => "#{elname}"
             }
           end
           n.occupation :path => 'occupation' do |n|
