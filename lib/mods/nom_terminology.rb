@@ -180,6 +180,62 @@ module Mods
           end
         end
         
+        # SUBJECT -----------------------------------------------------------------------------
+        t.subject :path => '/mods/subject' do |n|
+          Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
+          n.topic :path => 'topic' do |n|
+            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+              n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+          end
+          n.geographic :path => 'geographic' do |n|
+            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+              n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+          end
+          n.temporal :path => 'temporal' do |n|
+            n.encoding :path => 'encoding'
+            n.point :path => 'point'
+            n.keyDate :path => 'keyDate'
+            n.qualifier :path => 'qualifier'
+            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+              n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+          end
+#          n.titleInfo :path => 'titleInfo'
+#          n.name :path => 'name'
+          n.geographicCode :path => 'geographicCode' do |g|
+            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+              g.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+          end
+          n.genre :path => 'genre' do |n|
+            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+              n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+          end
+          n.hierarchicalGeographic :path => 'hierarchicalGeograpic' do |n|
+            Mods::Subject::HIER_GEO_CHILD_ELEMENTS.each { |elname|
+              t.send elname, :path => "#{elname}"
+            }
+          end
+          n.cartographics :path => 'cartographics' do |n|
+            n.scale :path => 'scale'
+            n.projection :path => 'projection'
+            n.coordinates :path => 'coordinates'
+            Mods::Subject::CARTOGRAPHICS_CHILD_ELEMENTS.each { |elname|
+              t.send elname, :path => "#{elname}"
+            }
+          end
+          n.occupation :path => 'occupation' do |n|
+            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+              n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+          end
+        end
+        
       end # terminology
 
       mods_ng_xml.nom!
