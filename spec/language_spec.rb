@@ -4,42 +4,53 @@ describe "Mods <language> Element" do
   before(:all) do
     @mods_rec = Mods::Record.new
     @simple = '<mods><language>Greek</language></mods>'
+    @simple_ln = @mods_rec.from_str(@simple).language
     @iso639_2b_code = '<mods><language><languageTerm authority="iso639-2b" type="code">fre</languageTerm></language></mods>'
+    @iso639_2b_code_ln = @mods_rec.from_str(@iso639_2b_code).language
     @iso639_2b_text = '<mods><language><languageTerm authority="iso639-2b" type="text">English</languageTerm></language></mods>'
+    @iso639_2b_text_ln = @mods_rec.from_str(@iso639_2b_text).language
     @mult_codes = '<mods><language><languageTerm authority="iso639-2b" type="code">per ara, dut</languageTerm></language></mods>'
-    @mult_code_terms = '<mods><language><languageTerm authority="iso639-2b" type="code">spa</languageTerm><languageTerm authority="iso639-2b" type="code">dut</languageTerm></language></mods>'
-    @mult_text_terms = '<mods><language><languageTerm authority="iso639-2b" type="text">Chinese</languageTerm><languageTerm authority="iso639-2b" type="text">Spanish</languageTerm></language></mods>'
+    @mult_codes_ln = @mods_rec.from_str(@mult_codes).language
+    mult_code_terms = '<mods><language><languageTerm authority="iso639-2b" type="code">spa</languageTerm><languageTerm authority="iso639-2b" type="code">dut</languageTerm></language></mods>'
+    @mult_code_terms = @mods_rec.from_str(mult_code_terms).language
+    mult_text_terms = '<mods><language><languageTerm authority="iso639-2b" type="text">Chinese</languageTerm><languageTerm authority="iso639-2b" type="text">Spanish</languageTerm></language></mods>'
+    @mult_text_terms = @mods_rec.from_str(mult_text_terms).language
+    @ex_array = [@simple_ln, @iso639_2b_code_ln, @iso639_2b_text_ln, @mult_codes_ln, @mult_code_terms, @mult_text_terms]
   end
 
-  context "basic language terminology pieces" do
+  context "basic <language> terminology pieces" do
     before(:all) do
       @mods_rec.from_str(@iso639_2b_code)
     end
+    it "should be a NodeSet" do
+      @ex_array.each { |t| t.should be_an_instance_of(Nokogiri::XML::NodeSet) }
+    end
+    it "should have as many members as there are <language> elements in the xml" do
+      @ex_array.each { |t| t.size.should == 1 }
+    end
     it "should understand languageTerm.type_at attribute" do
-      @mods_rec.language.languageTerm.type_at.should == ["code"]
+      @iso639_2b_code_ln.languageTerm.type_at.should == ["code"]
     end
     it "should understand languageTerm.authority attribute" do
-      @mods_rec.language.languageTerm.authority.should == ["iso639-2b"]
+      @iso639_2b_code_ln.languageTerm.authority.should == ["iso639-2b"]
     end
     it "should understand languageTerm value" do
-      @mods_rec.language.languageTerm.text.should == "fre"
-      @mods_rec.language.languageTerm.size.should == 1
+      @iso639_2b_code_ln.languageTerm.text.should == "fre"
+      @iso639_2b_code_ln.languageTerm.size.should == 1
     end
     it "should get one language.code_term for each languageTerm element with a type attribute of 'code'" do
-      @mods_rec.language.code_term.size.should == 1
-      @mods_rec.language.code_term.text.should == "fre"
-      @mods_rec.from_str(@mult_code_terms)
-      @mods_rec.language.code_term.size.should == 2
-      @mods_rec.language.code_term.first.text.should include("spa")
-      @mods_rec.language.code_term[1].text.should == "dut"
+      @iso639_2b_code_ln.code_term.size.should == 1
+      @iso639_2b_code_ln.code_term.text.should == "fre"
+      @mult_code_terms.code_term.size.should == 2
+      @mult_code_terms.code_term.first.text.should include("spa")
+      @mult_code_terms.code_term[1].text.should == "dut"
     end
     it "should get one language.text_term for each languageTerm element with a type attribute of 'text'" do
-      @mods_rec.from_str(@mult_text_terms)
-      @mods_rec.language.text_term.size.should == 2
-      @mods_rec.language.text_term.first.text.should include("Chinese")
-      @mods_rec.language.text_term[1].text.should == "Spanish"
+      @mult_text_terms.text_term.size.should == 2
+      @mult_text_terms.text_term.first.text.should include("Chinese")
+      @mult_text_terms.text_term[1].text.should == "Spanish"
     end
-  end
+  end # basic <language> terminology pieces
   
   context "Mods::Record.languages convenience method" do
     
