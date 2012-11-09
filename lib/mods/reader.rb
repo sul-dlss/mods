@@ -34,6 +34,8 @@ module Mods
     def normalize_mods
       if !@namespace_aware
         @mods_ng_xml.remove_namespaces!
+        # doing weird re-reading of xml for jruby, which gets confused by its own cache
+        @mods_ng_xml = Nokogiri::XML(@mods_ng_xml.to_s)
       end
     end
     
