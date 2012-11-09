@@ -28,16 +28,27 @@ describe "Mods <language> Element" do
     it "should have as many members as there are <language> elements in the xml" do
       @ex_array.each { |t| t.size.should == 1 }
     end
-    it "should understand languageTerm.type_at attribute" do
-      @iso639_2b_code_ln.languageTerm.type_at.should == ["code"]
-    end
-    it "should understand languageTerm.authority attribute" do
-      @iso639_2b_code_ln.languageTerm.authority.should == ["iso639-2b"]
-    end
-    it "should understand languageTerm value" do
-      @iso639_2b_code_ln.languageTerm.text.should == "fre"
-      @iso639_2b_code_ln.languageTerm.size.should == 1
-    end
+    
+    context "<languageTerm> child element" do
+      it "should understand languageTerm.type_at attribute" do
+        @iso639_2b_code_ln.languageTerm.type_at.should == ["code"]
+      end
+      it "should understand languageTerm.authority attribute" do
+        @iso639_2b_code_ln.languageTerm.authority.should == ["iso639-2b"]
+      end
+      it "should understand languageTerm value" do
+        @iso639_2b_code_ln.languageTerm.text.should == "fre"
+        @iso639_2b_code_ln.languageTerm.size.should == 1
+      end
+      
+      it "should recognize all authority attributes" do
+        Mods::AUTHORITY_ATTRIBS.each { |a|
+          @mods_rec.from_str("<mods><language><languageTerm #{a}='attr_val'>zzz</languageTerm></language></mods>")
+          @mods_rec.language.languageTerm.send(a.to_sym).should == ['attr_val']
+        }
+      end
+    end # <languageTerm> 
+    
     it "should get one language.code_term for each languageTerm element with a type attribute of 'code'" do
       @iso639_2b_code_ln.code_term.size.should == 1
       @iso639_2b_code_ln.code_term.text.should == "fre"
