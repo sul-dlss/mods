@@ -259,6 +259,42 @@ module Mods
           end
         end
         
+        # PART -----------------------------------------------------------------------------------
+        t.part :path => '/mods/part' do |n|
+          # attributes
+          n.id_at :path => '@ID', :accessor => lambda { |a| a.text }
+          n.order :path => '@order', :accessor => lambda { |a| a.text }
+          n.type_at :path => '@type', :accessor => lambda { |a| a.text }
+          # child elements
+          n.detail :path => 'detail' do |e|
+            # attributes
+            e.level :path => '@level', :accessor => lambda { |a| a.text }
+            e.type_at :path => '@type', :accessor => lambda { |a| a.text }
+            # elements
+            e.number :path => 'number'
+            e.caption :path => 'caption'
+            e.title :path => 'title'
+          end
+          n.extent :path => 'extent' do |e|  # TODO:  extent is ordered in xml schema
+            # attributes
+            e.unit :path => '@unit', :accessor => lambda { |a| a.text }
+            # elements
+            e.start :path => 'start'
+            e.end :path => 'end'
+            e.total :path => 'total'
+            e.list :path => 'list'
+          end
+          n.date :path => 'date' do |e|  # TODO:  extent is ordered in xml schema
+            Mods::DATE_ATTRIBS.reject { |a| a == 'keyDate' }.each { |attr_name|
+              e.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+          end
+          n.text_el :path => 'text' do |e|  
+            e.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+            e.type_at :path => '@type', :accessor => lambda { |a| a.text }
+          end
+        end
+        
         # RECORD_INFO --------------------------------------------------------------------------
         t.record_info :path => '/mods/recordInfo'
         t._record_info :path => '//recordInfo' do |n|
