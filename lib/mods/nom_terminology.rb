@@ -27,94 +27,10 @@ module Mods
         Mods::TOP_LEVEL_ELEMENTS_SIMPLE.each { |elname|
           t.send elname, :path => "/mods/#{elname}"
         }
-
-        # TITLE_INFO ----------------------------------------------------------------------------
-        # note - titleInfo can be a top level element or a sub-element of relatedItem 
-        #   (<titleInfo> as subelement of <subject> is not part of the MODS namespace)
         
-        t.title_info :path => '/mods/titleInfo'
-        
-        t._title_info :path => '//titleInfo' do |n|
-          Mods::TitleInfo::ATTRIBUTES.each { |attr_name|
-            if attr_name != 'type'
-              n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
-            else
-              n.type_at :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
-            end
-          }          
-          n.title :path => 'title'
-          n.subTitle :path => 'subTitle'
-          n.nonSort :path => 'nonSort'
-          n.partNumber :path => 'partNumber'
-          n.partName :path => 'partName'
-          n.sort_title :path => '.', :accessor => lambda { |node| 
-            if node.type_at != "alternative" || (node.type_at == "alternative" && mods_ng_xml.xpath('/mods/titleInfo').size == 1)
-              node.title.text + (!node.subTitle.text.empty? ? "#{@title_delimiter}#{node.subTitle.text}" : "" ) 
-            end
-          }
-          n.full_title :path => '.', :accessor => lambda { |node| 
-             (!node.nonSort.text.empty? ? "#{node.nonSort.text} " : "" ) + 
-             node.title.text + 
-             (!node.subTitle.text.empty? ? "#{@title_delimiter}#{node.subTitle.text}" : "" ) 
-          }
-          n.short_title :path => '.', :accessor => lambda { |node|  
-            if node.type_at != "alternative"
-              (!node.nonSort.text.empty? ? "#{node.nonSort.text} " : "" ) + 
-              node.title.text
-            end
-          }
-          n.alternative_title :path => '.', :accessor => lambda { |node|  
-            if node.type_at == "alternative"
-              (!node.nonSort.text.empty? ? "#{node.nonSort.text} " : "" ) + 
-              node.title.text
-            end
-          }
-        end
-        
-        # current way to do short_title correctly
-#        t.short_title :path => '/mods/titleInfo[not(@type=alternative)]', :accessor => lambda { |node|  
-#            (!node.nonSort.text.empty? ? "#{node.nonSort.text} " : "" ) + 
-#            node.title.text
-#          }
-
-
-        # NAME ------------------------------------------------------------------------------------
-        t.plain_name :path => '/mods/name'
-
-        t._plain_name :path => '//name' do |n|
-          
-          Mods::Name::ATTRIBUTES.each { |attr_name|
-            if attr_name != 'type'
-              n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
-            else
-              n.type_at :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
-            end
-          }
-          
-          n.namePart :path => 'namePart' do |np|
-            np.type_at :path => '@type'
-          end
-          n.displayForm :path => 'displayForm'
-          n.affiliation :path => 'affiliation'
-          n.description_el :path => 'description' # description is used by Nokogiri
-          n.role :path => 'role/roleTerm' do |r|
-            r.type_at :path => "@type", :accessor => lambda { |a| a.text }
-            r.authority :path => "@authority", :accessor => lambda { |a| a.text }
-          end
-        end
-
-        t.personal_name :path => '/mods/name[@type="personal"]' do |n|
-          n.family_name :path => 'namePart[@type="family"]'
-          n.given_name :path => 'namePart[@type="given"]'
-          n.termsOfAddress :path => 'namePart[@type="termsOfAddress"]'
-          n.date :path => 'namePart[@type="date"]'
-        end
-        
-        t.corporate_name :path => '/mods/name[@type="corporate"]'
-        t.conference_name :path => '/mods/name[@type="conference"]'
-
         # LANGUAGE -------------------------------------------------------------------------------
-        t.language :path => '/mods/language' do |n|
+        t.language :path => '/mods/language'
+        t._language :path => '//language' do |n|
           n.languageTerm :path => 'languageTerm'
           n.code_term :path => 'languageTerm[@type="code"]'
           n.text_term :path => 'languageTerm[@type="text"]'
@@ -125,26 +41,11 @@ module Mods
           Mods::AUTHORITY_ATTRIBS.each { |attr_name|
             lt.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
           }
-        end
+        end # t.language
 
-        # PHYSICAL_DESCRIPTION -------------------------------------------------------------------
-        t.physical_description :path => '/mods/physicalDescription' do |n|
-          n.digitalOrigin :path => 'digitalOrigin'
-          n.extent :path => 'extent'
-          n.form :path => 'form' do |f|
-            f.authority :path => '@authority', :accessor => lambda { |a| a.text }
-            f.type_at :path => '@type', :accessor => lambda { |a| a.text }
-          end
-          n.internetMediaType :path => 'internetMediaType'
-          n.note :path => 'note' do |nn|
-            nn.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
-            nn.type_at :path => '@type', :accessor => lambda { |a| a.text }
-          end
-          n.reformattingQuality :path => 'reformattingQuality'
-        end
-        
         # LOCATION -------------------------------------------------------------------------------
-        t.location :path => '/mods/location' do |n|
+        t.location :path => '/mods/location'
+        t._location :path => '//location' do |n|
           n.physicalLocation :path => 'physicalLocation' do |e|
             e.authority :path => '@authority', :accessor => lambda { |a| a.text }
             e.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
@@ -159,10 +60,47 @@ module Mods
           end
           n.holdingSimple :path => 'holdingSimple'
           n.holdingExternal :path => 'holdingExternal'
+        end # t.location
+        
+        # NAME ------------------------------------------------------------------------------------
+        t.plain_name :path => '/mods/name'
+        t._plain_name :path => '//name' do |n|
+          Mods::Name::ATTRIBUTES.each { |attr_name|
+            if attr_name != 'type'
+              n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            else
+              n.type_at :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            end
+          }
+          # elements
+          n.namePart :path => 'namePart' do |np|
+            np.type_at :path => '@type'
+          end
+          n.displayForm :path => 'displayForm'
+          n.affiliation :path => 'affiliation'
+          n.description_el :path => 'description' # description is used by Nokogiri
+          n.role :path => 'role/roleTerm' do |r|
+            r.type_at :path => "@type", :accessor => lambda { |a| a.text }
+            r.authority :path => "@authority", :accessor => lambda { |a| a.text }
+          end
+        end # t._plain_name
+
+        t.personal_name :path => '/mods/name[@type="personal"]'
+        t._personal_name :path => '//name[@type="personal"]' do |n|
+          n.family_name :path => 'namePart[@type="family"]'
+          n.given_name :path => 'namePart[@type="given"]'
+          n.termsOfAddress :path => 'namePart[@type="termsOfAddress"]'
+          n.date :path => 'namePart[@type="date"]'
         end
         
+        t.corporate_name :path => '/mods/name[@type="corporate"]'
+        t._corporate_name :path => '//name[@type="corporate"]'
+        t.conference_name :path => '/mods/name[@type="conference"]'
+        t._conference_name :path => '//name[@type="conference"]'
+
         # ORIGIN_INFO --------------------------------------------------------------------------
-        t.origin_info :path => '/mods/originInfo' do |n|
+        t.origin_info :path => '/mods/originInfo'
+        t._origin_info :path => '//originInfo' do |n|
           n.place :path => 'place' do |e|
             e.placeTerm :path => 'placeTerm' do |ee|
               ee.type_at :path => '@type', :accessor => lambda { |a| a.text }
@@ -186,10 +124,135 @@ module Mods
           n.frequency :path => 'frequency' do |f|
             f.authority :path => '@authority', :accessor => lambda { |a| a.text }
           end
+        end # t.origin_info
+        
+        # PART -----------------------------------------------------------------------------------
+        t.part :path => '/mods/part'
+        t._part :path => '//part' do |n|
+          # attributes
+          n.id_at :path => '@ID', :accessor => lambda { |a| a.text }
+          n.order :path => '@order', :accessor => lambda { |a| a.text }
+          n.type_at :path => '@type', :accessor => lambda { |a| a.text }
+          # child elements
+          n.detail :path => 'detail' do |e|
+            # attributes
+            e.level :path => '@level', :accessor => lambda { |a| a.text }
+            e.type_at :path => '@type', :accessor => lambda { |a| a.text }
+            # elements
+            e.number :path => 'number'
+            e.caption :path => 'caption'
+            e.title :path => 'title'
+          end
+          n.extent :path => 'extent' do |e|  # TODO:  extent is ordered in xml schema
+            # attributes
+            e.unit :path => '@unit', :accessor => lambda { |a| a.text }
+            # elements
+            e.start :path => 'start'
+            e.end :path => 'end'
+            e.total :path => 'total'
+            e.list :path => 'list'
+          end
+          n.date :path => 'date' do |e|  # TODO:  extent is ordered in xml schema
+            Mods::DATE_ATTRIBS.reject { |a| a == 'keyDate' }.each { |attr_name|
+              e.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+          end
+          n.text_el :path => 'text' do |e|  
+            e.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+            e.type_at :path => '@type', :accessor => lambda { |a| a.text }
+          end
+        end # t._part
+        
+        # PHYSICAL_DESCRIPTION -------------------------------------------------------------------
+        t.physical_description :path => '/mods/physicalDescription'
+        t._physical_description :path => '//physicalDescription' do |n|
+          n.digitalOrigin :path => 'digitalOrigin'
+          n.extent :path => 'extent'
+          n.form :path => 'form' do |f|
+            f.authority :path => '@authority', :accessor => lambda { |a| a.text }
+            f.type_at :path => '@type', :accessor => lambda { |a| a.text }
+          end
+          n.internetMediaType :path => 'internetMediaType'
+          n.note :path => 'note' do |nn|
+            nn.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+            nn.type_at :path => '@type', :accessor => lambda { |a| a.text }
+          end
+          n.reformattingQuality :path => 'reformattingQuality'
         end
         
+        # RECORD_INFO --------------------------------------------------------------------------
+        t.record_info :path => '/mods/recordInfo'
+        t._record_info :path => '//recordInfo' do |n|
+          # attributes
+          n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+          Mods::LANG_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
+          # child elements
+          n.recordContentSource :path => 'recordContentSource' do |r|
+            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+              r.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+          end
+          n.recordCreationDate :path => 'recordCreationDate' do |r|
+            Mods::DATE_ATTRIBS.each { |attr_name|
+              r.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+          end
+          n.recordChangeDate :path => 'recordChangeDate' do |r|
+            Mods::DATE_ATTRIBS.each { |attr_name|
+              r.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+          end
+          n.recordIdentifier :path => 'recordIdentifier' do |r|
+            r.source :path => '@source', :accessor => lambda { |a| a.text }
+          end
+          n.recordOrigin :path => 'recordOrigin'
+          n.languageOfCataloging :path => 'languageOfCataloging' do |r|
+            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+              r.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+            r.languageTerm :path => 'languageTerm'
+            r.scriptTerm :path => 'scriptTerm'
+          end
+          n.descriptionStandard :path => 'descriptionStandard' do |r|
+            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+              r.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+          end
+        end # t._record_info
+        
+        # RELATED_ITEM-------------------------------------------------------------------------
+        t.related_item :path => '/mods/relatedItem' do |n|
+          # attributes
+          n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+          n.id_at :path => '@ID', :accessor => lambda { |a| a.text }
+          n.type_at :path => '@type', :accessor => lambda { |a| a.text }
+          # elements
+          n.abstract :path => 'abstract'
+          n.accessCondition :path => 'accessCondition'
+          n.classification :path => 'classification'
+          n.extension :path => 'extension'
+          n.genre :path => 'genre'
+          n.identifier :path => 'identifier'
+          n.language :path => 'language'
+          n.location :path => 'location'
+          n.name_el :path => 'name'
+          n.note :path => 'note'
+          n.originInfo :path => 'originInfo'
+          n.part :path => 'part'
+          n.physicalDescription :path => 'physicalDescription'
+          n.recordInfo :path => 'recordInfo'
+          n.subject :path => 'subject'
+          n.tableOfContents :path => 'tableOfContents'
+          n.targetAudience :path => 'targetAudience'
+          n.titleInfo :path => 'titleInfo'
+          n.typeOfResource :path => 'typeOfResource'
+        end
+
         # SUBJECT -----------------------------------------------------------------------------
-        t.subject :path => '/mods/subject' do |n|
+        t.subject :path => '/mods/subject'
+        t._subject :path => '//subject' do |n|
           Mods::AUTHORITY_ATTRIBS.each { |attr_name|
             n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
           }
@@ -257,86 +320,46 @@ module Mods
               n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
           end
-        end
+        end # t.subject
         
-        # PART -----------------------------------------------------------------------------------
-        t.part :path => '/mods/part' do |n|
-          # attributes
-          n.id_at :path => '@ID', :accessor => lambda { |a| a.text }
-          n.order :path => '@order', :accessor => lambda { |a| a.text }
-          n.type_at :path => '@type', :accessor => lambda { |a| a.text }
-          # child elements
-          n.detail :path => 'detail' do |e|
-            # attributes
-            e.level :path => '@level', :accessor => lambda { |a| a.text }
-            e.type_at :path => '@type', :accessor => lambda { |a| a.text }
-            # elements
-            e.number :path => 'number'
-            e.caption :path => 'caption'
-            e.title :path => 'title'
-          end
-          n.extent :path => 'extent' do |e|  # TODO:  extent is ordered in xml schema
-            # attributes
-            e.unit :path => '@unit', :accessor => lambda { |a| a.text }
-            # elements
-            e.start :path => 'start'
-            e.end :path => 'end'
-            e.total :path => 'total'
-            e.list :path => 'list'
-          end
-          n.date :path => 'date' do |e|  # TODO:  extent is ordered in xml schema
-            Mods::DATE_ATTRIBS.reject { |a| a == 'keyDate' }.each { |attr_name|
-              e.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
-            }
-          end
-          n.text_el :path => 'text' do |e|  
-            e.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
-            e.type_at :path => '@type', :accessor => lambda { |a| a.text }
-          end
-        end
-        
-        # RECORD_INFO --------------------------------------------------------------------------
-        t.record_info :path => '/mods/recordInfo'
-        t._record_info :path => '//recordInfo' do |n|
-          # attributes
-          n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
-          Mods::LANG_ATTRIBS.each { |attr_name|
-            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+        # TITLE_INFO ----------------------------------------------------------------------------
+        t.title_info :path => '/mods/titleInfo'
+        t._title_info :path => '//titleInfo' do |n|
+          Mods::TitleInfo::ATTRIBUTES.each { |attr_name|
+            if attr_name != 'type'
+              n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            else
+              n.type_at :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            end
+          }          
+          n.title :path => 'title'
+          n.subTitle :path => 'subTitle'
+          n.nonSort :path => 'nonSort'
+          n.partNumber :path => 'partNumber'
+          n.partName :path => 'partName'
+          n.sort_title :path => '.', :accessor => lambda { |node| 
+            if node.type_at != "alternative" || (node.type_at == "alternative" && mods_ng_xml.xpath('/mods/titleInfo').size == 1)
+              node.title.text + (!node.subTitle.text.empty? ? "#{@title_delimiter}#{node.subTitle.text}" : "" ) 
+            end
           }
-          # child elements
-          n.recordContentSource :path => 'recordContentSource' do |r|
-            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
-              r.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
-            }
-          end
-          n.recordCreationDate :path => 'recordCreationDate' do |r|
-            Mods::DATE_ATTRIBS.each { |attr_name|
-              r.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
-            }
-          end
-          n.recordChangeDate :path => 'recordChangeDate' do |r|
-            Mods::DATE_ATTRIBS.each { |attr_name|
-              r.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
-            }
-          end
-          n.recordIdentifier :path => 'recordIdentifier' do |r|
-            r.source :path => '@source', :accessor => lambda { |a| a.text }
-          end
-          n.recordOrigin :path => 'recordOrigin'
-          n.languageOfCataloging :path => 'languageOfCataloging' do |r|
-            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
-              r.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
-            }
-            r.languageTerm :path => 'languageTerm'
-            r.scriptTerm :path => 'scriptTerm'
-          end
-          n.descriptionStandard :path => 'descriptionStandard' do |r|
-            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
-              r.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
-            }
-          end
-        end
-        
+          n.full_title :path => '.', :accessor => lambda { |node| 
+             (!node.nonSort.text.empty? ? "#{node.nonSort.text} " : "" ) + 
+             node.title.text + 
+             (!node.subTitle.text.empty? ? "#{@title_delimiter}#{node.subTitle.text}" : "" ) 
+          }
+          n.short_title :path => '.', :accessor => lambda { |node|  
+            if node.type_at != "alternative"
+              (!node.nonSort.text.empty? ? "#{node.nonSort.text} " : "" ) + 
+              node.title.text
+            end
+          }
+          n.alternative_title :path => '.', :accessor => lambda { |node|  
+            if node.type_at == "alternative"
+              (!node.nonSort.text.empty? ? "#{node.nonSort.text} " : "" ) + 
+              node.title.text
+            end
+          }
+        end # t._title_info
         
       end # terminology
 
