@@ -33,6 +33,7 @@ describe "Mods <relatedItem> Element" do
     @rel_it2 = @mods_rec.from_str('<mods><relatedItem type="constituent" ID="MODSMD_ARTICLE1">
                        	<titleInfo>
                        	  	<title>Nuppineula.</title>
+                       	</titleInfo>
                        	<genre>article</genre>
                        	<part ID="DIVL15" type="paragraph" order="1"/>
                        	<part ID="DIVL17" type="paragraph" order="2"/>
@@ -75,6 +76,7 @@ describe "Mods <relatedItem> Element" do
     
     context "<genre> child element" do
       it "relatedItem.genre should match <relatedItem><genre>" do
+p @rel_it2.text
         @rel_it2.genre.map { |ri| ri.text }.should == ['article']
       end
     end # <genre> child element
@@ -108,7 +110,6 @@ describe "Mods <relatedItem> Element" do
 
     context "<part> child element" do
       it "relatedItem.part.type_at should match <relatedItem><part type=''> attribute" do
-p @rel_it2.part.type_at.size     
         @rel_it2.part.type_at.should == ['paragraph', 'paragraph', 'paragraph']
       end
       it "relatedItem.part.id_at should match <relatedItem><part ID=''> attribute" do
