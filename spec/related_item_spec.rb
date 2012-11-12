@@ -108,6 +108,7 @@ describe "Mods <relatedItem> Element" do
 
     context "<part> child element" do
       it "relatedItem.part.type_at should match <relatedItem><part type=''> attribute" do
+p @rel_it2.part.type_at.size     
         @rel_it2.part.type_at.should == ['paragraph', 'paragraph', 'paragraph']
       end
       it "relatedItem.part.id_at should match <relatedItem><part ID=''> attribute" do
@@ -143,8 +144,8 @@ describe "Mods <relatedItem> Element" do
       it "relatedItem.typeOfResource should access <relatedItem><typeOfResource>" do
         @rel_it1.typeOfResource.map { |n| n.text }.should == ['text']
       end
-      it "relatedItem.typeOfResource.collection should access <relatedItem><typeOfResource collection=''> attribute" do
-        @rel_it1.typeOfResource.collection.should == ['yes']
+      it "relatedItem.typeOfResource.collection should access <relatedItem><typeOfResource collection='yes'> attribute" do
+        @coll_ex.typeOfResource.collection.should == ['yes']
       end
     end # <typeOfResource> child element
     

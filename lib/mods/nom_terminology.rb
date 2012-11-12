@@ -90,8 +90,10 @@ module Mods
         t.location :path => '/mods/location'
         t._location :path => '//location' do |n|
           n.physicalLocation :path => 'physicalLocation' do |e|
-            e.authority :path => '@authority', :accessor => lambda { |a| a.text }
             e.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+              e.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
           end
           n.shelfLocator :path => 'shelfLocator'
           n.url :path => 'url' do |e|
@@ -117,14 +119,16 @@ module Mods
           }
           # elements
           n.namePart :path => 'namePart' do |np|
-            np.type_at :path => '@type'
+            np.type_at :path => '@type', :accessor => lambda { |a| a.text }
           end
           n.displayForm :path => 'displayForm'
           n.affiliation :path => 'affiliation'
           n.description_el :path => 'description' # description is used by Nokogiri
           n.role :path => 'role/roleTerm' do |r|
             r.type_at :path => "@type", :accessor => lambda { |a| a.text }
-            r.authority :path => "@authority", :accessor => lambda { |a| a.text }
+            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+              r.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
           end
         end # t._plain_name
 
@@ -154,16 +158,17 @@ module Mods
           n.place :path => 'place' do |e|
             e.placeTerm :path => 'placeTerm' do |ee|
               ee.type_at :path => '@type', :accessor => lambda { |a| a.text }
-              ee.authority :path => '@authority', :accessor => lambda { |a| a.text }
+              Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+                ee.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+              }
             end
           end
           n.publisher :path => 'publisher'
           Mods::ORIGIN_INFO_DATE_ELEMENTS.each { |date_el|
             n.send date_el, :path => "#{date_el}" do |d|
-              d.encoding :path => '@encoding', :accessor => lambda { |a| a.text }
-              d.point :path => '@point', :accessor => lambda { |a| a.text }
-              d.keyDate :path => '@keyDate', :accessor => lambda { |a| a.text }
-              d.qualifier :path => '@qualifier', :accessor => lambda { |a| a.text }
+              Mods::DATE_ATTRIBS.each { |attr_name|
+                d.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+              }
               if date_el == 'dateOther'
                 d.type_at :path => '@type', :accessor => lambda { |a| a.text }
               end
@@ -172,7 +177,9 @@ module Mods
           n.edition :path => 'edition'
           n.issuance :path => 'issuance'
           n.frequency :path => 'frequency' do |f|
-            f.authority :path => '@authority', :accessor => lambda { |a| a.text }
+            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+              f.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
           end
         end # t.origin_info
         
@@ -219,8 +226,10 @@ module Mods
           n.digitalOrigin :path => 'digitalOrigin'
           n.extent :path => 'extent'
           n.form :path => 'form' do |f|
-            f.authority :path => '@authority', :accessor => lambda { |a| a.text }
             f.type_at :path => '@type', :accessor => lambda { |a| a.text }
+            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+              f.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
           end
           n.internetMediaType :path => 'internetMediaType'
           n.note :path => 'note' do |nn|
@@ -317,13 +326,14 @@ module Mods
             }
           end
           n.temporal :path => 'temporal' do |n|
-            n.encoding :path => 'encoding'
-            n.point :path => 'point'
-            n.keyDate :path => 'keyDate'
-            n.qualifier :path => 'qualifier'
+            # date attributes as elements
+            Mods::DATE_ATTRIBS.each { |attr_name|
+              n.send attr_name, :path => "#{attr_name}"
+            }
             Mods::AUTHORITY_ATTRIBS.each { |attr_name|
               n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
+            # date attributes as attributes
             Mods::DATE_ATTRIBS.each { |attr_name|
               n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
@@ -441,43 +451,13 @@ module Mods
       mods_ng_xml
     end # set_terminology_no_ns
 
-# TODO: common top level element attributes:  ID; xlink; lang; xml:lang; script; transliteration 
-#       authority, authorityURI, valueURI
-#       displayLabel, usage altRepGroup
-#       type
-# TODO:   common subelement attributes:   lang, xml:lang, script, transliteration
-# TODO: other common attribute:  supplied
-    
-    
+
     # set the NOM terminology, with namespaces
     # @param mods_ng_xml a Nokogiri::Xml::Document object containing MODS (with namespaces)
     def set_terminology_ns(mods_ng_xml)
       mods_ng_xml.set_terminology(:namespaces => { 'm' => Mods::MODS_NS}) do |t|
 
-        # note - titleInfo can be a top level element or a sub-element of subject and relatedItem
-        t.title_info :path => '//m:titleInfo' do |n|
-          n.title :path => 'm:title'
-          n.subTitle :path => 'm:subTitle'
-          n.nonSort :path => 'm:nonSort'
-          n.partNumber :path => 'm:partNumber'
-          n.partName :path => 'm:partName'
-          n.type_at :path => '@type'
-        end
-
-        t.author :path => '//m:name' do |n|
-          n.valueURI :path => '@valueURI'
-          n.namePart :path => 'm:namePart', :single => true
-        end
-
-        t.corporate_authors :path => '//m:name[@type="corporate"]'
-        t.personal_authors :path => 'm:name[@type="personal"]' do |n|
-          n.roleTerm :path => 'm:role/m:roleTerm'
-          n.name_role_pair :path => '.', :accessor => lambda { |node| node.roleTerm.text + ": " + node.namePart.text }
-        end
-
-        t.language :path => 'm:language' do |n|
-          n.value :path => 'm:languageTerm', :accessor => :text
-        end
+        # TODO  implement terminology with namespace
 
       end
       

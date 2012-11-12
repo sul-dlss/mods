@@ -229,7 +229,7 @@ describe "Mods <name> Element" do
       it "should recognize type attribute on namePart element" do
         Mods::Name::NAME_PART_TYPES.each { |t|  
           @mods_rec.from_str("<mods><name><namePart type='#{t}'>hi</namePart></name></mods>")
-          @mods_rec.plain_name.namePart.type_at.text.should == t
+          @mods_rec.plain_name.namePart.type_at.should == [t]
         }
       end
     end
