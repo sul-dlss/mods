@@ -65,17 +65,17 @@ describe "Mods <relatedItem> Element" do
     end
     it "relatedItem.id_at should match ID attribute" do
       @rel_it2.id_at.should == ['MODSMD_ARTICLE1']
-      [@rel_it1, @rel_it_mult, @coll_ex].each { |ri| ri.id_at.should == [] }
+      [@rel_it1, @rel_it_mult, @coll_ex].each { |ri| ri.id_at.size.should == 0 }
     end
     it "relatedItem.displayLabel should match displayLabel attribute" do
       @rel_it1.displayLabel.should == ['Bibliography'] 
       @rel_it_mult.displayLabel.should == ['From:']
-      [@rel_it2, @coll_ex].each { |ri| ri.displayLabel.should == [] }
+      [@rel_it2, @coll_ex].each { |ri| ri.displayLabel.size.should == 0 }
     end
     
     context "<genre> child element" do
       it "relatedItem.genre should match <relatedItem><genre>" do
-        @rel_it2.genre.map { |n| n.text }.should == ['article']
+        @rel_it2.genre.map { |ri| ri.text }.should == ['article']
       end
     end # <genre> child element
     
