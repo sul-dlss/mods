@@ -64,6 +64,13 @@ module Mods
           }
         end
         
+        # IDENTIIER ------------------------------------------------------------------------------
+        t._identifier :path => '//identifier' do |n|
+          n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+          n.invalid :path => '@invalid', :accessor => lambda { |a| a.text }
+          n.type_at :path => '@type', :accessor => lambda { |a| a.text }
+        end
+        
         # LANGUAGE -------------------------------------------------------------------------------
         t.language :path => '/mods/language'
         t._language :path => '//language' do |n|
@@ -134,6 +141,13 @@ module Mods
         t.conference_name :path => '/mods/name[@type="conference"]'
         t._conference_name :path => '//name[@type="conference"]'
 
+        # NOTE ---------------------------------------------------------------------------------
+        t._note :path => '//note' do |n|
+          n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+          n.id_at :path => '@ID', :accessor => lambda { |a| a.text }
+          n.type_at :path => '@type', :accessor => lambda { |a| a.text }
+        end
+        
         # ORIGIN_INFO --------------------------------------------------------------------------
         t.origin_info :path => '/mods/originInfo'
         t._origin_info :path => '//originInfo' do |n|
@@ -358,6 +372,21 @@ module Mods
           end
         end # t.subject
         
+        # TABLE_OF_CONTENTS ---------------------------------------------------------------------
+        t._tableOfContents :path => '//tableOfContents' do |n|
+          n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+          n.shareable :path => '@shareable', :accessor => lambda { |a| a.text }
+          n.type_at :path => '@type', :accessor => lambda { |a| a.text }
+        end
+        
+        # TARGET_AUDIENCE -----------------------------------------------------------------------
+        t._targetAudience :path => '//targetAudience' do |n|
+          n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+          Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
+        end
+        
         # TITLE_INFO ----------------------------------------------------------------------------
         t.title_info :path => '/mods/titleInfo'
         t._title_info :path => '//titleInfo' do |n|
@@ -396,6 +425,14 @@ module Mods
             end
           }
         end # t._title_info
+        
+        # TYPE_OF_RESOURCE --------------------------------------------------------------------
+        t._typeOfResource :path => '//typeOfResource' do |n|
+          n.collection :path => '@collection', :accessor => lambda { |a| a.text }
+          n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+          n.manuscript :path => '@manuscript', :accessor => lambda { |a| a.text }
+          n.usage :path => '@usage', :accessor => lambda { |a| a.text }
+        end
         
       end # terminology
 

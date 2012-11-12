@@ -29,13 +29,6 @@ describe "Mods Top Level Elements that do not have Child Elements" do
     pending "need to implement ruby style version of (element/attribute) method names"
   end
   
-  it "<genre> element should recognize authority attributes" do
-    pending "to be implemented"
-    Mods::AUTHORITY_ATTRIBS.each { |a|  
-      @mods_rec.from_str("<mods><genre #{a}='attr_val'>Graphic Novels</genre></mods>").genre.send(a.to_sym).should == 'attr_val'
-    }
-  end
-  
   context "<abstract> child element" do
     it ".abstract.displayLabel should be an accessor for displayLabel attribute on abstract element: <abstract displayLabel='foo'>" do
       @mods_rec.from_str('<mods><abstract displayLabel="Summary">blah blah blah</abstract></mods>')
@@ -93,10 +86,6 @@ describe "Mods Top Level Elements that do not have Child Elements" do
   end
 
   context "<genre> child element" do
-    before(:all) do
-      @genre1 = @mods_rec.from_str('<mods><genre authority="marcgt">map</genre></mods>').genre
-      @genre1 = @mods_rec.from_str('<mods><genre authority="marcgt">map</genre></mods>').genre
-    end
     it ".genre.displayLabel should be an accessor for displayLabel attribute on genre element: <genre displayLabel='foo'>" do
       @mods_rec.from_str('<mods><genre displayLabel="something">blah blah blah</genre></mods>')
       @mods_rec.genre.displayLabel.should == ['something']
@@ -117,9 +106,84 @@ describe "Mods Top Level Elements that do not have Child Elements" do
     end
   end
 
+  context "<identifier> child element" do
+    before(:all) do
+      @id = @mods_rec.from_str('<mods><identifier displayLabel="book_number" type="local">70</identifier></mods>').identifier
+    end
+    it ".identifier.displayLabel should be an accessor for displayLabel attribute on identifier element: <identifier displayLabel='foo'>" do
+      @id.displayLabel.should == ['book_number']
+    end
+    it ".identifier.invalid should be an accessor for invalid attribute on identifier element: <identifier invalid='foo'>" do
+      @mods_rec.from_str('<mods> <identifier type="isbn" invalid="yes">0877780116</identifier></mods>')
+      @mods_rec.identifier.invalid.should == ['yes']
+    end
+    it ".identifier.type_at should be an accessor for type attribute on identifier element: <identifier type='foo'>" do
+      @id.type_at.should == ['local']
+    end
+  end
+
+  context "<note> child element" do
+    it ".note.displayLabel should be an accessor for displayLabel attribute on note element: <note displayLabel='foo'>" do
+      @mods_rec.from_str('<mods><note displayLabel="state_note">blah</note></mods>')
+      @mods_rec.note.displayLabel.should == ['state_note']
+    end
+    it ".note.id_at should be an accessor for ID attribute on note element: <note ID='foo'>" do
+      @mods_rec.from_str('<mods><note ID="foo">blah blah blah</note></mods>')
+      @mods_rec.note.id_at.should == ['foo']
+    end
+    it ".note.type_at should be an accessor for type attribute on note element: <note type='foo'>" do
+      @mods_rec.from_str('<mods><note type="content">blah</note></mods>')
+      @mods_rec.note.type_at.should == ['content']
+    end
+  end
+
+  context "<tableOfContents> child element" do
+    it ".tableOfContents.displayLabel should be an accessor for displayLabel attribute on tableOfContents element: <tableOfContents displayLabel='foo'>" do
+      @mods_rec.from_str('<mods><tableOfContents displayLabel="Chapters included in book">blah blah</tableOfContents></mods>')
+      @mods_rec.tableOfContents.displayLabel.should == ['Chapters included in book']
+    end
+    it ".tableOfContents.shareable should be an accessor for shareable attribute on tableOfContents element: <tableOfContents shareable='foo'>" do
+      @mods_rec.from_str('<mods><tableOfContents shareable="no">blah blah blah</tableOfContents></mods>')
+      @mods_rec.tableOfContents.shareable.should == ['no']
+    end
+    it ".tableOfContents.type_at should be an accessor for type attribute on tableOfContents element: <tableOfContents type='foo'>" do
+      @mods_rec.from_str('<mods><tableOfContents type="partial contents">blah blah</tableOfContents></mods>')
+      @mods_rec.tableOfContents.type_at.should == ['partial contents']
+    end
+  end
+
+  context "<targetAudience> child element" do
+    it ".targetAudience.displayLabel should be an accessor for displayLabel attribute on targetAudience element: <targetAudience displayLabel='foo'>" do
+      @mods_rec.from_str('<mods><targetAudience displayLabel="ta da">blah blah</targetAudience></mods>')
+      @mods_rec.targetAudience.displayLabel.should == ['ta da']
+    end
+    it "should recognize all authority attributes" do
+      Mods::AUTHORITY_ATTRIBS.each { |a|  
+        @mods_rec.from_str("<mods><targetAudience #{a}='attr_val'>zzz</targetAudience></mods>")
+        @mods_rec.targetAudience.send(a.to_sym).should == ['attr_val']
+      }
+    end
+  end
+
   context "<typeOfResource> child element" do
     before(:all) do
       '<typeOfResource manuscript="yes">mixed material</typeOfResource>'
+    end
+    it ".typeOfResource.collection should be an accessor for collection attribute on typeOfResource element: <typeOfResource collection='foo'>" do
+      @mods_rec.from_str('<mods><typeOfResource collection="yes">blah blah blah</typeOfResource></mods>')
+      @mods_rec.typeOfResource.collection.should == ['yes']
+    end
+    it ".typeOfResource.displayLabel should be an accessor for displayLabel attribute on typeOfResource element: <typeOfResource displayLabel='foo'>" do
+      @mods_rec.from_str('<mods><typeOfResource displayLabel="Summary">blah blah blah</typeOfResource></mods>')
+      @mods_rec.typeOfResource.displayLabel.should == ['Summary']
+    end
+    it ".typeOfResource.manuscript should be an accessor for manuscript attribute on typeOfResource element: <typeOfResource manuscript='foo'>" do
+      @mods_rec.from_str('<mods><typeOfResource manuscript="yes">blah blah blah</typeOfResource></mods>')
+      @mods_rec.typeOfResource.manuscript.should == ['yes']
+    end
+    it ".typeOfResource.usage should be an accessor for usage attribute on typeOfResource element: <typeOfResource usage='foo'>" do
+      @mods_rec.from_str('<mods><typeOfResource usage="fer sure">blah blah blah</typeOfResource></mods>')
+      @mods_rec.typeOfResource.usage.should == ['fer sure']
     end
   end
   
