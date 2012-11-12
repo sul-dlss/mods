@@ -209,7 +209,7 @@ module Mods
             e.total :path => 'total'
             e.list :path => 'list'
           end
-          n.date :path => 'date' do |e|  # TODO:  extent is ordered in xml schema
+          n.date :path => 'date' do |e| 
             Mods::DATE_ATTRIBS.reject { |a| a == 'keyDate' }.each { |attr_name|
               e.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
@@ -296,7 +296,7 @@ module Mods
           n.identifier :path => 'identifier'
           n.language :path => 'language'
           n.location :path => 'location'
-          n.name_el :path => 'name'
+          n.name_el :path => 'name'  # Note:  'name' is used by Nokogiri
           n.personal_name :path => 'name[@type="personal"]'
           n.corporate_name :path => 'name[@type="corporate"]'
           n.conference_name :path => 'name[@type="conference"]'
@@ -347,11 +347,14 @@ module Mods
             }
           end
           # Note:  'name' is used by Nokogiri
-          n.name_ :path => 'name' do |t|
+          n.name_el :path => 'name' do |t|
             Mods::AUTHORITY_ATTRIBS.each { |attr_name|
               t.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
           end
+          n.personal_name :path => 'name[@type="personal"]'
+          n.corporate_name :path => 'name[@type="corporate"]'
+          n.conference_name :path => 'name[@type="conference"]'
           n.geographicCode :path => 'geographicCode' do |g|
             Mods::AUTHORITY_ATTRIBS.each { |attr_name|
               g.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }

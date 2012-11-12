@@ -76,7 +76,6 @@ describe "Mods <relatedItem> Element" do
     
     context "<genre> child element" do
       it "relatedItem.genre should match <relatedItem><genre>" do
-p @rel_it2.text
         @rel_it2.genre.map { |ri| ri.text }.should == ['article']
       end
     end # <genre> child element
@@ -101,10 +100,10 @@ p @rel_it2.text
         @rel_it_mult.personal_name.date.map { |n| n.text }.should == ['d. 1767']
       end
       it "relatedItem.name_el.namePart should match <relatedItem><name><namePart>" do
-        @rel_it_mult.name.namePart.map { |n| n.text }.size.should == 3
-        @rel_it_mult.name.namePart.map { |n| n.text }.should include('Bowen, Emanuel,')
-        @rel_it_mult.name.namePart.map { |n| n.text }.should include('d. 1767')
-        @rel_it_mult.name.namePart.map { |n| n.text }.should include('Bowen, Emanuel, d. 1767.')
+        @rel_it_mult.name_el.namePart.map { |n| n.text }.size.should == 3
+        @rel_it_mult.name_el.namePart.map { |n| n.text }.should include('Bowen, Emanuel,')
+        @rel_it_mult.name_el.namePart.map { |n| n.text }.should include('d. 1767')
+        @rel_it_mult.name_el.namePart.map { |n| n.text }.should include('Bowen, Emanuel, d. 1767.')
       end
     end # <name> child element
 

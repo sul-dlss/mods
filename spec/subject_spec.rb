@@ -25,9 +25,9 @@ describe "Mods <subject> Element" do
     pending "to be implemented"
   end
 
-  context "names" do
+  context "subterms for <name> child elements of <subject> element" do
     before(:all) do
-      @both_types = @mods_rec.from_str('<mods><subject>
+      @both_types_sub = @mods_rec.from_str('<mods><subject>
                    <name type="personal">
                      <namePart>Bridgens, R.P</namePart>
                    </name>
@@ -35,13 +35,13 @@ describe "Mods <subject> Element" do
                     <name type="corporate">
                       <namePart>Britton &amp; Rey.</namePart>
                     </name>
-                  </subject></mods>').subject.name
-      @pers_name = @mods_rec.from_str('<mods><subject>
+                  </subject></mods>').subject
+      @pers_name_sub = @mods_rec.from_str('<mods><subject>
                   <name type="personal" authority="ingest">
                       <namePart type="family">Edward VI , king of England, </namePart>
                       <displayForm>Edward VI , king of England, 1537-1553</displayForm>
-                  </name></subject></mods>').subject.name
-      @mult_pers_name = @mods_rec.from_str('<mods><subject authority="lcsh">
+                  </name></subject></mods>').subject
+      @mult_pers_name_sub = @mods_rec.from_str('<mods><subject authority="lcsh">
                    <name type="personal">
                      <namePart>Baker, George H</namePart>
                      <role>
@@ -77,8 +77,8 @@ describe "Mods <subject> Element" do
                  </subject><subject authority="lcsh">
                    <name type="personal">
                      <namePart>Swasey, W. F. (William F.)</namePart>
-                   </name></subject></mods>').subject.name
-      @mult_corp_name = @mods_rec.from_str('<mods><subject authority="lcsh">
+                   </name></subject></mods>').subject
+      @mult_corp_name_sub = @mods_rec.from_str('<mods><subject authority="lcsh">
                    <name type="corporate">
                      <namePart>Britton &amp; Rey.</namePart>
                    </name>
@@ -88,19 +88,20 @@ describe "Mods <subject> Element" do
                      <role>
                        <roleTerm type="text">lithographers.</roleTerm>
                      </role>
-                   </name></subject></mods>').subject.name
+                   </name></subject></mods>').subject
     end
     it "should be able to identify corporate names" do
-      pending "to be implemented"
+      @both_types_sub.corporate_name.namePart.map { |e| e.text }.should == ['Britton & Rey.']
     end
     it "should be able to identify personal names" do
-      pending "to be implemented"
+      @both_types_sub.personal_name.namePart.map { |e| e.text }.should == ['Bridgens, R.P']
+      @pers_name_sub.personal_name.displayForm.map { |e| e.text }.should == ['Edward VI , king of England, 1537-1553']
     end
     it "should be able to identify roles associated with a name" do
-      pending "to be implemented"
+      @mult_corp_name_sub.corporate_name.role.map { |e| e.text }.should == ['lithographers.']
     end
     it "should be able to identify dates associated with a name" do
-      pending "to be implemented"
+      @mult_pers_name_sub.personal_name.date.map { |e| e.text }.should include("1818-1878")
     end
     it "should do the appropriate thing with the role for the value of a name" do
       pending "to be implemented"
@@ -313,7 +314,7 @@ describe "Mods <subject> Element" do
     context "<name> child element" do
       it "should understand all attributes allowed on a <name> element" do
         Mods::Name::ATTRIBUTES.each { |a|
-          name = @mods_rec.from_str("<mods><subject><name #{a}='attr_val'>Obadiah</name></subject></mods>").subject.name_
+          name = @mods_rec.from_str("<mods><subject><name #{a}='attr_val'>Obadiah</name></subject></mods>").subject.name_el
           if (a == 'type')
             name.type_at.should == ['attr_val']
           else
@@ -323,7 +324,7 @@ describe "Mods <subject> Element" do
       end
       it "should understand all immediate child elements allowed on a <name> element" do
         Mods::Name::CHILD_ELEMENTS.each { |e|  
-          name = @mods_rec.from_str("<mods><subject><name><#{e}>el_val</#{e}></name></subject></mods>").subject.name_
+          name = @mods_rec.from_str("<mods><subject><name><#{e}>el_val</#{e}></name></subject></mods>").subject.name_el
           if (e == 'description')
             name.description_el.text.should == 'el_val'
           elsif (e != 'role')
@@ -336,7 +337,7 @@ describe "Mods <subject> Element" do
            <name type="personal" authority="lcsh">
              <namePart>Nahl, Charles Christian</namePart>
              <namePart type="date">1818-1878</namePart>
-           </name></mods>').subject.name_.authority.should == ["lcsh"]
+           </name></mods>').subject.name_el.authority.should == ["lcsh"]
       end
     end # <name>
      
