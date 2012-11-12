@@ -104,10 +104,10 @@ describe "Mods <subject> Element" do
       @mult_pers_name_sub.personal_name.date.map { |e| e.text }.should include("1818-1878")
     end
     it "should do the appropriate thing with the role for the value of a name" do
-      pending "to be implemented"
+      pending "name objects to be implemented"
     end
     it "should do the appropriate thing with the date for the value of a name" do
-      pending "to be implemented"
+      pending "name objects to be implemented"
     end
   end
 

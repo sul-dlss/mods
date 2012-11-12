@@ -160,12 +160,12 @@ describe "Mods <originInfo> Element" do
     
   end
 
-  context "basic origin_info terminology pieces" do
+  context "basic <originInfo> terminology pieces" do
     before(:all) do
       @mods_rec.from_str(@form_and_extent)
     end
 
-    context "place child element" do
+    context "<place> child element" do
       before(:all) do
         @place_term_text = '<mods><originInfo><place><placeTerm type="text">Iran</placeTerm></place></originInfo></mods>'
         @place_term_plain_mult = '<mods><originInfo>
@@ -177,7 +177,7 @@ describe "Mods <originInfo> Element" do
         @yuck3 = '<mods><originInfo><place><placeTerm type="text">[s.l. : s.n.]</placeTerm></place></originInfo></mods>'
         @yuck4 = '<mods><originInfo><place><placeTerm type="text">[London]</placeTerm></place></originInfo></mods>'
       end
-      context "placeTerm child element" do
+      context "<placeTerm> child element" do
         it "should get element values" do
           vals = @mods_rec.from_str(@place_term_plain_mult).origin_info.place.placeTerm.map { |e| e.text}
           vals.size.should == 2
@@ -202,7 +202,7 @@ describe "Mods <originInfo> Element" do
       end # placeTerm
     end # place
       
-    context "publisher child element" do
+    context "<publisher> child element" do
       before(:all) do
         @ex = '<mods><originInfo><publisher>Olney</publisher></origin_info></mods>'
         @yuck1 = '<mods><originInfo><publisher>[s.n.]</publisher></originInfo></mods>'
@@ -220,7 +220,7 @@ describe "Mods <originInfo> Element" do
       end
     end
     
-    context "various date child elements" do
+    context "<xxxDate> child elements" do
       it "should recognize each element" do
         Mods::ORIGIN_INFO_DATE_ELEMENTS.each { |elname|
           @mods_rec.from_str("<mods><originInfo><#{elname}>date</#{elname}></originInfo></mods>")
@@ -274,14 +274,14 @@ describe "Mods <originInfo> Element" do
       it "should know the only valid values for qualifier attribute: approximate, inferred, questionable" do
         pending "to be implemented"
       end
-    end
+    end # <xxxDate> child elements
     
-    it "edition child element" do
+    it "<edition> child element" do
       xml = '<mods><originInfo><edition>7th ed.</edition></originInfo></mods>'
       @mods_rec.from_str(xml).origin_info.edition.map { |n| n.text }.should == ['7th ed.']
     end
     
-    context "issuance child element" do
+    context "<issuance> child element" do
       before(:all) do
         @ex = '<mods><originInfo><issuance>monographic</issuance></originInfo></mods>'
       end
@@ -293,7 +293,7 @@ describe "Mods <originInfo> Element" do
       end
     end
     
-    context "frequency child element" do
+    context "<frequency> child element" do
       before(:all) do
         xml = '<mods><originInfo><frequency authority="marcfrequency">Annual</frequency></originInfo></mods>'
         @origin_info = @mods_rec.from_str(xml).origin_info

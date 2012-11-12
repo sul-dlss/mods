@@ -135,7 +135,7 @@ describe "Mods <name> Element" do
   
   context "sort_author" do
     it "should do something" do
-      pending "sort_author to be implemented"
+      pending "sort_author to be implemented (choose creator if present ... )"
     end
   end
   
