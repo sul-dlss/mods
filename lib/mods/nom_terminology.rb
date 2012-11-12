@@ -28,6 +28,27 @@ module Mods
           t.send elname, :path => "/mods/#{elname}"
         }
         
+        # ABSTRACT -------------------------------------------------------------------------------
+        t._abstract :path => '//abstract' do |n|
+          n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+          n.type_at :path => '@type', :accessor => lambda { |a| a.text }
+        end
+        
+        # ACCESS_CONDITION -----------------------------------------------------------------------
+        t._accessCondition :path => '//accessCondition' do |n|
+          n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+          n.type_at :path => '@type', :accessor => lambda { |a| a.text }
+        end
+        
+        # CLASSIFICATION -------------------------------------------------------------------------
+        t._classification :path => '//classification' do |n|
+          n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+          n.edition :path => '@edition', :accessor => lambda { |a| a.text }
+          Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
+        end        
+        
         # LANGUAGE -------------------------------------------------------------------------------
         t.language :path => '/mods/language'
         t._language :path => '//language' do |n|
