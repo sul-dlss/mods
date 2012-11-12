@@ -49,6 +49,21 @@ module Mods
           }
         end        
         
+        # EXTENSION ------------------------------------------------------------------------------
+        t._extension :path => '//extension' do |n|
+          n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+        end
+        
+        # GENRE ----------------------------------------------------------------------------------
+        t._genre :path => '//genre' do |n|
+          n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+          n.type_at :path => '@type', :accessor => lambda { |a| a.text }
+          n.usage :path => '@usage', :accessor => lambda { |a| a.text }
+          Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
+        end
+        
         # LANGUAGE -------------------------------------------------------------------------------
         t.language :path => '/mods/language'
         t._language :path => '//language' do |n|

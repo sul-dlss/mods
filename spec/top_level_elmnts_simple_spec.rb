@@ -42,8 +42,8 @@ describe "Mods Top Level Elements that do not have Child Elements" do
       @mods_rec.abstract.displayLabel.should == ['Summary']
     end
     it ".abstract.type_at should be an accessor for type attribute on abstract element: <abstract type='foo'>" do
-      @mods_rec.from_str('<mods><abstract type="scope and content">blah blah blah</abstract></mods>')
-      @mods_rec.abstract.type_at.should == ['scope and content']
+      @mods_rec.from_str('<mods><abstract type="Scope and Contents note">blah blah blah</abstract></mods>')
+      @mods_rec.abstract.type_at.should == ['Scope and Contents note']
     end
   end
   
@@ -77,6 +77,49 @@ describe "Mods Top Level Elements that do not have Child Elements" do
         @mods_rec.from_str("<mods><classification #{a}='attr_val'>zzz</classification></mods>")
         @mods_rec.classification.send(a.to_sym).should == ['attr_val']
       }
+    end
+  end
+  
+  context "<extension> child element" do
+    before(:all) do
+      @ext = @mods_rec.from_str('<mods><extension xmlns:dcterms="http://purl.org/dc/terms/" >
+      	<dcterms:modified>2003-03-24</dcterms:modified>
+      </extension></mods>').extension
+    end
+    it ".extension.displayLabel should be an accessor for displayLabel attribute on extension element: <extension displayLabel='foo'>" do
+      @mods_rec.from_str('<mods><extension displayLabel="something">blah blah blah</extension></mods>')
+      @mods_rec.extension.displayLabel.should == ['something']
+    end
+  end
+
+  context "<genre> child element" do
+    before(:all) do
+      @genre1 = @mods_rec.from_str('<mods><genre authority="marcgt">map</genre></mods>').genre
+      @genre1 = @mods_rec.from_str('<mods><genre authority="marcgt">map</genre></mods>').genre
+    end
+    it ".genre.displayLabel should be an accessor for displayLabel attribute on genre element: <genre displayLabel='foo'>" do
+      @mods_rec.from_str('<mods><genre displayLabel="something">blah blah blah</genre></mods>')
+      @mods_rec.genre.displayLabel.should == ['something']
+    end
+    it ".genre.type_at should be an accessor for type attribute on genre element: <genre type='foo'>" do
+      @mods_rec.from_str('<mods><genre type="maybe">blah blah blah</genre></mods>')
+      @mods_rec.genre.type_at.should == ['maybe']
+    end
+    it ".genre.usage should be an accessor for usage attribute on genre element: <genre usage='foo'>" do
+      @mods_rec.from_str('<mods><genre usage="fer sure">blah blah blah</genre></mods>')
+      @mods_rec.genre.usage.should == ['fer sure']
+    end
+    it "should recognize all authority attributes" do
+      Mods::AUTHORITY_ATTRIBS.each { |a|  
+        @mods_rec.from_str("<mods><genre #{a}='attr_val'>zzz</genre></mods>")
+        @mods_rec.genre.send(a.to_sym).should == ['attr_val']
+      }
+    end
+  end
+
+  context "<typeOfResource> child element" do
+    before(:all) do
+      '<typeOfResource manuscript="yes">mixed material</typeOfResource>'
     end
   end
   
