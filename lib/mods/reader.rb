@@ -29,6 +29,14 @@ module Mods
       @mods_ng_xml
     end
     
+    # @param node (Nokogiri::XML::Node) - Nokogiri::XML::Node that is the top level element of a mods record
+    # @return a Nokogiri::XML::Document object
+    def from_nk_node(node)
+      @mods_ng_xml = Nokogiri::XML(node.to_s)
+      normalize_mods
+      @mods_ng_xml
+    end
+    
     # Whatever we get, normalize it into a Nokogiri::XML::Document,
     # strip any elements enclosing the mods record
     def normalize_mods

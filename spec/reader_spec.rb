@@ -20,6 +20,48 @@ describe "Mods::Reader" do
   it "from_url should turn the contents at the url into a Nokogiri::XML::Document object" do
     @from_url.class.should == Nokogiri::XML::Document
   end
+  
+  context "from_nk_node" do
+    before(:all) do
+      oai_resp = '<?xml version="1.0" encoding="UTF-8"?>
+      <OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/">
+      	<responseDate>2012-11-13T22:11:35Z</responseDate>
+      	<request>http://sul-lyberservices-prod.stanford.edu/sw-oai-provider/oai</request>
+      	<GetRecord>
+      		<record>
+      			<header>
+      				<identifier>oai:searchworks.stanford.edu/druid:mm848sz7984</identifier>
+      				<datestamp>2012-10-28T01:06:31Z</datestamp>
+      			</header>
+      			<metadata>
+      				<ns3:mods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns3="http://www.loc.gov/mods/v3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-2.xsd">
+      					<ns3:titleInfo>
+      						<ns3:title>boo</ns3:title>
+      					</ns3:titleInfo>
+      				</ns3:mods>
+            </metadata>
+          </record>
+        </GetRecord>
+      </OAI-PMH>'
+      ng_xml = Nokogiri::XML(oai_resp)
+      @mods_node = ng_xml.xpath('//mods:mods', @ns_hash).first
+      @r = Mods::Reader.new
+      @mods_ng_doc = @r.from_nk_node(@mods_node)
+    end
+    it "should turn the Nokogiri::XML::Node into a Nokogiri::XML::Document object" do
+      @mods_ng_doc.should be_kind_of(Nokogiri::XML::Document)
+    end
+    it "should not care about namespace by default" do
+      @mods_ng_doc.xpath('/mods/titleInfo/title').text.should == "boo"
+    end
+    it "should be able to care about namespaces" do
+      @r.namespace_aware = true
+      @mods_ng_doc = @r.from_nk_node(@mods_node)
+      @mods_ng_doc.xpath('/mods:mods/mods:titleInfo/mods:title', @ns_hash).text.should == "boo"
+      @r.namespace_aware = false
+    end
+    
+  end
 
   context "namespace awareness" do
     it "should not care about namespace by default" do

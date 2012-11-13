@@ -45,6 +45,18 @@ module Mods
       end
     end
 
+    # convenience method to call Mods::Reader.new.from_nk_node and to nom
+    # @param ns_aware true if the XML parsing should be strict about using namespaces.  Default is false
+    # @param node (Nokogiri::XML::Node) - Nokogiri::XML::Node that is the top level element of a mods record
+    def from_nk_node(node, ns_aware = false)
+      @mods_ng_xml = Mods::Reader.new(ns_aware).from_nk_node(node)
+      if ns_aware
+        set_terminology_ns(@mods_ng_xml)
+      else
+        set_terminology_no_ns(@mods_ng_xml)
+      end
+    end
+
     # @return Array of Strings, each containing the text contents of <mods><titleInfo>   <nonSort> + ' ' + <title> elements
     #  but not including any titleInfo elements with type="alternative"
     def short_titles
@@ -65,7 +77,6 @@ module Mods
     def sort_title
       @mods_ng_xml.title_info.sort_title.find { |n| !n.nil? }
     end
-    
     
     # use the displayForm of a personal name if present
     #   if no displayForm, try to make a string from family name and given name "family_name, given_name"
@@ -110,7 +121,7 @@ module Mods
                 result << ISO_639.find(v.strip).english_name
               end
             rescue => e
-              p "Couldn't find english name for #{code.text}"
+              p "Couldn't find english name for #{ct.text}"
               result << ct.text
             end
           else
