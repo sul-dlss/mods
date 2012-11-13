@@ -29,7 +29,7 @@ end
 
 # Use yard to build docs
 begin
-  project_root = File.expand_path(File.dirname(__FILE__) + "/../..")
+  project_root = File.expand_path(File.dirname(__FILE__))
   doc_dest_dir = File.join(project_root, 'doc')
 
   YARD::Rake::YardocTask.new(:doc) do |yt|
