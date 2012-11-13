@@ -37,6 +37,7 @@ TODO: Write usage instructions here
 
 == Releases
 
+0.0.9 implement from_nk_node as way to load record object
 0.0.8 implement relatedItem and attributes on all simple top level elements
 0.0.7 implement part
 0.0.6 implement recordInfo, fix to work under jruby
