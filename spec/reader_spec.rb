@@ -89,7 +89,8 @@ describe "Mods::Reader" do
       str = '<ns3:mods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns3="http://www.loc.gov/mods/v3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-2.xsd">
 				<ns3:note>be very frightened</ns3:note></ns3:mods>'
 			ng_xml = Nokogiri::XML(str)
-			ng_xml.root.has_attribute?('schemaLocation').should == true
+			# Nokogiri treats namespaced attributes differently in jruby than in ruby
+			(ng_xml.root.has_attribute?('schemaLocation') || ng_xml.root.has_attribute?('xsi:schemaLocation')).should == true
 			r = Mods::Reader.new
       r.namespace_aware = true
       r.from_nk_node(ng_xml)
