@@ -94,8 +94,11 @@ describe "Mods::Reader" do
 			r = Mods::Reader.new
       r.namespace_aware = true
       r.from_nk_node(ng_xml)
-      r.mods_ng_xml.has_attribute?('schemaLocation').should == (false || nil)
-      r.mods_ng_xml.has_attribute?('xsi:schemaLocation').should == (false || nil)
+      # the below are different depending on jruby or ruby ... oy
+      has_a = r.mods_ng_xml.has_attribute?('schemaLocation')
+      has_a.should == false if has_a
+      has = r.mods_ng_xml.has_attribute?('xsi:schemaLocation')
+      has_a.should == false if has_a
     end
   end
   
