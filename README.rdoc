@@ -37,7 +37,8 @@ TODO: Write usage instructions here
 
 == Releases
 
-(0.0.12 make namespace aware processing the default)
+(0.0.13 make namespace aware processing the default)
+0.0.12 fix failing jruby test
 0.0.11 fix remove xsi:schemaLocation attribute from mods element when not using namespaces
 0.0.10 remove xsi:schemaLocation attribute from mods element when not using namespaces
 0.0.9 implement from_nk_node as way to load record object
