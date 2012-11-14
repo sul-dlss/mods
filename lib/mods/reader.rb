@@ -42,6 +42,8 @@ module Mods
     def normalize_mods
       if !@namespace_aware
         @mods_ng_xml.remove_namespaces!
+        # xsi:schemaLocation attribute will cause problems in JRuby
+        @mods_ng_xml.root.remove_attribute('schemaLocation') if @mods_ng_xml.has_attribute?('schemaLocation')
         # doing weird re-reading of xml for jruby, which gets confused by its own cache
         @mods_ng_xml = Nokogiri::XML(@mods_ng_xml.to_s)
       end
