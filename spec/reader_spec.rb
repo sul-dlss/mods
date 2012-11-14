@@ -92,13 +92,11 @@ describe "Mods::Reader" do
 			# Nokogiri treats namespaced attributes differently in jruby than in ruby
 			(ng_xml.root.has_attribute?('schemaLocation') || ng_xml.root.has_attribute?('xsi:schemaLocation')).should == true
 			r = Mods::Reader.new
-      r.namespace_aware = true
+      r.namespace_aware = false
       r.from_nk_node(ng_xml)
       # the below are different depending on jruby or ruby ... oy
-      has_a = r.mods_ng_xml.has_attribute?('schemaLocation')
-      has_a.should == false if has_a
-      has = r.mods_ng_xml.has_attribute?('xsi:schemaLocation')
-      has_a.should == false if has_a
+      r.mods_ng_xml.root.attributes.keys.should_not include('schemaLocation')
+      r.mods_ng_xml.root.attributes.keys.should_not include('xsi:schemaLocation')
     end
   end
   
