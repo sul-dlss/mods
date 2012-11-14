@@ -17,30 +17,34 @@ module Mods
   class Record
     
     # set the NOM terminology;  do NOT use namespaces
+    # NOTES:
+    # 1.  certain words, such as 'type' 'name' 'description' are reserved words in jruby or nokogiri
+    #  when the terminology would use these words, a suffix of '_at' is added if it is an attribute, 
+    #  (e.g. 'type_at' for @type) and a suffix of '_el' is added if it is an element.
+    # 2.  the underscore prefix variant terms are a way of making subterms for a node available 
+    #   to any instance of said node and are not intended to be used externally
     # @param mods_ng_xml a Nokogiri::Xml::Document object containing MODS (without namespaces)
     def set_terminology_no_ns(mods_ng_xml)
       mods_ng_xml.set_terminology() do |t|
 
 # FIXME: may want to deal with camelcase vs. underscore in method_missing 
- 
-        # These elements have no subelements - w00t!
-        Mods::TOP_LEVEL_ELEMENTS_SIMPLE.each { |elname|
-          t.send elname, :path => "/mods/#{elname}"
-        }
-        
+
         # ABSTRACT -------------------------------------------------------------------------------
+        t.abstract :path => '/mods/abstract'
         t._abstract :path => '//abstract' do |n|
           n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
           n.type_at :path => '@type', :accessor => lambda { |a| a.text }
         end
         
         # ACCESS_CONDITION -----------------------------------------------------------------------
+        t.accessCondition :path => '/mods/accessCondition'
         t._accessCondition :path => '//accessCondition' do |n|
           n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
           n.type_at :path => '@type', :accessor => lambda { |a| a.text }
         end
         
         # CLASSIFICATION -------------------------------------------------------------------------
+        t.classification :path => '/mods/classification'
         t._classification :path => '//classification' do |n|
           n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
           n.edition :path => '@edition', :accessor => lambda { |a| a.text }
@@ -50,11 +54,13 @@ module Mods
         end        
         
         # EXTENSION ------------------------------------------------------------------------------
+        t.extension :path => '/mods/extension'
         t._extension :path => '//extension' do |n|
           n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
         end
         
         # GENRE ----------------------------------------------------------------------------------
+        t.genre :path => '/mods/genre'
         t._genre :path => '//genre' do |n|
           n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
           n.type_at :path => '@type', :accessor => lambda { |a| a.text }
@@ -65,6 +71,7 @@ module Mods
         end
         
         # IDENTIIER ------------------------------------------------------------------------------
+        t.identifier :path => '/mods/identifier'
         t._identifier :path => '//identifier' do |n|
           n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
           n.invalid :path => '@invalid', :accessor => lambda { |a| a.text }
@@ -146,6 +153,7 @@ module Mods
         t._conference_name :path => '//name[@type="conference"]'
 
         # NOTE ---------------------------------------------------------------------------------
+        t.note :path => '/mods/note'
         t._note :path => '//note' do |n|
           n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
           n.id_at :path => '@ID', :accessor => lambda { |a| a.text }
@@ -389,6 +397,7 @@ module Mods
         end # t.subject
         
         # TABLE_OF_CONTENTS ---------------------------------------------------------------------
+        t.tableOfContents :path => '/mods/tableOfContents'
         t._tableOfContents :path => '//tableOfContents' do |n|
           n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
           n.shareable :path => '@shareable', :accessor => lambda { |a| a.text }
@@ -396,6 +405,7 @@ module Mods
         end
         
         # TARGET_AUDIENCE -----------------------------------------------------------------------
+        t.targetAudience :path => '//targetAudience'
         t._targetAudience :path => '//targetAudience' do |n|
           n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
           Mods::AUTHORITY_ATTRIBS.each { |attr_name|
@@ -443,6 +453,7 @@ module Mods
         end # t._title_info
         
         # TYPE_OF_RESOURCE --------------------------------------------------------------------
+        t.typeOfResource :path => '/mods/typeOfResource'
         t._typeOfResource :path => '//typeOfResource' do |n|
           n.collection :path => '@collection', :accessor => lambda { |a| a.text }
           n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
