@@ -318,38 +318,38 @@ module Mods
           Mods::AUTHORITY_ATTRIBS.each { |attr_name|
             n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
           }
-          n.topic :path => 'topic' do |n|
+          n.topic :path => 'topic' do |n1|
             Mods::AUTHORITY_ATTRIBS.each { |attr_name|
-              n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+              n1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
           end
-          n.geographic :path => 'geographic' do |n|
+          n.geographic :path => 'geographic' do |n1|
             Mods::AUTHORITY_ATTRIBS.each { |attr_name|
-              n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+              n1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
           end
-          n.temporal :path => 'temporal' do |n|
+          n.temporal :path => 'temporal' do |n1|
             # date attributes as elements
             Mods::DATE_ATTRIBS.each { |attr_name|
-              n.send attr_name, :path => "#{attr_name}"
+              n1.send attr_name, :path => "#{attr_name}"
             }
             Mods::AUTHORITY_ATTRIBS.each { |attr_name|
-              n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+              n1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
             # date attributes as attributes
             Mods::DATE_ATTRIBS.each { |attr_name|
-              n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+              n1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
           end
-          n.titleInfo :path => 'titleInfo' do |t|
+          n.titleInfo :path => 'titleInfo' do |t1|
             Mods::AUTHORITY_ATTRIBS.each { |attr_name|
-              t.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+              t1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
           end
           # Note:  'name' is used by Nokogiri
-          n.name_el :path => 'name' do |t|
+          n.name_el :path => 'name' do |t1|
             Mods::AUTHORITY_ATTRIBS.each { |attr_name|
-              t.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+              t1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
           end
           n.personal_name :path => 'name[@type="personal"]'
@@ -360,30 +360,30 @@ module Mods
               g.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
           end
-          n.genre :path => 'genre' do |n|
+          n.genre :path => 'genre' do |n1|
             Mods::AUTHORITY_ATTRIBS.each { |attr_name|
-              n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+              n1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
           end
-          n.hierarchicalGeographic :path => 'hierarchicalGeographic' do |n|
+          n.hierarchicalGeographic :path => 'hierarchicalGeographic' do |n1|
             Mods::Subject::HIER_GEO_CHILD_ELEMENTS.each { |elname|
-              n.send elname, :path => "#{elname}"
+              n1.send elname, :path => "#{elname}"
             }
             Mods::AUTHORITY_ATTRIBS.each { |attr_name|
-              n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+              n1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
           end
-          n.cartographics :path => 'cartographics' do |n|
-            n.scale :path => 'scale'
-            n.projection :path => 'projection'
-            n.coordinates :path => 'coordinates'
+          n.cartographics :path => 'cartographics' do |n1|
+            n1.scale :path => 'scale'
+            n1.projection :path => 'projection'
+            n1.coordinates :path => 'coordinates'
             Mods::Subject::CARTOGRAPHICS_CHILD_ELEMENTS.each { |elname|
-              n.send elname, :path => "#{elname}"
+              n1.send elname, :path => "#{elname}"
             }
           end
-          n.occupation :path => 'occupation' do |n|
+          n.occupation :path => 'occupation' do |n1|
             Mods::AUTHORITY_ATTRIBS.each { |attr_name|
-              n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+              n1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
           end
         end # t.subject
