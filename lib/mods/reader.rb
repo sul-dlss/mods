@@ -44,9 +44,11 @@ module Mods
         @mods_ng_xml.remove_namespaces!
         # xsi:schemaLocation attribute will cause problems in JRuby
         if @mods_ng_xml.root && @mods_ng_xml.root.attributes.keys.include?('schemaLocation')
-          @mods_ng_xml.root.remove_attribute('schemaLocation')
+          @mods_ng_xml.root.attributes['schemaLocation'].remove
         end
         # doing weird re-reading of xml for jruby, which gets confused by its own cache
+        #   using pedantic is helpful for debugging
+#        @mods_ng_xml = Nokogiri::XML(@mods_ng_xml.to_s, nil, nil, Nokogiri::XML::ParseOptions::PEDANTIC)
         @mods_ng_xml = Nokogiri::XML(@mods_ng_xml.to_s)
       end
     end
