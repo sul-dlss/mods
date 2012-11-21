@@ -14,7 +14,7 @@ module Mods
     
     ATTRIBUTES = ['id', 'version']
 
-    # @param (String) what to use when combining a title and subtitle, e.g. 
+    # @param (String) title_delimiter what to use when combining a title and subtitle, e.g. 
     #  for title "MODS" and subtitle "Metadata Odious Delimited Stuff" and delimiter " : "
     #  we get "MODS : Metadata Odious Delimited Stuff"
     def initialize(title_delimiter = Mods::TitleInfo::DEFAULT_TITLE_DELIM)
@@ -34,7 +34,7 @@ module Mods
     end
 
     # convenience method to call Mods::Reader.new.from_url and to nom
-    # @param ns_aware true if the XML parsing should be strict about using namespaces.  Default is false
+    # @param namespace_aware true if the XML parsing should be strict about using namespaces.  Default is false
     # @param url (String) - url that has mods xml as its content
     def from_url(url, namespace_aware = false)
       @mods_ng_xml = Mods::Reader.new(ns_aware).from_url(url)

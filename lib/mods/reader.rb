@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 module Mods
   class Reader
     
@@ -13,15 +15,15 @@ module Mods
     end
     
     # @param str - a string containing mods xml
-    # @return a Nokogiri::XML::Document object
+    # @return Nokogiri::XML::Document
     def from_str(str)
-      @mods_ng_xml = Nokogiri::XML(str)
+      @mods_ng_xml = Nokogiri::XML(str, nil, str.encoding.to_s)
       normalize_mods
       @mods_ng_xml
     end
   
     # @param url (String) - url that has mods xml as its content
-    # @return a Nokogiri::XML::Document object
+    # @return Nokogiri::XML::Document
     def from_url(url, encoding = nil, options = Nokogiri::XML::ParseOptions::DEFAULT_XML)
       require 'open-uri'
       @mods_ng_xml = Nokogiri::XML(open(url).read)
@@ -30,7 +32,7 @@ module Mods
     end
     
     # @param node (Nokogiri::XML::Node) - Nokogiri::XML::Node that is the top level element of a mods record
-    # @return a Nokogiri::XML::Document object
+    # @return Nokogiri::XML::Document
     def from_nk_node(node)
       @mods_ng_xml = Nokogiri::XML(node.to_s)
       normalize_mods
@@ -40,6 +42,7 @@ module Mods
     # Whatever we get, normalize it into a Nokogiri::XML::Document,
     # strip any elements enclosing the mods record
     def normalize_mods
+      encoding = @mods_ng_xml.encoding
       if !@namespace_aware
         @mods_ng_xml.remove_namespaces!
         # xsi:schemaLocation attribute will cause problems in JRuby
@@ -49,7 +52,8 @@ module Mods
         # doing weird re-reading of xml for jruby, which gets confused by its own cache
         #   using pedantic is helpful for debugging
 #        @mods_ng_xml = Nokogiri::XML(@mods_ng_xml.to_s, nil, nil, Nokogiri::XML::ParseOptions::PEDANTIC)
-        @mods_ng_xml = Nokogiri::XML(@mods_ng_xml.to_s)
+        str = @mods_ng_xml.to_s
+        @mods_ng_xml = Nokogiri::XML(str, nil, encoding.to_s)
       end
     end
     

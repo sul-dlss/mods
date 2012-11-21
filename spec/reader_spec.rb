@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require 'spec_helper'
 
 describe "Mods::Reader" do
@@ -19,6 +21,22 @@ describe "Mods::Reader" do
   
   it "from_url should turn the contents at the url into a Nokogiri::XML::Document object" do
     @from_url.class.should == Nokogiri::XML::Document
+  end
+  
+  context "normalizing mods" do
+    it "should not lose UTF-8 encoding" do
+      utf_mods = '<?xml version="1.0" encoding="UTF-8"?>
+                  <mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3"
+                  xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
+                  <mods:name authority="local" type="personal">
+                  <mods:namePart>Gravé par Denise Macquart.</mods:namePart>
+                  </mods:name>
+                  </mods:mods>'
+      utf_mods.encoding.to_s.should eql("UTF-8")
+      reader = Mods::Reader.new.from_str(utf_mods)
+      reader.encoding.to_s.should eql("UTF-8")
+    end
   end
   
   context "from_nk_node" do

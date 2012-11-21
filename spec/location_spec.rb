@@ -18,9 +18,6 @@ describe "Mods <location> Element" do
   end
 
   context "basic location terminology pieces" do
-    before(:all) do
-      @mods_rec.from_str(@form_and_extent)
-    end
     
     context "physicalLocation child element" do
       before(:all) do

@@ -161,9 +161,6 @@ describe "Mods <originInfo> Element" do
   end
 
   context "basic <originInfo> terminology pieces" do
-    before(:all) do
-      @mods_rec.from_str(@form_and_extent)
-    end
 
     context "<place> child element" do
       before(:all) do
