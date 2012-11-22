@@ -33,9 +33,8 @@ describe "Mods::Reader" do
                   <mods:namePart>Gravé par Denise Macquart.</mods:namePart>
                   </mods:name>
                   </mods:mods>'
-      utf_mods.encoding.to_s.should eql("UTF-8")
       reader = Mods::Reader.new.from_str(utf_mods)
-      reader.encoding.to_s.should eql("UTF-8")
+      reader.encoding.should eql("UTF-8")
     end
   end
   

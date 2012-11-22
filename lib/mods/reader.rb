@@ -42,7 +42,6 @@ module Mods
     # Whatever we get, normalize it into a Nokogiri::XML::Document,
     # strip any elements enclosing the mods record
     def normalize_mods
-      encoding = @mods_ng_xml.encoding
       if !@namespace_aware
         @mods_ng_xml.remove_namespaces!
         # xsi:schemaLocation attribute will cause problems in JRuby
@@ -51,9 +50,8 @@ module Mods
         end
         # doing weird re-reading of xml for jruby, which gets confused by its own cache
         #   using pedantic is helpful for debugging
-#        @mods_ng_xml = Nokogiri::XML(@mods_ng_xml.to_s, nil, nil, Nokogiri::XML::ParseOptions::PEDANTIC)
-        str = @mods_ng_xml.to_s
-        @mods_ng_xml = Nokogiri::XML(str, nil, encoding.to_s)
+#        @mods_ng_xml = Nokogiri::XML(@mods_ng_xml.to_s, nil, @mods_ng_xml.encoding, Nokogiri::XML::ParseOptions::PEDANTIC)
+        @mods_ng_xml = Nokogiri::XML(@mods_ng_xml.to_s, nil, @mods_ng_xml.encoding)
       end
     end
     
