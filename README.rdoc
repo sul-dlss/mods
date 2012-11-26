@@ -37,7 +37,7 @@ TODO: Write usage instructions here
 
 == Releases
 
-(0.0.15 make namespace aware processing the default)
+0.0.15 make namespace aware processing the default
 0.0.14 don't lose xml encoding in reader.normalize_mods under jruby
 0.0.13 really really fix removal of xsi:schemaLocation in jruby
 0.0.12 fix failing jruby test
