@@ -827,7 +827,7 @@ module Mods
           end
           n.hierarchicalGeographic :path => 'm:hierarchicalGeographic' do |n1|
             Mods::Subject::HIER_GEO_CHILD_ELEMENTS.each { |elname|
-              n1.send elname, :path => "#{elname}"
+              n1.send elname, :path => "m:#{elname}"
             }
             Mods::AUTHORITY_ATTRIBS.each { |attr_name|
               n1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
@@ -838,7 +838,7 @@ module Mods
             n1.projection :path => 'm:projection'
             n1.coordinates :path => 'm:coordinates'
             Mods::Subject::CARTOGRAPHICS_CHILD_ELEMENTS.each { |elname|
-              n1.send elname, :path => "#{elname}"
+              n1.send elname, :path => "m:#{elname}"
             }
           end
           n.occupation :path => 'm:occupation' do |n1|
