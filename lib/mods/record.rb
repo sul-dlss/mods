@@ -22,9 +22,9 @@ module Mods
     end
 
     # convenience method to call Mods::Reader.new.from_str and to nom
-    # @param ns_aware true if the XML parsing should be strict about using namespaces.  Default is false
+    # @param ns_aware true if the XML parsing should be strict about using namespaces.  Default is true
     # @param str - a string containing mods xml
-    def from_str(str, ns_aware = false)
+    def from_str(str, ns_aware = true)
       @mods_ng_xml = Mods::Reader.new(ns_aware).from_str(str)
       if ns_aware
         set_terminology_ns(@mods_ng_xml)
@@ -34,9 +34,9 @@ module Mods
     end
 
     # convenience method to call Mods::Reader.new.from_url and to nom
-    # @param namespace_aware true if the XML parsing should be strict about using namespaces.  Default is false
+    # @param namespace_aware true if the XML parsing should be strict about using namespaces.  Default is true
     # @param url (String) - url that has mods xml as its content
-    def from_url(url, namespace_aware = false)
+    def from_url(url, namespace_aware = true)
       @mods_ng_xml = Mods::Reader.new(ns_aware).from_url(url)
       if ns_aware
         set_terminology_ns(@mods_ng_xml)
@@ -46,9 +46,9 @@ module Mods
     end
 
     # convenience method to call Mods::Reader.new.from_nk_node and to nom
-    # @param ns_aware true if the XML parsing should be strict about using namespaces.  Default is false
+    # @param ns_aware true if the XML parsing should be strict about using namespaces.  Default is true
     # @param node (Nokogiri::XML::Node) - Nokogiri::XML::Node that is the top level element of a mods record
-    def from_nk_node(node, ns_aware = false)
+    def from_nk_node(node, ns_aware = true)
       @mods_ng_xml = Mods::Reader.new(ns_aware).from_nk_node(node)
       if ns_aware
         set_terminology_ns(@mods_ng_xml)
@@ -141,7 +141,6 @@ module Mods
       }
       result.uniq
     end
-
 
     def method_missing method_name, *args
       if mods_ng_xml.respond_to?(method_name)
