@@ -3,13 +3,13 @@
 module Mods
   class Reader
     
-    DEFAULT_NS_AWARE = false
+    DEFAULT_NS_AWARE = true
 
     # true if the XML parsing should be strict about using namespaces. 
     attr_accessor :namespace_aware
     attr_reader :mods_ng_xml
     
-    # @param ns_aware true if the XML parsing should be strict about using namespaces.  Default is false
+    # @param ns_aware true if the XML parsing should be strict about using namespaces.  Default is true
     def initialize(ns_aware = DEFAULT_NS_AWARE)
       @namespace_aware = ns_aware
     end
@@ -34,7 +34,7 @@ module Mods
     # @param node (Nokogiri::XML::Node) - Nokogiri::XML::Node that is the top level element of a mods record
     # @return Nokogiri::XML::Document
     def from_nk_node(node)
-      @mods_ng_xml = Nokogiri::XML(node.to_s)
+      @mods_ng_xml = Nokogiri::XML(node.to_s, nil, node.document.encoding)
       normalize_mods
       @mods_ng_xml
     end
