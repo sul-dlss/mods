@@ -625,7 +625,7 @@ module Mods
           end
           n.publisher :path => 'm:publisher'
           Mods::ORIGIN_INFO_DATE_ELEMENTS.each { |date_el|
-            n.send date_el, :path => "#{date_el}" do |d|
+            n.send date_el, :path => "m:#{date_el}" do |d|
               Mods::DATE_ATTRIBS.each { |attr_name|
                 d.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
               }
