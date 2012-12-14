@@ -7,38 +7,31 @@ describe "Mods <name> Element" do
     @ns_decl = "xmlns='#{Mods::MODS_NS}'"
     
     @corp_name = 'ABC corp'
-    @mods_w_corp_name = "<mods><name type='corporate'><namePart>#{@corp_name}</namePart></name></mods>"
     @mods_w_corp_name_ns = "<mods #{@ns_decl}><name type='corporate'><namePart>#{@corp_name}</namePart></name></mods>"
-    @mods_w_corp_name_role = "<mods><name type='corporate'><namePart>#{@corp_name}</namePart>
-      <role><roleTerm type='text'>lithographer</roleTerm></role></name></mods>"
+    @mods_w_corp_name = @mods_w_corp_name_ns.sub(" #{@ns_decl}", '')
     @mods_w_corp_name_role_ns = "<mods #{@ns_decl}><name type='corporate'><namePart>#{@corp_name}</namePart>
       <role><roleTerm type='text'>lithographer</roleTerm></role></name></mods>"
+    @mods_w_corp_name_role = @mods_w_corp_name_role_ns.sub(" #{@ns_decl}", '')
+
     @pers_name = 'Crusty'
-    @mods_w_pers_name = "<mods><name type='personal'><namePart>#{@pers_name}</namePart></name></mods>"
     @mods_w_pers_name_ns = "<mods #{@ns_decl}><name type='personal'><namePart>#{@pers_name}</namePart></name></mods>"
-    @mods_w_both = "<mods>
-      <name type='corporate'><namePart>#{@corp_name}</namePart></name>
-      <name type='personal'><namePart>#{@pers_name}</namePart></name></mods>"
+    @mods_w_pers_name = @mods_w_pers_name_ns.sub(" #{@ns_decl}", '')
     @mods_w_both_ns = "<mods #{@ns_decl}>
       <name type='corporate'><namePart>#{@corp_name}</namePart></name>
       <name type='personal'><namePart>#{@pers_name}</namePart></name></mods>"
+    @mods_w_both = @mods_w_both_ns.sub(" #{@ns_decl}", '')
+
     @pers_role = 'creator'
-    @mods_w_pers_name_role = "<mods><name type='personal'><namePart>#{@pers_name}</namePart>
-      <role><roleTerm authority='marcrelator' type='text'>#{@pers_role}</roleTerm><role></name></mods>"
     @mods_w_pers_name_role_ns = "<mods #{@ns_decl}><name type='personal'><namePart>#{@pers_name}</namePart>
       <role><roleTerm authority='marcrelator' type='text'>#{@pers_role}</roleTerm><role></name></mods>"
-    @mods_w_pers_name_role_code = "<mods><name type='personal'><namePart type='given'>John</namePart>
-        	<namePart type='family'>Huston</namePart>
-        	<role>
-        	  	<roleTerm type='code' authority='marcrelator'>drt</roleTerm>
-        	</role>
-      </name></mods>"
+    @mods_w_pers_name_role = @mods_w_pers_name_role_ns.sub(" #{@ns_decl}", '')
     @mods_w_pers_name_role_code_ns = "<mods #{@ns_decl}><name type='personal'><namePart type='given'>John</namePart>
         	<namePart type='family'>Huston</namePart>
         	<role>
         	  	<roleTerm type='code' authority='marcrelator'>drt</roleTerm>
         	</role>
       </name></mods>"
+    @mods_w_pers_name_role_code = @mods_w_pers_name_role_code_ns.sub(" #{@ns_decl}", '')
   end
   
   context "personal name" do
