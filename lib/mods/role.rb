@@ -18,7 +18,7 @@ module Mods
       #  If both a code and a term are given that represent the same role, 
       #  use one <role> and multiple occurrences of <roleTerm>. If different roles, repeat <role><roleTerm>.
       @ng_node.roleTerm.each { |role_term|  
-        @authority ||= @ng_node.roleTerm.authority
+        @authority ||= role_term.authority
         if role_term.type_at == 'text'
           @text ||= role_term.text
         elsif role_term.type_at == 'code'
