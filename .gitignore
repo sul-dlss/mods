@@ -20,3 +20,4 @@ tmp
 *.tmproj
 tmtags
 .idea/*
+to_delete
