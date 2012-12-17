@@ -61,17 +61,17 @@ describe "Mods <name> Element" do
       context "roles" do
         it "should be possible to access a personal_name role easily" do
           @mods_rec.from_str(@mods_w_pers_name_role_ns)
-          @mods_rec.personal_name.role.text.should include(@pers_role)
+          @mods_rec.personal_name.role.roleTerm.text.should include(@pers_role)
         end
         it "should get role type" do
           @mods_rec.from_str(@mods_w_pers_name_role_ns)
-          @mods_rec.personal_name.role.type_at.should == ["text"]
+          @mods_rec.personal_name.role.roleTerm.type_at.should == ["text"]
           @mods_rec.from_str(@mods_w_pers_name_role_code_ns)
-          @mods_rec.personal_name.role.type_at.should == ["code"]
+          @mods_rec.personal_name.role.roleTerm.type_at.should == ["code"]
         end
         it "should get role authority" do
           @mods_rec.from_str(@mods_w_pers_name_role_ns)
-          @mods_rec.personal_name.role.authority.should == ["marcrelator"]
+          @mods_rec.personal_name.role.roleTerm.authority.should == ["marcrelator"]
         end
       end # roles
     end # WITH namespaces
@@ -105,13 +105,13 @@ describe "Mods <name> Element" do
         end
         it "should get role type" do
           @mods_rec.from_str(@mods_w_pers_name_role, false)
-          @mods_rec.personal_name.role.type_at.should == ["text"]
+          @mods_rec.personal_name.role.roleTerm.type_at.should == ["text"]
           @mods_rec.from_str(@mods_w_pers_name_role_code, false)
-          @mods_rec.personal_name.role.type_at.should == ["code"]
+          @mods_rec.personal_name.role.roleTerm.type_at.should == ["code"]
         end
         it "should get role authority" do
           @mods_rec.from_str(@mods_w_pers_name_role, false)
-          @mods_rec.personal_name.role.authority.should == ["marcrelator"]
+          @mods_rec.personal_name.role.roleTerm.authority.should == ["marcrelator"]
         end
       end # roles    
     end # WITHOUT namespaces
@@ -211,13 +211,13 @@ describe "Mods <name> Element" do
       context "role child element" do
         it "should get role type" do
           @mods_rec.from_str(@mods_w_pers_name_role_ns)
-          @mods_rec.plain_name.role.type_at.should == ["text"]
+          @mods_rec.plain_name.role.roleTerm.type_at.should == ["text"]
           @mods_rec.from_str(@mods_w_pers_name_role_code_ns)
-          @mods_rec.plain_name.role.type_at.should == ["code"]
+          @mods_rec.plain_name.role.roleTerm.type_at.should == ["code"]
         end
         it "should get role authority" do
           @mods_rec.from_str(@mods_w_pers_name_role_ns)
-          @mods_rec.plain_name.role.authority.should == ["marcrelator"]
+          @mods_rec.plain_name.role.roleTerm.authority.should == ["marcrelator"]
         end
       end
       
@@ -255,13 +255,13 @@ describe "Mods <name> Element" do
       context "role child element" do
         it "should get role type" do
           @mods_rec.from_str(@mods_w_pers_name_role, false)
-          @mods_rec.plain_name.role.type_at.should == ["text"]
+          @mods_rec.plain_name.role.roleTerm.type_at.should == ["text"]
           @mods_rec.from_str(@mods_w_pers_name_role_code, false)
-          @mods_rec.plain_name.role.type_at.should == ["code"]
+          @mods_rec.plain_name.role.roleTerm.type_at.should == ["code"]
         end
         it "should get role authority" do
           @mods_rec.from_str(@mods_w_pers_name_role, false)
-          @mods_rec.plain_name.role.authority.should == ["marcrelator"]
+          @mods_rec.plain_name.role.roleTerm.authority.should == ["marcrelator"]
         end
       end
     end # context WITHOUT namespaces

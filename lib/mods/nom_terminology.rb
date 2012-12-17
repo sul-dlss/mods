@@ -131,11 +131,13 @@ module Mods
           n.displayForm :path => 'displayForm'
           n.affiliation :path => 'affiliation'
           n.description_el :path => 'description' # description is used by Nokogiri
-          n.role :path => 'role/roleTerm' do |r|
-            r.type_at :path => "@type", :accessor => lambda { |a| a.text }
-            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
-              r.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
-            }
+          n.role :path => 'role' do |r| 
+            r.roleTerm :path => 'roleTerm' do |rt|
+              rt.type_at :path => "@type", :accessor => lambda { |a| a.text }
+              Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+                rt.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+              }
+            end
           end
         end # t._plain_name
 
@@ -583,11 +585,13 @@ module Mods
           n.displayForm :path => 'm:displayForm'
           n.affiliation :path => 'm:affiliation'
           n.description_el :path => 'm:description' # description is used by Nokogiri
-          n.role :path => 'm:role/m:roleTerm' do |r|
-            r.type_at :path => "@type", :accessor => lambda { |a| a.text }
-            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
-              r.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
-            }
+          n.role :path => 'm:role' do |r| 
+            r.roleTerm :path => 'm:roleTerm' do |rt|
+              rt.type_at :path => "@type", :accessor => lambda { |a| a.text }
+              Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+                rt.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+              }
+            end
           end
         end # t._plain_name
 

@@ -99,7 +99,7 @@ describe "Mods <subject> Element" do
       @pers_name_sub.personal_name.displayForm.map { |e| e.text }.should == ['Edward VI , king of England, 1537-1553']
     end
     it "should be able to identify roles associated with a name" do
-      @mult_corp_name_sub.corporate_name.role.map { |e| e.text }.should == ['lithographers.']
+      @mult_corp_name_sub.corporate_name.role.roleTerm.map { |e| e.text }.should == ['lithographers.']
     end
     it "should be able to identify dates associated with a name" do
       @mult_pers_name_sub.personal_name.date.map { |e| e.text }.should include("1818-1878")
