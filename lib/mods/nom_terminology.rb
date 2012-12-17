@@ -138,6 +138,37 @@ module Mods
                 rt.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
               }
             end
+            # convenience method
+            r.authority :path => '.', :accessor => lambda { |role_node| 
+              a = nil
+              role_node.roleTerm.each { |role_t|  
+                a ||= role_t.authority
+              }
+              a
+            }
+            # convenience method            
+            r.code :path => '.', :accessor => lambda { |role_node| 
+              c = nil
+              role_node.roleTerm.each { |role_t|  
+                if role_t.type_at == 'code' 
+                  c ||= role_t.text
+                end
+              }
+              c
+            }
+            # convenience method
+            r.value :path => '.', :accessor => lambda { |role_node| 
+              val = nil
+              role_node.roleTerm.each { |role_t|  
+                if role_t.type_at == 'text' 
+                  val ||= role_t.text
+                end
+              }
+              if !val && role_node.code && role_node.authority.first =~ /marcrelator/
+                val = MARC_RELATOR[role_node.code.first]
+              end
+              val
+            }
           end
         end # t._plain_name
 
@@ -592,6 +623,37 @@ module Mods
                 rt.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
               }
             end
+            # convenience method
+            r.authority :path => '.', :accessor => lambda { |role_node| 
+              a = nil
+              role_node.roleTerm.each { |role_t|  
+                a ||= role_t.authority
+              }
+              a
+            }
+            # convenience method            
+            r.code :path => '.', :accessor => lambda { |role_node| 
+              c = nil
+              role_node.roleTerm.each { |role_t|  
+                if role_t.type_at == 'code' 
+                  c ||= role_t.text
+                end
+              }
+              c
+            }
+            # convenience method
+            r.value :path => '.', :accessor => lambda { |role_node| 
+              val = nil
+              role_node.roleTerm.each { |role_t|  
+                if role_t.type_at == 'text' 
+                  val ||= role_t.text
+                end
+              }
+              if !val && role_node.code && role_node.authority.first =~ /marcrelator/
+                val = MARC_RELATOR[role_node.code.first]
+              end
+              val
+            }
           end
         end # t._plain_name
 
@@ -884,23 +946,27 @@ module Mods
           n.nonSort :path => 'm:nonSort'
           n.partNumber :path => 'm:partNumber'
           n.partName :path => 'm:partName'
+          # convenience method
           n.sort_title :path => '.', :accessor => lambda { |node| 
             if node.type_at != "alternative" || (node.type_at == "alternative" && 
                   mods_ng_xml.xpath('/m:mods/m:titleInfo', {'m' => Mods::MODS_NS}).size == 1)
               node.title.text + (!node.subTitle.text.empty? ? "#{@title_delimiter}#{node.subTitle.text}" : "" ) 
             end
           }
+          # convenience method
           n.full_title :path => '.', :accessor => lambda { |node| 
              (!node.nonSort.text.empty? ? "#{node.nonSort.text} " : "" ) + 
              node.title.text + 
              (!node.subTitle.text.empty? ? "#{@title_delimiter}#{node.subTitle.text}" : "" ) 
           }
+          # convenience method
           n.short_title :path => '.', :accessor => lambda { |node|  
             if node.type_at != "alternative"
               (!node.nonSort.text.empty? ? "#{node.nonSort.text} " : "" ) + 
               node.title.text
             end
           }
+          # convenience method
           n.alternative_title :path => '.', :accessor => lambda { |node|  
             if node.type_at == "alternative"
               (!node.nonSort.text.empty? ? "#{node.nonSort.text} " : "" ) + 

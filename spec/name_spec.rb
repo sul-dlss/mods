@@ -273,4 +273,115 @@ describe "Mods <name> Element" do
     MARC_RELATOR['drt'].should == "Director"
   end
   
+  context "roles" do
+    before(:all) do
+      @xml_w_code = "<mods #{@ns_decl}><name><namePart>Alfred Hitchock</namePart>
+                <role><roleTerm type='code' authority='marcrelator'>drt</roleTerm></role>
+            </name></mods>"
+      @xml_w_text = "<mods #{@ns_decl}><name><namePart>Sean Connery</namePart>
+                <role><roleTerm type='text' authority='marcrelator'>Actor</roleTerm></role>
+            </name></mods>"
+      @xml_wo_authority = "<mods #{@ns_decl}><name><namePart>Exciting Prints</namePart>
+                <role><roleTerm type='text'>lithographer</roleTerm></role>
+            </name></mods>"
+      @xml_w_both = "<mods #{@ns_decl}><name><namePart>anyone</namePart>
+                <role>
+                  <roleTerm type='text' authority='marcrelator'>CreatorFake</roleTerm>
+                  <roleTerm type='code' authority='marcrelator'>cre</roleTerm>
+                </role>
+            </name></mods>"
+    end
+
+    context "WITH namespaces" do      
+      context "value" do
+        it "should be the value of a text roleTerm" do
+          @mods_rec.from_str(@xml_w_text)
+          @mods_rec.plain_name.role.value.should == ["Actor"]
+        end  
+        it "should be the translation of the code if it is a marcrelator code and there is no text roleTerm" do
+          @mods_rec.from_str(@xml_w_code)
+          @mods_rec.plain_name.role.value.should == ["Director"]
+        end
+        it "should be the value of the text roleTerm if there are both a code and a text roleTerm" do
+          @mods_rec.from_str(@xml_w_both)
+          @mods_rec.plain_name.role.value.should == ["CreatorFake"]
+        end
+      end
+      context "authority" do
+        it "should be empty if it is missing from xml" do
+          @mods_rec.from_str(@xml_wo_authority)
+          @mods_rec.plain_name.role.authority.size.should == 0
+        end
+        it "should be the value of the authority attribute on the roleTerm element" do
+          @mods_rec.from_str(@xml_w_code)
+          @mods_rec.plain_name.role.authority.should == ["marcrelator"]
+          @mods_rec.from_str(@xml_w_text)
+          @mods_rec.plain_name.role.authority.should == ["marcrelator"]
+          @mods_rec.from_str(@xml_w_both)
+          @mods_rec.plain_name.role.authority.should == ["marcrelator"]
+        end
+      end
+      context "code" do
+        it "should be empty if the roleTerm is not of type code" do
+          @mods_rec.from_str(@xml_w_text)
+          @mods_rec.plain_name.role.code.size.should == 0
+          @mods_rec.from_str(@xml_wo_authority)
+          @mods_rec.plain_name.role.code.size.should == 0
+        end
+        it "should be the value of the roleTerm element if element's type attribute is 'code'" do
+          @mods_rec.from_str(@xml_w_code)
+          @mods_rec.plain_name.role.code.should == ["drt"]
+          @mods_rec.from_str(@xml_w_both)
+          @mods_rec.plain_name.role.code.should == ["cre"]
+        end
+      end
+    end # roles WITH namespaces
+      
+    context "WITHOUT namespaces" do
+      context "value" do
+        it "should be the value of a text roleTerm" do
+          @mods_rec.from_str(@xml_w_text, false)
+          @mods_rec.plain_name.role.value.should == ["Actor"]
+        end  
+        it "should be the translation of the code if it is a marcrelator code and there is no text roleTerm" do
+          @mods_rec.from_str(@xml_w_code, false)
+          @mods_rec.plain_name.role.value.should == ["Director"]
+        end
+        it "should be the value of the text roleTerm if there are both a code and a text roleTerm" do
+          @mods_rec.from_str(@xml_w_both, false)
+          @mods_rec.plain_name.role.value.should == ["CreatorFake"]
+        end
+      end
+      context "authority" do
+        it "should be empty if it is missing from xml" do
+          @mods_rec.from_str(@xml_wo_authority, false)
+          @mods_rec.plain_name.role.authority.size.should == 0
+        end
+        it "should be the value of the authority attribute on the roleTerm element" do
+          @mods_rec.from_str(@xml_w_code, false)
+          @mods_rec.plain_name.role.authority.should == ["marcrelator"]
+          @mods_rec.from_str(@xml_w_text, false)
+          @mods_rec.plain_name.role.authority.should == ["marcrelator"]
+          @mods_rec.from_str(@xml_w_both, false)
+          @mods_rec.plain_name.role.authority.should == ["marcrelator"]
+        end
+      end
+      context "code" do
+        it "should be empty if the roleTerm is not of type code" do
+          @mods_rec.from_str(@xml_w_text, false)
+          @mods_rec.plain_name.role.code.size.should == 0
+          @mods_rec.from_str(@xml_wo_authority, false)
+          @mods_rec.plain_name.role.code.size.should == 0
+        end
+        it "should be the value of the roleTerm element if element's type attribute is 'code'" do
+          @mods_rec.from_str(@xml_w_code, false)
+          @mods_rec.plain_name.role.code.should == ["drt"]
+          @mods_rec.from_str(@xml_w_both, false)
+          @mods_rec.plain_name.role.code.should == ["cre"]
+        end
+      end
+    end # WITHOUT namespaces    
+        
+  end # roles
+  
 end
