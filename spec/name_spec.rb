@@ -120,12 +120,6 @@ describe "Mods <name> Element" do
     
   end # personal name
   
-  context "sort_author" do
-    it "should do something" do
-      pending "sort_author to be implemented (choose creator if present ... )"
-    end
-  end
-  
   context "corporate name" do    
     context "WITH namespaces" do
       it "should recognize child elements" do
@@ -341,40 +335,60 @@ describe "Mods <name> Element" do
       end
       context "pertaining to a specific name" do
         before(:all) do
-          @xml_w_role_text = "<mods #{@ns_decl}><name>
-                        <namePart>Sean Connery</namePart>
-                        <role><roleTerm type='text' authority='marcrelator'>Actor</roleTerm></role>
-                      </name></mods>"
+          @complex = "<mods #{@ns_decl}>
+                <name>
+                    <namePart>Sean Connery</namePart>
+                    <role><roleTerm type='code' authority='marcrelator'>drt</roleTerm></role>
+                </name>
+                <name>
+                    <namePart>Pierce Brosnan</namePart>
+                    <role>
+                      <roleTerm type='text'>CreatorFake</roleTerm>
+                      <roleTerm type='code' authority='marcrelator'>cre</roleTerm>
+                    </role>
+                    <role><roleTerm type='text' authority='marcrelator'>Actor</roleTerm></role>
+                </name>
+                <name>
+                    <namePart>Daniel Craig</namePart>
+                    <role>
+                      <roleTerm type='text' authority='marcrelator'>Actor</roleTerm>
+                      <roleTerm type='code' authority='marcrelator'>cre</roleTerm>
+                    </role>
+                </name>
+              </mods>"
+          @mods_complex = Mods::Record.new.from_str(@complex)
         end
-        context "convenience methods WITH namespaces" do
-          it "roles should be empty array when there is no role element" do
-            @mods_rec.from_str(@mods_w_pers_name_ns)
-            @mods_rec.personal_name.first.role.size.should == 0
+        it "roles should be empty array when there is no role element" do
+          @mods_rec.from_str(@mods_w_pers_name_ns)
+          @mods_rec.personal_name.first.role.size.should == 0
+        end
+        it "object should have same number of roles as it has role nodes in xml" do
+          @mods_complex.plain_name[0].role.size.should == 1
+          @mods_complex.plain_name[1].role.size.should == 2
+          @mods_complex.plain_name[2].role.size.should == 1
+        end
+        context "name's roles should be correctly populated" do
+          it "text attribute" do
+            @mods_complex.plain_name[0].role.value.should == ['Director']
+            @mods_complex.plain_name[1].role.value.should == ['CreatorFake', 'Actor']
+            @mods_complex.plain_name[2].role.value.should == ['Actor']
           end
-          it "object should have same number of roles as it has role nodes in xml" do
-            @mods_mult_roles.plain_name.first.role.size.should == 2
+          it "code attribute" do
+            @mods_complex.plain_name[0].role.code.should == ['drt']
+            @mods_complex.plain_name[1].role.code.should == ['cre']
+            @mods_complex.plain_name[2].role.code.should == ['cre']
           end
-          context "name's roles should be correctly populated" do
-            it "text attribute" do
-              @mods_w_text.plain_name.role.value.should == ['Actor']
-              @mods_rec.from_str(@mods_w_pers_name_role_code_ns)
-              @mods_rec.personal_name.first.role.value.should == ['Director']
-            end
-            it "code attribute" do
-              @mods_rec.from_str(@mods_w_pers_name_role_code_ns)
-              @mods_rec.personal_name.first.role.code.should == ['drt']
-            end
-            it "authority attribute" do
-              @mods_rec.from_str(@mods_w_corp_name_role_ns)
-              @mods_rec.plain_name.role.authority.should == ['marcrelator']
-            end
-            it "multiple roles" do
-              @mods_mult_roles.plain_name.first.role.value.should == ['Creator', 'Performer']
-              @mods_mult_roles.plain_name.first.role.code.should == ['cre']
-              @mods_mult_roles.plain_name.role.first.roleTerm.authority.first.should == 'marcrelator'
-              @mods_mult_roles.plain_name.role.last.roleTerm.authority.size.should == 0
-            end      
+          it "authority attribute" do
+            @mods_complex.plain_name[0].role.authority.should == ['marcrelator']
+            @mods_complex.plain_name[1].role.authority.should == ['marcrelator', 'marcrelator']
+            @mods_complex.plain_name[2].role.authority.should == ['marcrelator']
           end
+          it "multiple roles" do
+            @mods_mult_roles.plain_name.first.role.value.should == ['Creator', 'Performer']
+            @mods_mult_roles.plain_name.first.role.code.should == ['cre']
+            @mods_mult_roles.plain_name.role.first.roleTerm.authority.first.should == 'marcrelator'
+            @mods_mult_roles.plain_name.role.last.roleTerm.authority.size.should == 0
+          end      
         end
       end # pertaining to a specific name
     end # roles WITH namespaces
