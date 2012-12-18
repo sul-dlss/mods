@@ -141,8 +141,11 @@ module Mods
             # convenience method
             r.authority :path => '.', :accessor => lambda { |role_node| 
               a = nil
-              role_node.roleTerm.each { |role_t|  
-                a ||= role_t.authority
+              role_node.roleTerm.each { |role_t| 
+                # role_t.authority will be [] if it is missing from an earlier roleTerm
+                if role_t.authority && (!a || a.size == 0)
+                  a = role_t.authority
+                end
               }
               a
             }
@@ -164,12 +167,13 @@ module Mods
                   val ||= role_t.text
                 end
               }
+              # FIXME:  this is broken if there are multiple role codes and some of them are not marcrelator
               if !val && role_node.code && role_node.authority.first =~ /marcrelator/
                 val = MARC_RELATOR[role_node.code.first]
               end
               val
             }
-          end
+          end # role node
         end # t._plain_name
 
         t.personal_name :path => '/mods/name[@type="personal"]'
@@ -626,8 +630,11 @@ module Mods
             # convenience method
             r.authority :path => '.', :accessor => lambda { |role_node| 
               a = nil
-              role_node.roleTerm.each { |role_t|  
-                a ||= role_t.authority
+              role_node.roleTerm.each { |role_t|
+                # role_t.authority will be [] if it is missing from an earlier roleTerm
+                if role_t.authority && (!a || a.size == 0)
+                  a = role_t.authority
+                end
               }
               a
             }
@@ -635,7 +642,7 @@ module Mods
             r.code :path => '.', :accessor => lambda { |role_node| 
               c = nil
               role_node.roleTerm.each { |role_t|  
-                if role_t.type_at == 'code' 
+                if role_t.type_at == 'code'
                   c ||= role_t.text
                 end
               }
@@ -645,16 +652,17 @@ module Mods
             r.value :path => '.', :accessor => lambda { |role_node| 
               val = nil
               role_node.roleTerm.each { |role_t|  
-                if role_t.type_at == 'text' 
+                if role_t.type_at == 'text'
                   val ||= role_t.text
                 end
               }
+              # FIXME:  this is broken if there are multiple role codes and some of them are not marcrelator
               if !val && role_node.code && role_node.authority.first =~ /marcrelator/
                 val = MARC_RELATOR[role_node.code.first]
               end
               val
             }
-          end
+          end # role node
         end # t._plain_name
 
         t.personal_name :path => '/m:mods/m:name[@type="personal"]'
