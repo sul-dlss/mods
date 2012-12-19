@@ -269,33 +269,35 @@ describe "Mods <name> Element" do
   context "display_value and display_value_w_date" do
     before(:all) do
       @disp_form = 'q'
-      x = "<mods #{@ns_decl}><name type='personal'>
+      @pname1_xml = "<mods #{@ns_decl}><name type='personal'>
               <namePart type='given'>John</namePart>
               <namePart type='family'>Huston</namePart>
               <displayForm>#{@disp_form}</displayForm>
          </name></mods>"
-      @mods_pname1 = Mods::Record.new.from_str(x)
-      x = "<mods #{@ns_decl}><name type='corporate'>
+      @cname_xml = "<mods #{@ns_decl}><name type='corporate'>
               <namePart>Watchful Eye</namePart>
           </name></mods>"
-      @mods_cname = Mods::Record.new.from_str(x)
       @affl = 'affliation'
       @desc = 'description'
       @role = 'role'
-      x = "<mods #{@ns_decl}><name>
+      @name_xml = "<mods #{@ns_decl}><name>
                 <namePart>Exciting Prints</namePart>
                 <affiliation>#{@affl}</affiliation>
                 <description>#{@desc}</description>
                 <role><roleTerm type='text'>#{@role}</roleTerm></role>
             </name></mods>"
-      @mods_name = Mods::Record.new.from_str(x)
-      x = "<mods #{@ns_decl}><name>
+      @namepart_xml = "<mods #{@ns_decl}><name>
                 <namePart>Suzy</namePart>
                 <namePart type='date'>1920-</namePart>
             </name></mods>"
-      @mods_namepart_date = Mods::Record.new.from_str(x)          
     end
     context "WITH namespaces" do
+      before(:all) do
+        @mods_pname1 = Mods::Record.new.from_str(@pname1_xml)
+        @mods_cname = Mods::Record.new.from_str(@cname_xml)
+        @mods_name = Mods::Record.new.from_str(@name_xml)
+        @mods_namepart_date = Mods::Record.new.from_str(@namepart_xml)        
+      end
       it "should be a string value for each name, not an Array" do
         @mods_name.plain_name.first.display_value.should be_an_instance_of(String)
         @mods_name.plain_name.first.display_value_w_date.should be_an_instance_of(String)
@@ -403,6 +405,119 @@ describe "Mods <name> Element" do
       end
     end # WITH namespaces
 
+    context "WITHOUT namespaces" do
+      before(:all) do
+        @mods_pname1 = Mods::Record.new.from_str(@pname1_xml.sub(" #{@ns_decl}", ''), false)
+        @mods_cname = Mods::Record.new.from_str(@cname_xml.sub(" #{@ns_decl}", ''), false)
+        @mods_name = Mods::Record.new.from_str(@name_xml.sub(" #{@ns_decl}", ''), false)
+        @mods_namepart_date = Mods::Record.new.from_str(@namepart_xml.sub(" #{@ns_decl}", ''), false)
+      end
+      it "should be a string value for each name, not an Array" do
+        @mods_name.plain_name.first.display_value.should be_an_instance_of(String)
+        @mods_name.plain_name.first.display_value_w_date.should be_an_instance_of(String)
+      end
+      it "should return nil when there is no display_value" do
+        x = "<mods><name>
+                  <namePart></namePart>
+              </name></mods>"
+        r = Mods::Record.new.from_str(x, false)
+        r.plain_name.first.display_value.should == nil
+      end
+      it "should be applicable to all name term flavors (plain_name, personal_name, corporate_name ...)" do
+        @mods_name.plain_name.first.display_value.should_not == nil
+        @mods_name.plain_name.first.display_value_w_date.should_not == nil
+        @mods_pname1.personal_name.first.display_value.should_not == nil
+        @mods_pname1.personal_name.first.display_value_w_date.should_not == nil
+        @mods_cname.corporate_name.first.display_value.should_not == nil
+        @mods_cname.corporate_name.first.display_value_w_date.should_not == nil
+      end
+      it "should not include <affiliation> text" do
+        @mods_name.plain_name.first.display_value.should_not =~ Regexp.new(@affl)
+      end
+      it "should not include <description> text" do
+        @mods_name.plain_name.first.display_value.should_not =~  Regexp.new(@desc)
+      end
+      it "should not include <role> info" do
+        @mods_name.plain_name.first.display_value.should_not =~  Regexp.new(@role)
+      end
+      it "should be the value of the <displayForm> subelement if it exists" do
+        @mods_pname1.plain_name.first.display_value.should == @disp_form
+        x = "<mods><name type='personal'>
+              	  <namePart>Alterman, Eric</namePart>
+              	  <displayForm>Eric Alterman</displayForm>
+              </name><mods>"
+        r = Mods::Record.new.from_str(x, false)         
+        r.plain_name.first.display_value.should == 'Eric Alterman'
+      end
+      it "display_value should not include <namePart type='date'>" do
+        @mods_namepart_date.plain_name.first.display_value.should == 'Suzy'
+      end
+      it "date text should be added to display_value_w_date when it is available" do
+        @mods_namepart_date.plain_name.first.display_value_w_date.should == 'Suzy, 1920-'
+      end
+      it "date text should not be added to display_value_w_dates if dates are already included" do
+        x = "<mods><name>
+                  <namePart>Woolf, Virginia</namePart>
+  	              <namePart type='date'>1882-1941</namePart>
+                  <displayForm>Woolf, Virginia, 1882-1941</namePart>
+              </name></mods>"
+        r = Mods::Record.new.from_str(x, false) 
+        r.plain_name.first.display_value_w_date.should == 'Woolf, Virginia, 1882-1941'
+      end
+      context "personal names" do
+        before(:all) do
+          @d = '1920-2005'
+          x = "<mods><name type='personal'>
+                	<namePart type='given'>John Paul</namePart>
+                	<namePart type='termsOfAddress'>II</namePart>
+                	<namePart type='termsOfAddress'>Pope</namePart>
+                	<namePart type='date'>#{@d}</namePart>
+              </name></mods>"
+          @pope = Mods::Record.new.from_str(x, false) 
+          x = "<mods><name type='personal'>
+                    <namePart>Crusty</namePart>
+                    <namePart>The Clown</namePart>
+                    <namePart type='date'>#{@d}</namePart>
+                </name></mods>"
+          @pname2 = Mods::Record.new.from_str(x, false)
+        end
+        # use the displayForm of a personal name if present
+        #   if no displayForm, try to make a string from family name and given name "family_name, given_name"
+        #   otherwise, return all nameParts concatenated together
+        # @return Array of Strings, each containing the above described string
+        it "should be [family name], [given name] if they are present" do
+          x = "<mods><name type='personal'>
+                  <namePart type='given'>John</namePart>
+                  <namePart type='family'>Huston</namePart>
+             </name></mods>"
+          r = Mods::Record.new.from_str(x, false)
+          r.personal_name.first.display_value.should == 'Huston, John'
+          @pope.personal_name.first.display_value.should == 'John Paul II, Pope'
+        end
+        it "should be concatenation of untyped <namePart> elements if there is no family or given name" do
+          @pname2.personal_name.first.display_value.should == 'Crusty The Clown'
+        end
+        it "should include <termOfAddress> elements, in order, comma separated" do
+          @pope.personal_name.first.display_value.should == 'John Paul II, Pope'
+        end
+        it "display_value should not include date" do
+          @pope.personal_name.first.display_value.should_not =~ Regexp.new(@d)
+        end
+        it "date should be included in display_value_w_date" do
+          @pope.personal_name.first.display_value_w_date.should == "John Paul II, Pope, #{@d}"
+        end
+      end
+      context "not personal name (e.g. corporate)" do
+        it "should be the value of non-date nameParts concatenated" do
+          x = "<mods><name type='corporate'>
+            	<namePart>United States</namePart>
+            	<namePart>Court of Appeals (2nd Circuit)</namePart>
+          </name></mods>"
+          r = Mods::Record.new.from_str(x, false)
+          r.corporate_name.first.display_value.should == 'United States Court of Appeals (2nd Circuit)'
+        end
+      end
+    end # WITHOUT namespaces
   end # display_value and display_value_w_date
   
   context "roles" do
