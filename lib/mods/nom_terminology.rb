@@ -128,6 +128,11 @@ module Mods
           n.namePart :path => 'm:namePart' do |np|
             np.type_at :path => '@type', :accessor => lambda { |a| a.text }
           end
+          n.family_name :path => 'm:namePart[@type="family"]'
+          n.given_name :path => 'm:namePart[@type="given"]'
+          n.termsOfAddress :path => 'm:namePart[@type="termsOfAddress"]'
+          n.date :path => 'm:namePart[@type="date"]'
+          
           n.displayForm :path => 'm:displayForm'
           n.affiliation :path => 'm:affiliation'
           n.description_el :path => 'm:description' # description is used by Nokogiri
@@ -138,7 +143,7 @@ module Mods
                 rt.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
               }
             end
-            # convenience method
+            # role convenience method
             r.authority :path => '.', :accessor => lambda { |role_node| 
               a = nil
               role_node.roleTerm.each { |role_t|
@@ -149,7 +154,7 @@ module Mods
               }
               a
             }
-            # convenience method            
+            # role convenience method            
             r.code :path => '.', :accessor => lambda { |role_node| 
               c = nil
               role_node.roleTerm.each { |role_t|  
@@ -159,7 +164,7 @@ module Mods
               }
               c
             }
-            # convenience method
+            # role convenience method
             r.value :path => '.', :accessor => lambda { |role_node| 
               val = nil
               role_node.roleTerm.each { |role_t|  
@@ -174,16 +179,59 @@ module Mods
               val
             }
           end # role node
+          
+          # name convenience method
+          n.display_value :path => '.', :single => true, :accessor => lambda {|name_node|
+            dv = ''
+            if name_node.displayForm && name_node.displayForm.text.size > 0
+              dv = name_node.displayForm.text
+            end
+            if dv.empty?
+              if name_node.type_at == 'personal'
+                if name_node.family_name.size > 0
+                  dv = name_node.given_name.size > 0 ? name_node.family_name.text + ', ' + name_node.given_name.text : name_node.family_name.text
+                elsif name_node.given_name.size > 0
+                  dv = name_node.given_name.text
+                end
+                if !dv.empty?
+                  first = true
+                  name_node.namePart.each { |np| 
+                    if np.type_at == 'termsOfAddress' && !np.text.empty?
+                      if first
+                        dv = dv + " " + np.text
+                        first = false
+                      else
+                        dv = dv + ", " + np.text
+                      end
+                    end
+                  }
+                else
+                  dv = name_node.namePart.select {|np| np.type_at != 'date' && !np.text.empty?}.join(" ")
+                end
+              else
+                dv = name_node.namePart.select {|np| np.type_at != 'date' && !np.text.empty?}.join(" ")
+              end
+            end
+            dv.strip.empty? ? nil : dv.strip
+          }
+          
+          # name convenience method
+          n.display_value_w_date :path => '.', :single => true, :accessor => lambda {|name_node|
+            dv = '' + name_node.display_value
+            name_node.namePart.each { |np|  
+              if np.type_at == 'date' && !np.text.empty? && !dv.end_with?(np.text)
+                dv = dv + ", #{np.text}"
+              end
+            }
+            if dv.start_with?(', ')
+              dv.sub(', ', '')
+            end
+            dv.strip.empty? ? nil : dv.strip
+          }
         end # t._plain_name
 
         t.personal_name :path => '/m:mods/m:name[@type="personal"]'
-        t._personal_name :path => '//m:name[@type="personal"]' do |n|
-          n.family_name :path => 'm:namePart[@type="family"]'
-          n.given_name :path => 'm:namePart[@type="given"]'
-          n.termsOfAddress :path => 'm:namePart[@type="termsOfAddress"]'
-          n.date :path => 'm:namePart[@type="date"]'
-        end
-
+        t._personal_name :path => '//m:name[@type="personal"]'
         t.corporate_name :path => '/m:mods/m:name[@type="corporate"]'
         t._corporate_name :path => '//m:name[@type="corporate"]'
         t.conference_name :path => '/m:mods/m:name[@type="conference"]'
