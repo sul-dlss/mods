@@ -78,13 +78,19 @@ module Mods
       @mods_ng_xml.title_info.sort_title.find { |n| !n.nil? }
     end
     
-    # use the displayForm of a personal name if present
-    #   if no displayForm, try to make a string from family name and given name "family_name, given_name"
-    #   otherwise, return all nameParts concatenated together
-    # @return Array of Strings, each containing the above described string
+    # @return Array of Strings, each containing the computed display value of a personal name
+    #   (see nom_terminology for algorithm)
     def personal_names
       @mods_ng_xml.personal_name.map { |n|
         n.display_value
+      }
+    end
+
+    # @return Array of Strings, each containing the computed display value of a personal name
+    #   (see nom_terminology for algorithm)
+    def personal_names_w_dates
+      @mods_ng_xml.personal_name.map { |n|
+        n.display_value_w_date
       }
     end
 

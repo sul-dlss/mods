@@ -175,6 +175,34 @@ describe "Mods::Record" do
         @mods_rec.personal_names.first.should match(/Mr./)
       end      
     end # personal_names 
+    
+    context "personal_names_w_dates" do
+      before(:all) do
+        @given_family = '<mods xmlns="http://www.loc.gov/mods/v3"><name type="personal"><namePart type="given">Jorge Luis</namePart>
+                                <namePart type="family">Borges</namePart></name></mods>'        
+        @given_family_date = '<mods xmlns="http://www.loc.gov/mods/v3"><name type="personal"><namePart type="given">Zaphod</namePart>
+                                <namePart type="family">Beeblebrox</namePart>
+                                <namePart type="date">1912-2362</namePart></name></mods>'
+        @all_name_parts = '<mods xmlns="http://www.loc.gov/mods/v3"><name type="personal"><namePart type="given">Given</namePart>
+                                <namePart type="family">Family</namePart>
+                                <namePart type="termsOfAddress">Mr.</namePart>
+                                <namePart type="date">date</namePart></name></mods>'
+      end
+      it "should return an Array of Strings" do
+        @mods_rec.from_str(@given_family_date)
+        @mods_rec.personal_names_w_dates.should be_an_instance_of(Array)
+      end
+      it "should include the date when it is available" do
+        @mods_rec.from_str(@given_family_date)
+        @mods_rec.personal_names_w_dates.first.should match(/, 1912-2362$/)
+        @mods_rec.from_str(@all_name_parts)
+        @mods_rec.personal_names_w_dates.first.should match(/, date$/)
+      end      
+      it "should be just the personal_name if no date is available" do
+        @mods_rec.from_str(@given_family)
+        @mods_rec.personal_names_w_dates.first.should == 'Borges, Jorge Luis'
+      end
+    end
       
     context "corporate_names" do
       before(:all) do
