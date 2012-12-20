@@ -158,7 +158,7 @@ describe "Mods::Record" do
       end
       it "should include a comma when there is both a family and a given name" do
         @mods_rec.from_str(@all_name_parts)
-        @mods_rec.personal_names.should include("Family, Given")
+        @mods_rec.personal_names.should include("Family, Given Mr.")
       end
       it "should include multiple words in a namePart" do
         @mods_rec.from_str(@given_family)
@@ -170,9 +170,9 @@ describe "Mods::Record" do
           @mods_rec.personal_names.first.should_not match(/,/)
         }
       end
-      it "should not include terms of address" do
+      it "should include terms of address" do
         @mods_rec.from_str(@all_name_parts)
-        @mods_rec.personal_names.first.should_not match(/Mr./)
+        @mods_rec.personal_names.first.should match(/Mr./)
       end      
     end # personal_names 
       

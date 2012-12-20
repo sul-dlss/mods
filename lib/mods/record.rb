@@ -84,13 +84,7 @@ module Mods
     # @return Array of Strings, each containing the above described string
     def personal_names
       @mods_ng_xml.personal_name.map { |n|
-        if n.displayForm.size > 0
-          n.displayForm.text
-        elsif n.family_name.size > 0
-          n.given_name.size > 0 ? n.family_name.text + ', ' + n.given_name.text : n.family_name.text
-        else
-          n.namePart.text
-        end
+        n.display_value
       }
     end
 
@@ -99,11 +93,7 @@ module Mods
     # @return Array of Strings, each containing the above described string
     def corporate_names
       @mods_ng_xml.corporate_name.map { |n|
-        if n.displayForm.size > 0
-          n.displayForm.text
-        else
-          n.namePart.text 
-        end
+        n.display_value
       }
     end
     
