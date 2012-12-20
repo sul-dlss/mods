@@ -81,26 +81,20 @@ module Mods
     # @return Array of Strings, each containing the computed display value of a personal name
     #   (see nom_terminology for algorithm)
     def personal_names
-      @mods_ng_xml.personal_name.map { |n|
-        n.display_value
-      }
+      @mods_ng_xml.personal_name.map { |n| n.display_value }
     end
 
     # @return Array of Strings, each containing the computed display value of a personal name
     #   (see nom_terminology for algorithm)
     def personal_names_w_dates
-      @mods_ng_xml.personal_name.map { |n|
-        n.display_value_w_date
-      }
+      @mods_ng_xml.personal_name.map { |n| n.display_value_w_date }
     end
 
     # use the displayForm of a corporate name if present
     #   otherwise, return all nameParts concatenated together
     # @return Array of Strings, each containing the above described string
     def corporate_names
-      @mods_ng_xml.corporate_name.map { |n|
-        n.display_value
-      }
+      @mods_ng_xml.corporate_name.map { |n| n.display_value }
     end
     
     # Translates iso-639 language codes, and leaves everything else alone.
