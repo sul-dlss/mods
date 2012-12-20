@@ -181,6 +181,9 @@ module Mods
           end # role node
           
           # name convenience method
+          # uses the displayForm of a name if present
+          #   if no displayForm, try to make a string from family, given and terms of address
+          #   otherwise, return all non-date nameParts concatenated together
           n.display_value :path => '.', :single => true, :accessor => lambda {|name_node|
             dv = ''
             if name_node.displayForm && name_node.displayForm.text.size > 0
@@ -205,10 +208,10 @@ module Mods
                       end
                     end
                   }
-                else
+                else # no family or given name 
                   dv = name_node.namePart.select {|np| np.type_at != 'date' && !np.text.empty?}.join(" ")
                 end
-              else
+              else # not a personal name
                 dv = name_node.namePart.select {|np| np.type_at != 'date' && !np.text.empty?}.join(" ")
               end
             end
@@ -722,6 +725,9 @@ module Mods
           end # role node
 
           # name convenience method
+          # uses the displayForm of a name if present
+          #   if no displayForm, try to make a string from family, given and terms of address
+          #   otherwise, return all non-date nameParts concatenated together
           n.display_value :path => '.', :single => true, :accessor => lambda {|name_node|
             dv = ''
             if name_node.displayForm && name_node.displayForm.text.size > 0
@@ -746,10 +752,10 @@ module Mods
                       end
                     end
                   }
-                else
+                else # no family or given name
                   dv = name_node.namePart.select {|np| np.type_at != 'date' && !np.text.empty?}.join(" ")
                 end
-              else
+              else # not a personal name
                 dv = name_node.namePart.select {|np| np.type_at != 'date' && !np.text.empty?}.join(" ")
               end
             end
