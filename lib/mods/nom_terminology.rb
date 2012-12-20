@@ -189,7 +189,7 @@ module Mods
             if dv.empty?
               if name_node.type_at == 'personal'
                 if name_node.family_name.size > 0
-                  dv = name_node.given_name.size > 0 ? name_node.family_name.text + ', ' + name_node.given_name.text : name_node.family_name.text
+                  dv = name_node.given_name.size > 0 ? "#{name_node.family_name.text}, #{name_node.given_name.text}" : name_node.family_name.text
                 elsif name_node.given_name.size > 0
                   dv = name_node.given_name.text
                 end
@@ -730,7 +730,7 @@ module Mods
             if dv.empty?
               if name_node.type_at == 'personal'
                 if name_node.family_name.size > 0
-                  dv = name_node.given_name.size > 0 ? name_node.family_name.text + ', ' + name_node.given_name.text : name_node.family_name.text
+                  dv = name_node.given_name.size > 0 ? "#{name_node.family_name.text}, #{name_node.given_name.text}" : name_node.family_name.text
                 elsif name_node.given_name.size > 0
                   dv = name_node.given_name.text
                 end
