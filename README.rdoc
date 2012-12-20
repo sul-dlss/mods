@@ -37,19 +37,20 @@ TODO: Write usage instructions here
 
 == Releases
 
-0.0.16 add role convenience methods (within name node)
-0.0.15 make namespace aware processing the default
-0.0.14 don't lose xml encoding in reader.normalize_mods under jruby
-0.0.13 really really fix removal of xsi:schemaLocation in jruby
-0.0.12 fix failing jruby test
-0.0.11 fix remove xsi:schemaLocation attribute from mods element when not using namespaces
-0.0.10 remove xsi:schemaLocation attribute from mods element when not using namespaces
-0.0.9 implement from_nk_node as way to load record object
-0.0.8 implement relatedItem and attributes on all simple top level elements
-0.0.7 implement part
-0.0.6 implement recordInfo, fix to work under jruby
-0.0.5 implement subject, change a few constants
-0.0.4 implement language, location, origin_info, physical_description
-0.0.3 use nom-xml gem and make this more nokogiri-ish; implement name, title, and simple top level elements with no subelements
-0.0.2 Set up rake tasks, publishing rdoc, and continuous integration.
-0.0.1 Grab the name
+* <b>0.0.17</b> add display_value and display_value_w_date to name node; add personal_names_w_dates to record
+* <b>0.0.16</b> add role convenience methods (within name node)
+* <b>0.0.15</b> make namespace aware processing the default
+* <b>0.0.14</b> don't lose xml encoding in reader.normalize_mods under jruby
+* <b>0.0.13</b> really really fix removal of xsi:schemaLocation in jruby
+* <b>0.0.12</b> fix failing jruby test
+* <b>0.0.11</b> fix remove xsi:schemaLocation attribute from mods element when not using namespaces
+* <b>0.0.10</b> remove xsi:schemaLocation attribute from mods element when not using namespaces
+* <b>0.0.9</b> implement from_nk_node as way to load record object
+* <b>0.0.8</b> implement relatedItem and attributes on all simple top level elements
+* <b>0.0.7</b> implement part
+* <b>0.0.6</b> implement recordInfo, fix to work under jruby
+* <b>0.0.5</b> implement subject, change a few constants
+* <b>0.0.4</b> implement language, location, origin_info, physical_description
+* <b>0.0.3</b> use nom-xml gem and make this more nokogiri-ish; implement name, title, and simple top level elements with no subelements
+* <b>0.0.2</b> Set up rake tasks, publishing rdoc, and continuous integration.
+* <b>0.0.1</b> Grab the name
