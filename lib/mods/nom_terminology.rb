@@ -9,7 +9,7 @@ module Mods
   DATE_ATTRIBS = ['encoding', 'point', 'keyDate', 'qualifier']
   ENCODING_ATTRIB_VALUES = ['w3cdtf', 'iso8601', 'marc', 'edtf', 'temper']
   POINT_ATTRIB_VALUES = ['start', 'end']
-  KEY_DATE_ATTRIB_VALUEs = ['yes']
+  KEY_DATE_ATTRIB_VALUES = ['yes']
   QUALIFIER_ATTRIB_VALUES = ['approximate', 'inferred', 'questionable']
   
   AUTHORITY_ATTRIBS = ['authority', 'authorityURI', 'valueURI']
@@ -425,10 +425,6 @@ module Mods
             }
           end
           n.temporal :path => 'm:temporal' do |n1|
-            # date attributes as elements
-            Mods::DATE_ATTRIBS.each { |attr_name|
-              n1.send attr_name, :path => "#{attr_name}"
-            }
             Mods::AUTHORITY_ATTRIBS.each { |attr_name|
               n1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
@@ -969,10 +965,6 @@ module Mods
             }
           end
           n.temporal :path => 'temporal' do |n1|
-            # date attributes as elements
-            Mods::DATE_ATTRIBS.each { |attr_name|
-              n1.send attr_name, :path => "#{attr_name}"
-            }
             Mods::AUTHORITY_ATTRIBS.each { |attr_name|
               n1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
