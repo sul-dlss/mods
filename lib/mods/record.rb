@@ -56,6 +56,88 @@ module Mods
         set_terminology_no_ns(@mods_ng_xml)
       end
     end
+    
+    # get the value for the terms, as a String. f there are multiple values, they will be joined with the separator. 
+    #  If there are no values, the result will be nil.
+    # @param [Symbol or String or Array<Symbol>] messages the single symbol of the message to send to the Stanford::Mods::Record object
+    #  (as a Symbol or a String), or an Array of (Symbols or Strings) to be sent as messages. 
+    #  Messages will usually be terms from the nom-xml terminology defined in the mods gem.)
+    # @param [String] sep - the separator string to insert between multiple values
+    # @return [String] a String representing the value(s) or nil.
+    def term_value messages, sep = ' '
+      case messages
+        when Symbol
+          nodes = send(messages)
+        when String
+          nodes = send(messages.to_sym)
+        when Array
+          obj = self
+          messages.each { |msg|
+            if msg.is_a? Symbol
+              obj = obj.send(msg)
+            elsif msg.is_a? String
+              obj = obj.send(msg.to_sym)
+            else
+              raise ArgumentError, "term_value called with Array containing unrecognized class: #{msg.class}, #{messages.inspect}", caller
+            end
+          }
+          nodes = obj
+        else
+          raise ArgumentError, "term_value called with unrecognized argument class: #{messages.class}", caller
+      end
+
+      val = ''
+      if nodes
+        nodes.each { |n| 
+          val << sep + n.text unless n.text.empty?
+        }
+      end
+      val.sub!(sep, '')
+      return nil if val.empty?
+      val
+    rescue NoMethodError
+      raise ArgumentError, "term_value called with unknown argument: #{messages.inspect}", caller
+    end
+
+    # get the values for the terms, as an Array. If there are no values, the result will be nil.
+    # @param [Symbol or String or Array<Symbol>] messages the single symbol of the message to send to the Stanford::Mods::Record object
+    #  (as a Symbol or a String), or an Array of (Symbols or Strings) to be sent as messages. 
+    #  Messages will usually be terms from the nom-xml terminology defined in the mods gem.)
+    # @return [Array<String>] an Array with a String value for each result node's non-empty text, or nil if none
+    def term_values messages
+      case messages
+        when Symbol
+          nodes = send(messages)
+        when String
+          nodes = send(messages.to_sym)
+        when Array
+          obj = self
+          messages.each { |msg|
+            if msg.is_a? Symbol
+              obj = obj.send(msg)
+            elsif msg.is_a? String
+              obj = obj.send(msg.to_sym)
+            else
+              raise ArgumentError, "term_values called with Array containing unrecognized class: #{msg.class}, #{messages.inspect}", caller
+            end
+          }
+          nodes = obj
+        else
+          raise ArgumentError, "term_values called with unrecognized argument class: #{messages.class}", caller
+      end
+
+      vals = []
+      if nodes
+        nodes.each { |n| 
+          vals << n.text unless n.text.empty?
+        }
+      end
+      return nil if vals.empty?
+      vals
+    rescue NoMethodError
+      raise ArgumentError, "term_values called with unknown argument: #{messages.inspect}", caller
+    end
+    
 
     # @return Array of Strings, each containing the text contents of <mods><titleInfo>   <nonSort> + ' ' + <title> elements
     #  but not including any titleInfo elements with type="alternative"

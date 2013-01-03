@@ -82,6 +82,84 @@ describe "Mods::Record" do
     end
   end # context from_nk_node
   
+  context "getting term values" do
+    before(:all) do
+      m = "<mods #{@def_ns_decl}>
+        <abstract>single</abstract>
+        <genre></genre>
+        <note>mult1</note>
+        <note>mult2</note>
+        <subject><topic>topic1</topic><topic>topic2</topic></subject>
+        <subject><topic>topic3</topic></subject>
+      </mods>"
+      @mods_rec = Mods::Record.new
+      @mods_rec.from_str(m)
+    end
+    
+    context "term_value (single value result)" do
+      it "should return nil if there are no such values in the MODS" do
+        @mods_rec.term_value(:identifier).should == nil
+      end
+      it "should return nil if there are only empty values in the MODS" do
+        @mods_rec.term_value(:genre).should == nil
+      end
+      it "should return a String for a single value" do
+        @mods_rec.term_value(:abstract).should == 'single'
+      end
+      it "should return a String containing all values, with separator, for multiple values" do
+        @mods_rec.term_value(:note).should == 'mult1 mult2'
+      end
+      it "should work with an Array of messages passed as the argument" do
+        @mods_rec.term_value([:subject, 'topic']).should == 'topic1 topic2 topic3'
+      end
+      it "should work with a String passed as the argument" do
+        @mods_rec.term_value('abstract').should == 'single'
+      end
+      it "should take a separator argument" do
+        @mods_rec.term_value(:note, ' -|-').should == 'mult1 -|-mult2'
+      end
+      it "should raise an error for an unrecognized message symbol" do
+        expect { @mods_rec.term_value(:not_there) }.to raise_error(ArgumentError, "term_value called with unknown argument: :not_there")
+      end
+      it "should raise an error if the argument is an Array containing non-symbols" do
+        expect { @mods_rec.term_value([:subject, @mods_rec.subject]) }.to raise_error(ArgumentError, /term_value called with Array containing unrecognized class:.*NodeSet.*/)
+      end
+      it "should raise an error if the argument isn't a Symbol or an Array" do
+        expect { @mods_rec.term_value(@mods_rec.subject) }.to raise_error(ArgumentError, /term_value called with unrecognized argument class:.*NodeSet.*/)
+      end
+    end
+
+    context "term_values (multiple values)" do
+      it "should return nil if there are no such values in the MODS" do
+        @mods_rec.term_values(:identifier).should == nil
+      end
+      it "should return nil if there are only empty values in the MODS" do
+        @mods_rec.term_values(:genre).should == nil
+      end
+      it "should return an array of size one for a single value" do
+        @mods_rec.term_values(:abstract).should == ['single']
+      end
+      it "should return an array of values for multiple values" do
+        @mods_rec.term_values(:note).should == ['mult1', 'mult2']
+      end
+      it "should work with an Array of messages passed as the argument" do
+        @mods_rec.term_values([:subject, 'topic']).should == ['topic1', 'topic2', 'topic3']
+      end
+      it "should work with a String passed as the argument" do
+        @mods_rec.term_values('abstract').should == ['single']
+      end
+      it "should raise an error for an unrecognized message symbol" do
+        expect { @mods_rec.term_values(:not_there) }.to raise_error(ArgumentError, "term_values called with unknown argument: :not_there")
+      end
+      it "should raise an error if the argument is an Array containing non-symbols" do
+        expect { @mods_rec.term_values([:subject, @mods_rec.subject]) }.to raise_error(ArgumentError, /term_values called with Array containing unrecognized class:.*NodeSet.*/)
+      end
+      it "should raise an error if the argument isn't a Symbol or an Array" do
+        expect { @mods_rec.term_values(@mods_rec.subject) }.to raise_error(ArgumentError, /term_values called with unrecognized argument class:.*NodeSet.*/)
+      end
+    end    
+  end # getting term values
+  
   context "convenience methods for accessing tricky bits of terminology" do
     before(:all) do
       @mods_rec = Mods::Record.new
@@ -254,6 +332,6 @@ describe "Mods::Record" do
         @mods_rec.languages.should include("Dutch; Flemish")
       end
     end
-  end # convenience methods
+  end # convenience methods for tricky bits of terminology
 
 end

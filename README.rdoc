@@ -38,6 +38,7 @@ TODO: Write usage instructions here
 
 == Releases
 
+* <b>0.0.19</b> term_values and term_value method added to Record object
 * <b>0.0.18</b> <subject><temporal> cannot have subelements
 * <b>0.0.17</b> add display_value and display_value_w_date to name node; add personal_names_w_dates to record
 * <b>0.0.16</b> add role convenience methods (within name node)
