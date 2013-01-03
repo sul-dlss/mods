@@ -65,38 +65,9 @@ module Mods
     # @param [String] sep - the separator string to insert between multiple values
     # @return [String] a String representing the value(s) or nil.
     def term_value messages, sep = ' '
-      case messages
-        when Symbol
-          nodes = send(messages)
-        when String
-          nodes = send(messages.to_sym)
-        when Array
-          obj = self
-          messages.each { |msg|
-            if msg.is_a? Symbol
-              obj = obj.send(msg)
-            elsif msg.is_a? String
-              obj = obj.send(msg.to_sym)
-            else
-              raise ArgumentError, "term_value called with Array containing unrecognized class: #{msg.class}, #{messages.inspect}", caller
-            end
-          }
-          nodes = obj
-        else
-          raise ArgumentError, "term_value called with unrecognized argument class: #{messages.class}", caller
-      end
-
-      val = ''
-      if nodes
-        nodes.each { |n| 
-          val << sep + n.text unless n.text.empty?
-        }
-      end
-      val.sub!(sep, '')
-      return nil if val.empty?
-      val
-    rescue NoMethodError
-      raise ArgumentError, "term_value called with unknown argument: #{messages.inspect}", caller
+      vals = term_values messages
+      return nil if !vals
+      val = vals.join sep
     end
 
     # get the values for the terms, as an Array. If there are no values, the result will be nil.

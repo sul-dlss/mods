@@ -119,13 +119,13 @@ describe "Mods::Record" do
         @mods_rec.term_value(:note, ' -|-').should == 'mult1 -|-mult2'
       end
       it "should raise an error for an unrecognized message symbol" do
-        expect { @mods_rec.term_value(:not_there) }.to raise_error(ArgumentError, "term_value called with unknown argument: :not_there")
+        expect { @mods_rec.term_value(:not_there) }.to raise_error(ArgumentError, "term_values called with unknown argument: :not_there")
       end
       it "should raise an error if the argument is an Array containing non-symbols" do
-        expect { @mods_rec.term_value([:subject, @mods_rec.subject]) }.to raise_error(ArgumentError, /term_value called with Array containing unrecognized class:.*NodeSet.*/)
+        expect { @mods_rec.term_value([:subject, @mods_rec.subject]) }.to raise_error(ArgumentError, /term_values called with Array containing unrecognized class:.*NodeSet.*/)
       end
       it "should raise an error if the argument isn't a Symbol or an Array" do
-        expect { @mods_rec.term_value(@mods_rec.subject) }.to raise_error(ArgumentError, /term_value called with unrecognized argument class:.*NodeSet.*/)
+        expect { @mods_rec.term_value(@mods_rec.subject) }.to raise_error(ArgumentError, /term_values called with unrecognized argument class:.*NodeSet.*/)
       end
     end
 
