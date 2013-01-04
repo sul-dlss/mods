@@ -1,4 +1,4 @@
 module Mods
   # this is the Ruby Gem version
-  VERSION = "0.0.19"
+  VERSION = "0.0.20"
 end
