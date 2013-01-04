@@ -1,4 +1,4 @@
-# Represents the Marc Relator Codes mapped to Relators, from http://www.loc.gov/marc/relators/relacode.html
+# Represents the Marc Relator Codes mapped to Relators, from http://www.loc.gov/marc/relators/relacode.html 2012-12
 #  key - Marc Relator code
 #  value - Marc Relator term
 MARC_RELATOR = {

@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require 'spec_helper'
 
 describe "Mods <subject> Element" do
@@ -19,10 +21,6 @@ describe "Mods <subject> Element" do
   end
   
   it "should subject personal name dates should be cleaned up???" do
-    pending "to be implemented"
-  end
-  
-  it "should translate the geographicCodes" do
     pending "to be implemented"
   end
   
@@ -276,7 +274,29 @@ describe "Mods <subject> Element" do
           @mods_rec.from_str("<mods #{@ns_decl}><subject><geographicCode authority='fake'>f------</geographicCode></subject></mods>")
           pending "to be implemented"
           expect { @mods_rec.subject.geographicCode.authority }.to raise_error(/no idea/)
-        end    
+        end 
+        context "translated_value convenience method" do
+          it "should be the translation of the code if it is a marcgac code" do
+            @mods_rec.from_str("<mods #{@ns_decl}><subject><geographicCode authority='marcgac'>e-er</geographicCode></subject></mods>")
+            @mods_rec.subject.geographicCode.translated_value.should == ["Estonia"]
+          end
+          it "should be the translation of the code if it is a marccountry code" do
+            @mods_rec.from_str("<mods #{@ns_decl}><subject><geographicCode authority='marccountry'>mg</geographicCode></subject></mods>")
+            @mods_rec.subject.geographicCode.translated_value.should == ["Madagascar"]
+          end
+          it "should be nil if the code is invalid" do
+            @mods_rec.from_str("<mods #{@ns_decl}><subject><geographicCode authority='marcgac'>zzz</geographicCode></subject></mods>")
+            @mods_rec.subject.geographicCode.translated_value.size.should == 0
+          end
+          it "should be nil if we don't have a translation for the authority" do
+            @mods_rec.from_str("<mods #{@ns_decl}><subject><geographicCode authority='iso3166'>zzz</geographicCode></subject></mods>")
+            @mods_rec.subject.geographicCode.translated_value.size.should == 0
+          end
+          it "should work with non-ascii characters" do
+            @mods_rec.from_str("<mods #{@ns_decl}><subject><geographicCode authority='marccountry'>co</geographicCode></subject></mods>")
+            @mods_rec.subject.geographicCode.translated_value.should == ["Curaçao"]
+          end
+        end
       end # <geographicCode>
 
       context "<titleInfo> child element" do
@@ -600,7 +620,29 @@ describe "Mods <subject> Element" do
           @mods_rec.from_str("<mods><subject><geographicCode authority='fake'>f------</geographicCode></subject></mods>", false)
           pending "to be implemented"
           expect { @mods_rec.subject.geographicCode.authority }.to raise_error(/no idea/)
-        end    
+        end
+        context "translated_value convenience method" do
+          it "should be the translation of the code if it is a marcgac code" do
+            @mods_rec.from_str("<mods><subject><geographicCode authority='marcgac'>e-er</geographicCode></subject></mods>", false)
+            @mods_rec.subject.geographicCode.translated_value.should == ["Estonia"]
+          end
+          it "should be the translation of the code if it is a marccountry code" do
+            @mods_rec.from_str("<mods><subject><geographicCode authority='marccountry'>mg</geographicCode></subject></mods>", false)
+            @mods_rec.subject.geographicCode.translated_value.should == ["Madagascar"]
+          end
+          it "should be empty if the code is invalid" do
+            @mods_rec.from_str("<mods><subject><geographicCode authority='marcgac'>zzz</geographicCode></subject></mods>", false)
+            @mods_rec.subject.geographicCode.translated_value.size.should == 0
+          end
+          it "should be empty if we don't have a translation for the authority" do
+            @mods_rec.from_str("<mods><subject><geographicCode authority='iso3166'>zzz</geographicCode></subject></mods>", false)
+            @mods_rec.subject.geographicCode.translated_value.size.should == 0
+          end
+          it "should work with non-ascii characters" do
+            @mods_rec.from_str("<mods><subject><geographicCode authority='marccountry'>co</geographicCode></subject></mods>", false)
+            @mods_rec.subject.geographicCode.translated_value.should == ["Curaçao"]
+          end
+        end
       end # <geographicCode>
 
       context "<titleInfo> child element" do

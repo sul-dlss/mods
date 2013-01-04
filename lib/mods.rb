@@ -1,5 +1,7 @@
 require 'mods/constants'
 require 'mods/nom_terminology'
+require 'mods/marc_country_codes'
+require 'mods/marc_geo_area_codes'
 require 'mods/marc_relator_codes'
 require 'mods/name'
 require 'mods/reader'

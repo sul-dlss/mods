@@ -414,12 +414,61 @@ module Mods
           Mods::AUTHORITY_ATTRIBS.each { |attr_name|
             n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
           }
-          n.topic :path => 'm:topic' do |n1|
+          n.cartographics :path => 'm:cartographics' do |n1|
+            n1.scale :path => 'm:scale'
+            n1.projection :path => 'm:projection'
+            n1.coordinates :path => 'm:coordinates'
+            Mods::Subject::CARTOGRAPHICS_CHILD_ELEMENTS.each { |elname|
+              n1.send elname, :path => "m:#{elname}"
+            }
+          end
+          n.genre :path => 'm:genre' do |n1|
             Mods::AUTHORITY_ATTRIBS.each { |attr_name|
               n1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
           end
           n.geographic :path => 'm:geographic' do |n1|
+            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+              n1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+          end
+          n.geographicCode :path => 'm:geographicCode' do |gc|
+            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+              gc.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+            # convenience method
+            gc.translated_value :path => '.', :accessor => lambda { |gc_node| 
+              code_val ||= gc_node.text
+              xval = nil
+              if code_val
+                case gc_node.authority
+                  when 'marcgac'
+                    xval = MARC_GEOGRAPHIC_AREA[code_val]
+                  when 'marccountry'
+                    xval = MARC_COUNTRY[code_val]
+                end
+              end
+              xval
+            }
+          end
+          n.hierarchicalGeographic :path => 'm:hierarchicalGeographic' do |n1|
+            Mods::Subject::HIER_GEO_CHILD_ELEMENTS.each { |elname|
+              n1.send elname, :path => "m:#{elname}"
+            }
+            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+              n1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+          end
+          # Note:  'name' is used by Nokogiri
+          n.name_el :path => 'm:name' do |t1|
+            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+              t1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+          end
+          n.personal_name :path => 'm:name[@type="personal"]'
+          n.corporate_name :path => 'm:name[@type="corporate"]'
+          n.conference_name :path => 'm:name[@type="conference"]'
+          n.occupation :path => 'm:occupation' do |n1|
             Mods::AUTHORITY_ATTRIBS.each { |attr_name|
               n1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
@@ -438,42 +487,7 @@ module Mods
               t1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
           end
-          # Note:  'name' is used by Nokogiri
-          n.name_el :path => 'm:name' do |t1|
-            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
-              t1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
-            }
-          end
-          n.personal_name :path => 'm:name[@type="personal"]'
-          n.corporate_name :path => 'm:name[@type="corporate"]'
-          n.conference_name :path => 'm:name[@type="conference"]'
-          n.geographicCode :path => 'm:geographicCode' do |g|
-            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
-              g.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
-            }
-          end
-          n.genre :path => 'm:genre' do |n1|
-            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
-              n1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
-            }
-          end
-          n.hierarchicalGeographic :path => 'm:hierarchicalGeographic' do |n1|
-            Mods::Subject::HIER_GEO_CHILD_ELEMENTS.each { |elname|
-              n1.send elname, :path => "m:#{elname}"
-            }
-            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
-              n1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
-            }
-          end
-          n.cartographics :path => 'm:cartographics' do |n1|
-            n1.scale :path => 'm:scale'
-            n1.projection :path => 'm:projection'
-            n1.coordinates :path => 'm:coordinates'
-            Mods::Subject::CARTOGRAPHICS_CHILD_ELEMENTS.each { |elname|
-              n1.send elname, :path => "m:#{elname}"
-            }
-          end
-          n.occupation :path => 'm:occupation' do |n1|
+          n.topic :path => 'm:topic' do |n1|
             Mods::AUTHORITY_ATTRIBS.each { |attr_name|
               n1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
@@ -954,12 +968,61 @@ module Mods
           Mods::AUTHORITY_ATTRIBS.each { |attr_name|
             n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
           }
-          n.topic :path => 'topic' do |n1|
+          n.cartographics :path => 'cartographics' do |n1|
+            n1.scale :path => 'scale'
+            n1.projection :path => 'projection'
+            n1.coordinates :path => 'coordinates'
+            Mods::Subject::CARTOGRAPHICS_CHILD_ELEMENTS.each { |elname|
+              n1.send elname, :path => "#{elname}"
+            }
+          end
+          n.geographic :path => 'geographic' do |n1|
             Mods::AUTHORITY_ATTRIBS.each { |attr_name|
               n1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
           end
-          n.geographic :path => 'geographic' do |n1|
+          n.genre :path => 'genre' do |n1|
+            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+              n1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+          end
+          n.geographicCode :path => 'geographicCode' do |gc|
+            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+              gc.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+            # convenience method
+            gc.translated_value :path => '.', :accessor => lambda { |gc_node| 
+              code_val ||= gc_node.text
+              xval = nil
+              if code_val
+                case gc_node.authority
+                  when 'marcgac'
+                    xval = MARC_GEOGRAPHIC_AREA[code_val]
+                  when 'marccountry'
+                    xval = MARC_COUNTRY[code_val]
+                end
+              end
+              xval
+            }
+          end
+          n.hierarchicalGeographic :path => 'hierarchicalGeographic' do |n1|
+            Mods::Subject::HIER_GEO_CHILD_ELEMENTS.each { |elname|
+              n1.send elname, :path => "#{elname}"
+            }
+            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+              n1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+          end
+          # Note:  'name' is used by Nokogiri
+          n.name_el :path => 'name' do |t1|
+            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+              t1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+            }
+          end
+          n.personal_name :path => 'name[@type="personal"]'
+          n.corporate_name :path => 'name[@type="corporate"]'
+          n.conference_name :path => 'name[@type="conference"]'
+          n.occupation :path => 'occupation' do |n1|
             Mods::AUTHORITY_ATTRIBS.each { |attr_name|
               n1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
@@ -978,42 +1041,7 @@ module Mods
               t1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
           end
-          # Note:  'name' is used by Nokogiri
-          n.name_el :path => 'name' do |t1|
-            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
-              t1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
-            }
-          end
-          n.personal_name :path => 'name[@type="personal"]'
-          n.corporate_name :path => 'name[@type="corporate"]'
-          n.conference_name :path => 'name[@type="conference"]'
-          n.geographicCode :path => 'geographicCode' do |g|
-            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
-              g.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
-            }
-          end
-          n.genre :path => 'genre' do |n1|
-            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
-              n1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
-            }
-          end
-          n.hierarchicalGeographic :path => 'hierarchicalGeographic' do |n1|
-            Mods::Subject::HIER_GEO_CHILD_ELEMENTS.each { |elname|
-              n1.send elname, :path => "#{elname}"
-            }
-            Mods::AUTHORITY_ATTRIBS.each { |attr_name|
-              n1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
-            }
-          end
-          n.cartographics :path => 'cartographics' do |n1|
-            n1.scale :path => 'scale'
-            n1.projection :path => 'projection'
-            n1.coordinates :path => 'coordinates'
-            Mods::Subject::CARTOGRAPHICS_CHILD_ELEMENTS.each { |elname|
-              n1.send elname, :path => "#{elname}"
-            }
-          end
-          n.occupation :path => 'occupation' do |n1|
+          n.topic :path => 'topic' do |n1|
             Mods::AUTHORITY_ATTRIBS.each { |attr_name|
               n1.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
             }
