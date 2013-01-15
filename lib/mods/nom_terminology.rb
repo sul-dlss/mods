@@ -220,7 +220,8 @@ module Mods
           
           # name convenience method
           n.display_value_w_date :path => '.', :single => true, :accessor => lambda {|name_node|
-            dv = '' + name_node.display_value
+            dv = '' 
+            dv = dv + name_node.display_value if name_node.display_value
             name_node.namePart.each { |np|  
               if np.type_at == 'date' && !np.text.empty? && !dv.end_with?(np.text)
                 dv = dv + ", #{np.text}"
