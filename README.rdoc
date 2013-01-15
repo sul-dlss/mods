@@ -38,6 +38,7 @@ TODO: Write usage instructions here
 
 == Releases
 
+* <b>0.0.21</b> bug fix to check for nil values in name nodes
 * <b>0.0.20</b> added translated_value convenience method to geographicCode  (mods.subject.geographicCode.translated_value)
 * <b>0.0.19</b> term_values and term_value method added to Record object
 * <b>0.0.18</b> <subject><temporal> cannot have subelements
