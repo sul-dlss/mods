@@ -2,7 +2,9 @@ module Mods
   
   # from:  http://www.loc.gov/standards/mods/v3/mods-userguide-generalapp.html
   
-  LANG_ATTRIBS = ['lang', 'xml:lang', 'script', 'transliteration']
+  # FIXME: didn't figure out a good way to deal with namespaced attribute for non-namespaced terminology
+#  LANG_ATTRIBS = ['lang', 'xml:lang', 'script', 'transliteration']
+  LANG_ATTRIBS = ['lang', 'script', 'transliteration']
   
   LINKING_ATTRIBS = ['xlink', 'ID']
 
@@ -34,6 +36,9 @@ module Mods
         t._abstract :path => '//m:abstract' do |n|
           n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
           n.type_at :path => '@type', :accessor => lambda { |a| a.text }
+          Mods::LANG_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
         end
 
         # ACCESS_CONDITION -----------------------------------------------------------------------
@@ -41,6 +46,9 @@ module Mods
         t._accessCondition :path => '//m:accessCondition' do |n|
           n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
           n.type_at :path => '@type', :accessor => lambda { |a| a.text }
+          Mods::LANG_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
         end
 
         # CLASSIFICATION -------------------------------------------------------------------------
@@ -49,6 +57,9 @@ module Mods
           n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
           n.edition :path => '@edition', :accessor => lambda { |a| a.text }
           Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
+          Mods::LANG_ATTRIBS.each { |attr_name|
             n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
           }
         end        
@@ -68,6 +79,9 @@ module Mods
           Mods::AUTHORITY_ATTRIBS.each { |attr_name|
             n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
           }
+          Mods::LANG_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
         end
 
         # IDENTIIER ------------------------------------------------------------------------------
@@ -76,11 +90,20 @@ module Mods
           n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
           n.invalid :path => '@invalid', :accessor => lambda { |a| a.text }
           n.type_at :path => '@type', :accessor => lambda { |a| a.text }
+          Mods::LANG_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
         end
 
         # LANGUAGE -------------------------------------------------------------------------------
         t.language :path => '/m:mods/m:language'
         t._language :path => '//m:language' do |n|
+          # attributes
+          n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+          Mods::LANG_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
+          # child elements
           n.languageTerm :path => 'm:languageTerm'
           n.code_term :path => 'm:languageTerm[@type="code"]'
           n.text_term :path => 'm:languageTerm[@type="text"]'
@@ -96,6 +119,12 @@ module Mods
         # LOCATION -------------------------------------------------------------------------------
         t.location :path => '/m:mods/m:location'
         t._location :path => '//m:location' do |n|
+          # attributes
+          n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+          Mods::LANG_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
+          # child elements
           n.physicalLocation :path => 'm:physicalLocation' do |e|
             e.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
             Mods::AUTHORITY_ATTRIBS.each { |attr_name|
@@ -247,11 +276,20 @@ module Mods
           n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
           n.id_at :path => '@ID', :accessor => lambda { |a| a.text }
           n.type_at :path => '@type', :accessor => lambda { |a| a.text }
+          Mods::LANG_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
         end
 
         # ORIGIN_INFO --------------------------------------------------------------------------
         t.origin_info :path => '/m:mods/m:originInfo'
         t._origin_info :path => '//m:originInfo' do |n|
+          # attributes
+          n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+          Mods::LANG_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
+          # child elements
           n.place :path => 'm:place' do |e|
             e.placeTerm :path => 'm:placeTerm' do |ee|
               ee.type_at :path => '@type', :accessor => lambda { |a| a.text }
@@ -287,6 +325,10 @@ module Mods
           n.id_at :path => '@ID', :accessor => lambda { |a| a.text }
           n.order :path => '@order', :accessor => lambda { |a| a.text }
           n.type_at :path => '@type', :accessor => lambda { |a| a.text }
+          n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+          Mods::LANG_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
           # child elements
           n.detail :path => 'm:detail' do |e|
             # attributes
@@ -320,6 +362,12 @@ module Mods
         # PHYSICAL_DESCRIPTION -------------------------------------------------------------------
         t.physical_description :path => '/m:mods/m:physicalDescription'
         t._physical_description :path => '//m:physicalDescription' do |n|
+          # attributes
+          n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+          Mods::LANG_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
+          # child elements
           n.digitalOrigin :path => 'm:digitalOrigin'
           n.extent :path => 'm:extent'
           n.form :path => 'm:form' do |f|
@@ -412,9 +460,15 @@ module Mods
         # SUBJECT -----------------------------------------------------------------------------
         t.subject :path => '/m:mods/m:subject'
         t._subject :path => '//m:subject' do |n|
+          # attributes
+          n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
           Mods::AUTHORITY_ATTRIBS.each { |attr_name|
             n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
           }
+          Mods::LANG_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
+          # child elements
           n.cartographics :path => 'm:cartographics' do |n1|
             n1.scale :path => 'm:scale'
             n1.projection :path => 'm:projection'
@@ -501,6 +555,9 @@ module Mods
           n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
           n.shareable :path => '@shareable', :accessor => lambda { |a| a.text }
           n.type_at :path => '@type', :accessor => lambda { |a| a.text }
+          Mods::LANG_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
         end
 
         # TARGET_AUDIENCE -----------------------------------------------------------------------
@@ -508,6 +565,9 @@ module Mods
         t._targetAudience :path => '//m:targetAudience' do |n|
           n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
           Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
+          Mods::LANG_ATTRIBS.each { |attr_name|
             n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
           }
         end
@@ -589,6 +649,9 @@ module Mods
         t._abstract :path => '//abstract' do |n|
           n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
           n.type_at :path => '@type', :accessor => lambda { |a| a.text }
+          Mods::LANG_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
         end
 
         # ACCESS_CONDITION -----------------------------------------------------------------------
@@ -596,6 +659,9 @@ module Mods
         t._accessCondition :path => '//accessCondition' do |n|
           n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
           n.type_at :path => '@type', :accessor => lambda { |a| a.text }
+          Mods::LANG_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
         end
 
         # CLASSIFICATION -------------------------------------------------------------------------
@@ -604,6 +670,9 @@ module Mods
           n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
           n.edition :path => '@edition', :accessor => lambda { |a| a.text }
           Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
+          Mods::LANG_ATTRIBS.each { |attr_name|
             n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
           }
         end        
@@ -623,6 +692,9 @@ module Mods
           Mods::AUTHORITY_ATTRIBS.each { |attr_name|
             n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
           }
+          Mods::LANG_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
         end
 
         # IDENTIIER ------------------------------------------------------------------------------
@@ -631,11 +703,20 @@ module Mods
           n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
           n.invalid :path => '@invalid', :accessor => lambda { |a| a.text }
           n.type_at :path => '@type', :accessor => lambda { |a| a.text }
+          Mods::LANG_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
         end
 
         # LANGUAGE -------------------------------------------------------------------------------
         t.language :path => '/mods/language'
         t._language :path => '//language' do |n|
+          # attributes
+          n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+          Mods::LANG_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
+          # child elements
           n.languageTerm :path => 'languageTerm'
           n.code_term :path => 'languageTerm[@type="code"]'
           n.text_term :path => 'languageTerm[@type="text"]'
@@ -651,6 +732,12 @@ module Mods
         # LOCATION -------------------------------------------------------------------------------
         t.location :path => '/mods/location'
         t._location :path => '//location' do |n|
+          # attributes
+          n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+          Mods::LANG_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
+          # child elements
           n.physicalLocation :path => 'physicalLocation' do |e|
             e.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
             Mods::AUTHORITY_ATTRIBS.each { |attr_name|
@@ -801,11 +888,20 @@ module Mods
           n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
           n.id_at :path => '@ID', :accessor => lambda { |a| a.text }
           n.type_at :path => '@type', :accessor => lambda { |a| a.text }
+          Mods::LANG_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
         end
 
         # ORIGIN_INFO --------------------------------------------------------------------------
         t.origin_info :path => '/mods/originInfo'
         t._origin_info :path => '//originInfo' do |n|
+          # attributes
+          n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+          Mods::LANG_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
+          # child elements
           n.place :path => 'place' do |e|
             e.placeTerm :path => 'placeTerm' do |ee|
               ee.type_at :path => '@type', :accessor => lambda { |a| a.text }
@@ -841,6 +937,10 @@ module Mods
           n.id_at :path => '@ID', :accessor => lambda { |a| a.text }
           n.order :path => '@order', :accessor => lambda { |a| a.text }
           n.type_at :path => '@type', :accessor => lambda { |a| a.text }
+          n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+          Mods::LANG_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
           # child elements
           n.detail :path => 'detail' do |e|
             # attributes
@@ -874,6 +974,12 @@ module Mods
         # PHYSICAL_DESCRIPTION -------------------------------------------------------------------
         t.physical_description :path => '/mods/physicalDescription'
         t._physical_description :path => '//physicalDescription' do |n|
+          # attributes
+          n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
+          Mods::LANG_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
+          # child elements
           n.digitalOrigin :path => 'digitalOrigin'
           n.extent :path => 'extent'
           n.form :path => 'form' do |f|
@@ -966,9 +1072,15 @@ module Mods
         # SUBJECT -----------------------------------------------------------------------------
         t.subject :path => '/mods/subject'
         t._subject :path => '//subject' do |n|
+          # attributes
+          n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
           Mods::AUTHORITY_ATTRIBS.each { |attr_name|
             n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
           }
+          Mods::LANG_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
+          # child elements
           n.cartographics :path => 'cartographics' do |n1|
             n1.scale :path => 'scale'
             n1.projection :path => 'projection'
@@ -1055,6 +1167,9 @@ module Mods
           n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
           n.shareable :path => '@shareable', :accessor => lambda { |a| a.text }
           n.type_at :path => '@type', :accessor => lambda { |a| a.text }
+          Mods::LANG_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
         end
 
         # TARGET_AUDIENCE -----------------------------------------------------------------------
@@ -1062,6 +1177,9 @@ module Mods
         t._targetAudience :path => '//targetAudience' do |n|
           n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
           Mods::AUTHORITY_ATTRIBS.each { |attr_name|
+            n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
+          }
+          Mods::LANG_ATTRIBS.each { |attr_name|
             n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
           }
         end
