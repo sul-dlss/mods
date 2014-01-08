@@ -7,3 +7,5 @@ rvm:
 notifications:
   email:
     - ndushay@stanford.edu
+    - jdeering@stanford.edu
+    - jkeck@stanford.edu

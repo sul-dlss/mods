@@ -6,6 +6,7 @@ describe "Mods::Record" do
     @def_ns_decl = "xmlns='#{Mods::MODS_NS}'"
     @example_ns_str = "<mods #{@def_ns_decl}><note>default ns</note></mods>"
     @example_no_ns_str = '<mods><note>no ns</note></mods>'
+    @example_record_url = 'http://www.loc.gov/standards/mods/modsrdf/examples/0001.xml'
     @doc_from_str_ns = Mods::Reader.new.from_str(@example_ns_str) 
     @doc_from_str_no_ns = Mods::Reader.new.from_str(@example_no_ns_str) 
   end
@@ -27,6 +28,18 @@ describe "Mods::Record" do
     it "should be allowed not to care about namespaces" do
       mods_ng_doc = Mods::Record.new.from_str(@example_no_ns_str, false)
       mods_ng_doc.note.map { |e| e.text }.should == ['no ns']
+    end
+  end
+
+  context "from_url" do
+    before(:all) do
+      @mods_doc = Mods::Record.new.from_url(@example_record_url)
+    end
+    it "should be a mods record" do
+      @mods_doc.kind_of? Mods::Record
+    end
+    it "should raise an error on a bad url" do
+      Mods::Record.new.from_url("http://example.org/fake.xml").should raise_error
     end
   end
   
@@ -112,20 +125,8 @@ describe "Mods::Record" do
       it "should work with an Array of messages passed as the argument" do
         @mods_rec.term_value([:subject, 'topic']).should == 'topic1 topic2 topic3'
       end
-      it "should work with a String passed as the argument" do
-        @mods_rec.term_value('abstract').should == 'single'
-      end
       it "should take a separator argument" do
         @mods_rec.term_value(:note, ' -|-').should == 'mult1 -|-mult2'
-      end
-      it "should raise an error for an unrecognized message symbol" do
-        expect { @mods_rec.term_value(:not_there) }.to raise_error(ArgumentError, "term_values called with unknown argument: :not_there")
-      end
-      it "should raise an error if the argument is an Array containing non-symbols" do
-        expect { @mods_rec.term_value([:subject, @mods_rec.subject]) }.to raise_error(ArgumentError, /term_values called with Array containing unrecognized class:.*NodeSet.*/)
-      end
-      it "should raise an error if the argument isn't a Symbol or an Array" do
-        expect { @mods_rec.term_value(@mods_rec.subject) }.to raise_error(ArgumentError, /term_values called with unrecognized argument class:.*NodeSet.*/)
       end
     end
 

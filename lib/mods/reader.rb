@@ -40,7 +40,6 @@ module Mods
     end
     
     # Whatever we get, normalize it into a Nokogiri::XML::Document,
-    # strip any elements enclosing the mods record
     def normalize_mods
       if !@namespace_aware
         @mods_ng_xml.remove_namespaces!

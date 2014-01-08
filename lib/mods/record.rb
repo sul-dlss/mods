@@ -36,7 +36,7 @@ module Mods
     # convenience method to call Mods::Reader.new.from_url and to nom
     # @param namespace_aware true if the XML parsing should be strict about using namespaces.  Default is true
     # @param url (String) - url that has mods xml as its content
-    def from_url(url, namespace_aware = true)
+    def from_url(url, ns_aware = true)
       @mods_ng_xml = Mods::Reader.new(ns_aware).from_url(url)
       if ns_aware
         set_terminology_ns(@mods_ng_xml)
