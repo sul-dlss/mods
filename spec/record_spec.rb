@@ -39,7 +39,7 @@ describe "Mods::Record" do
       @mods_doc.kind_of? Mods::Record
     end
     it "should raise an error on a bad url" do
-      Mods::Record.new.from_url("http://example.org/fake.xml").should raise_error
+      lambda{Mods::Record.new.from_url("http://example.org/fake.xml")}.should raise_error
     end
   end
   
