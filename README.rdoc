@@ -39,6 +39,7 @@ TODO: Write usage instructions here
 == Releases
 
 =======
+* <b>0.0.23</b> minor bug and typo fixes
 * <b>0.0.22</b> add displayLabel and lang attributes to every element
 * <b>0.0.21</b> bug fix to check for nil values in name nodes
 * <b>0.0.21</b> Check for the possibility that name_node.display_value is nil
