@@ -7,15 +7,15 @@ describe "Mods <recordInfo> Element" do
   end
 
   it "should translate language codes" do
-    pending "to be implemented"
+    skip "to be implemented"
   end
-  
+
   it "should normalize dates" do
-    pending "to be implemented"
+    skip "to be implemented"
   end
-  
+
   context "basic <record_info> terminology pieces" do
-    
+
     context "WITH namespaces" do
       before(:all) do
         @rec_info = @mods_rec.from_str("<mods #{@ns_decl}><recordInfo>
@@ -57,8 +57,8 @@ describe "Mods <recordInfo> Element" do
         [@rec_info, @rec_info2, @bnf, @rlin].each { |ri| ri.size.should == 1 }
       end
       it "should recognize language attributes on <recordInfo> element" do
-        pending "problem with xml:lang"
-        Mods::LANG_ATTRIBS.each { |a| 
+        skip "problem with xml:lang"
+        Mods::LANG_ATTRIBS.each { |a|
           @mods_rec.from_str("<mods #{@ns_decl}><recordInfo #{a}='val'><recordOrigin>nowhere</recordOrigin></recordInfo></mods>")
           @mods_rec.record_info.send(a.to_sym).should == ['val']
         }
@@ -86,7 +86,7 @@ describe "Mods <recordInfo> Element" do
           @bnf.recordContentSource.authority.size.should == 0
         end
         it "should recognize all authority attributes" do
-          Mods::AUTHORITY_ATTRIBS.each { |a|  
+          Mods::AUTHORITY_ATTRIBS.each { |a|
             @mods_rec.from_str("<mods #{@ns_decl}><recordInfo><recordContentSource #{a}='attr_val'>zzz</recordContentSource></recordInfo></mods>")
             @mods_rec.record_info.recordContentSource.send(a.to_sym).should == ['attr_val']
           }
@@ -111,7 +111,7 @@ describe "Mods <recordInfo> Element" do
           @bnf.recordCreationDate.encoding.should == ['w3cdtf']
         end
         it "should recognize all date attributes" do
-          Mods::DATE_ATTRIBS.each { |a|  
+          Mods::DATE_ATTRIBS.each { |a|
             @mods_rec.from_str("<mods #{@ns_decl}><recordInfo><recordCreationDate #{a}='attr_val'>zzz</recordCreationDate></recordInfo></mods>")
             @mods_rec.record_info.recordCreationDate.send(a.to_sym).should == ['attr_val']
           }
@@ -133,7 +133,7 @@ describe "Mods <recordInfo> Element" do
           @rlin.recordChangeDate.encoding.should == ['iso8601']
         end
         it "should recognize all date attributes" do
-          Mods::DATE_ATTRIBS.each { |a|  
+          Mods::DATE_ATTRIBS.each { |a|
             @mods_rec.from_str("<mods #{@ns_decl}><recordInfo><recordChangeDate #{a}='attr_val'>zzz</recordChangeDate></recordInfo></mods>")
             @mods_rec.record_info.recordChangeDate.send(a.to_sym).should == ['attr_val']
           }
@@ -201,9 +201,9 @@ describe "Mods <recordInfo> Element" do
         end
 
         # from http://www.loc.gov/standards/mods/userguide/recordinfo.html#languageofcataloging
-        # objectPart attribute defined for consistency with <language> . Unlikely to be used with <languageOfCataloging> 
+        # objectPart attribute defined for consistency with <language> . Unlikely to be used with <languageOfCataloging>
         it "objectType should get attribute value" do
-          pending "<languageOfCataloging objectType=''> to be implemented ... maybe ..."
+          skip "<languageOfCataloging objectType=''> to be implemented ... maybe ..."
         end
 
         context "<languageTerm> child element" do
@@ -224,7 +224,7 @@ describe "Mods <recordInfo> Element" do
 
         context "<scriptTerm> child element" do
           it "should do something" do
-            pending "<recordInfo><languageOfCataloging><scriptTerm> to be implemented"
+            skip "<recordInfo><languageOfCataloging><scriptTerm> to be implemented"
           end
         end
       end # <languageOfCataloging>
@@ -243,13 +243,13 @@ describe "Mods <recordInfo> Element" do
           @bnf.descriptionStandard.map { |n| n.text }.should == []
         end
         it "should recognize all authority attributes" do
-          Mods::AUTHORITY_ATTRIBS.each { |a|  
+          Mods::AUTHORITY_ATTRIBS.each { |a|
             @mods_rec.from_str("<mods #{@ns_decl}><recordInfo><descriptionStandard #{a}='attr_val'>zzz</descriptionStandard></recordInfo></mods>")
             @mods_rec.record_info.descriptionStandard.send(a.to_sym).should == ['attr_val']
           }
         end
       end # <descriptionStandard>
-      
+
     end # WITH namespaces
 
     context "WITHOUT namespaces" do
@@ -293,8 +293,8 @@ describe "Mods <recordInfo> Element" do
         [@rec_info, @rec_info2, @bnf, @rlin].each { |ri| ri.size.should == 1 }
       end
       it "should recognize language attributes on <recordInfo> element" do
-        pending "problem with xml:lang"
-        Mods::LANG_ATTRIBS.each { |a| 
+        skip "problem with xml:lang"
+        Mods::LANG_ATTRIBS.each { |a|
           @mods_rec.from_str("<mods><recordInfo #{a}='val'><recordOrigin>nowhere</recordOrigin></recordInfo></mods>", false)
           @mods_rec.record_info.send(a.to_sym).should == ['val']
         }
@@ -322,7 +322,7 @@ describe "Mods <recordInfo> Element" do
           @bnf.recordContentSource.authority.size.should == 0
         end
         it "should recognize all authority attributes" do
-          Mods::AUTHORITY_ATTRIBS.each { |a|  
+          Mods::AUTHORITY_ATTRIBS.each { |a|
             @mods_rec.from_str("<mods><recordInfo><recordContentSource #{a}='attr_val'>zzz</recordContentSource></recordInfo></mods>", false)
             @mods_rec.record_info.recordContentSource.send(a.to_sym).should == ['attr_val']
           }
@@ -347,7 +347,7 @@ describe "Mods <recordInfo> Element" do
           @bnf.recordCreationDate.encoding.should == ['w3cdtf']
         end
         it "should recognize all date attributes" do
-          Mods::DATE_ATTRIBS.each { |a|  
+          Mods::DATE_ATTRIBS.each { |a|
             @mods_rec.from_str("<mods><recordInfo><recordCreationDate #{a}='attr_val'>zzz</recordCreationDate></recordInfo></mods>", false)
             @mods_rec.record_info.recordCreationDate.send(a.to_sym).should == ['attr_val']
           }
@@ -369,7 +369,7 @@ describe "Mods <recordInfo> Element" do
           @rlin.recordChangeDate.encoding.should == ['iso8601']
         end
         it "should recognize all date attributes" do
-          Mods::DATE_ATTRIBS.each { |a|  
+          Mods::DATE_ATTRIBS.each { |a|
             @mods_rec.from_str("<mods><recordInfo><recordChangeDate #{a}='attr_val'>zzz</recordChangeDate></recordInfo></mods>", false)
             @mods_rec.record_info.recordChangeDate.send(a.to_sym).should == ['attr_val']
           }
@@ -437,9 +437,9 @@ describe "Mods <recordInfo> Element" do
         end
 
         # from http://www.loc.gov/standards/mods/userguide/recordinfo.html#languageofcataloging
-        # objectPart attribute defined for consistency with <language> . Unlikely to be used with <languageOfCataloging> 
+        # objectPart attribute defined for consistency with <language> . Unlikely to be used with <languageOfCataloging>
         it "objectType should get attribute value" do
-          pending "<languageOfCataloging objectType=''> to be implemented ... maybe ..."
+          skip "<languageOfCataloging objectType=''> to be implemented ... maybe ..."
         end
 
         context "<languageTerm> child element" do
@@ -460,7 +460,7 @@ describe "Mods <recordInfo> Element" do
 
         context "<scriptTerm> child element" do
           it "should do something" do
-            pending "<recordInfo><languageOfCataloging><scriptTerm> to be implemented"
+            skip "<recordInfo><languageOfCataloging><scriptTerm> to be implemented"
           end
         end
       end # <languageOfCataloging>
@@ -479,15 +479,15 @@ describe "Mods <recordInfo> Element" do
           @bnf.descriptionStandard.map { |n| n.text }.should == []
         end
         it "should recognize all authority attributes" do
-          Mods::AUTHORITY_ATTRIBS.each { |a|  
+          Mods::AUTHORITY_ATTRIBS.each { |a|
             @mods_rec.from_str("<mods><recordInfo><descriptionStandard #{a}='attr_val'>zzz</descriptionStandard></recordInfo></mods>", false)
             @mods_rec.record_info.descriptionStandard.send(a.to_sym).should == ['attr_val']
           }
         end
       end # <descriptionStandard>
-      
+
     end # WITHOUT namespaces
-    
+
   end # basic <record_info> terminology pieces
 
 end

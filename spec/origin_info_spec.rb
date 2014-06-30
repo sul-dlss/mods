@@ -146,62 +146,62 @@ describe "Mods <originInfo> Element" do
        <issuance>monographic</issuance>
     </originInfo>
     </mods>"
-    
+
     xml = "<originInfo>
     <dateCreated encoding='w3cdtf' keyDate='yes' point='start' qualifier='approximate'>250 B.C.</dateCreated>
     <dateCreated encoding='w3cdtf' keyDate='yes' point='end' qualifier='approximate'>150 B.C.</dateCreated>
     </originInfo>"
-    
+
   end
 
   context "parsing date values" do
     it "should cope with slop" do
-      pending "to be implemented"
+      skip "to be implemented"
     end
     it "should know something about various date encodings: w3cdtf, iso8601, marc, edtf, temper" do
-      pending "to be implemented"
+      skip "to be implemented"
     end
     it "should know the only valid values for point attribute are 'start' and 'end'" do
-      pending "to be implemented"
+      skip "to be implemented"
     end
     it "should know the only valid value for keyDate attribute is 'yes" do
-      pending "to be implemented"
+      skip "to be implemented"
     end
     it "should know the only valid values for qualifier attribute: approximate, inferred, questionable" do
-      pending "to be implemented"
+      skip "to be implemented"
     end
   end
-  
+
   context "parsing issuance" do
     it "should know the only valid values are: continuing, monographic, single unit, multipart monograph, serial, integrating resource" do
-      pending "to be implemented"
+      skip "to be implemented"
     end
   end
-  
+
   context "parsing publisher" do
     it "should ignore s.n. value (from MARC)" do
-      pending "to be implemented"
+      skip "to be implemented"
     end
     it "should leave square brackets alone, except for s.n." do
-      pending "to be implemented"
+      skip "to be implemented"
     end
   end
-  
+
   context "parsing placeTerm" do
     it "should be able to translate marccountry codes" do
-      pending "to be implemented"
+      skip "to be implemented"
     end
     it "should ignore s.l. value (from MARC)" do
-      pending "to be implemented"
+      skip "to be implemented"
     end
     it "should be forgiving of square brackets (from MARC), matched or unmatched" do
-      pending "to be implemented"
+      skip "to be implemented"
     end
   end
 
 
   context "basic <originInfo> terminology pieces" do
-    
+
     context "WITH namespaces" do
       context "<place> child element" do
         before(:all) do

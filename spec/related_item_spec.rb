@@ -5,13 +5,13 @@ describe "Mods <relatedItem> Element" do
     @mods_rec = Mods::Record.new
     @ns_decl = "xmlns='#{Mods::MODS_NS}'"
   end
-  
+
   it "should associate the right pieces with the right <relatedItem> elements" do
-    pending "to be implemented (Mods::RelatedItem object)"
+    skip "to be implemented (Mods::RelatedItem object)"
   end
 
   context "basic <related_item> terminology pieces" do
-    
+
     context "WITH namespaces" do
       before(:all) do
         @rel_it1 = @mods_rec.from_str("<mods #{@ns_decl}><relatedItem displayLabel='Bibliography' type='host'>
@@ -57,7 +57,7 @@ describe "Mods <relatedItem> Element" do
                            <typeOfResource collection='yes'/>
                          </relatedItem></mods>").related_item
       end
-      
+
       it ".relatedItem should be a NodeSet" do
         [@rel_it1, @rel_it_mult, @rel_it2, @coll_ex].each { |ri| ri.should be_an_instance_of(Nokogiri::XML::NodeSet) }
       end
@@ -74,7 +74,7 @@ describe "Mods <relatedItem> Element" do
         [@rel_it1, @rel_it_mult, @coll_ex].each { |ri| ri.id_at.size.should == 0 }
       end
       it "relatedItem.displayLabel should match displayLabel attribute" do
-        @rel_it1.displayLabel.should == ['Bibliography'] 
+        @rel_it1.displayLabel.should == ['Bibliography']
         @rel_it_mult.displayLabel.should == ['From:']
         [@rel_it2, @coll_ex].each { |ri| ri.displayLabel.size.should == 0 }
       end
@@ -134,7 +134,7 @@ describe "Mods <relatedItem> Element" do
         it "relatedItem.recordInfo.recordIdentifier.source should match <relatedItem><recordInfo><recordIdentifier source> attribute" do
           @rel_it1.recordInfo.recordIdentifier.source.should == ['Gallica ARK']
         end
-      end # <recordInfo> child element    
+      end # <recordInfo> child element
 
       context "<titleInfo> child element" do
         it "relatedItem.titleInfo.title should access <relatedItem><titleInfo><title>" do
@@ -142,7 +142,7 @@ describe "Mods <relatedItem> Element" do
           @rel_it_mult.titleInfo.title.map { |n| n.text }.should == ['Complete atlas, or, Distinct view of the known world', 'Complete atlas, or, Distinct view of the known world']
           @rel_it2.titleInfo.title.map { |n| n.text }.should == ['Nuppineula.']
           @coll_ex.titleInfo.title.map { |n| n.text }.should == ['The Collier Collection of the Revs Institute for Automotive Research']
-        end      
+        end
       end # <titleInfo> child element
 
       context "<typeOfResource> child element" do
@@ -153,9 +153,9 @@ describe "Mods <relatedItem> Element" do
           @coll_ex.typeOfResource.collection.should == ['yes']
         end
       end # <typeOfResource> child element
-      
+
     end # WITH namespaces
-    
+
     context "WITHOUT namespaces" do
       before(:all) do
         @rel_it1 = @mods_rec.from_str("<mods><relatedItem displayLabel='Bibliography' type='host'>
@@ -201,7 +201,7 @@ describe "Mods <relatedItem> Element" do
                            <typeOfResource collection='yes'/>
                          </relatedItem></mods>", false).related_item
       end
-      
+
       it ".relatedItem should be a NodeSet" do
         [@rel_it1, @rel_it_mult, @rel_it2, @coll_ex].each { |ri| ri.should be_an_instance_of(Nokogiri::XML::NodeSet) }
       end
@@ -218,7 +218,7 @@ describe "Mods <relatedItem> Element" do
         [@rel_it1, @rel_it_mult, @coll_ex].each { |ri| ri.id_at.size.should == 0 }
       end
       it "relatedItem.displayLabel should match displayLabel attribute" do
-        @rel_it1.displayLabel.should == ['Bibliography'] 
+        @rel_it1.displayLabel.should == ['Bibliography']
         @rel_it_mult.displayLabel.should == ['From:']
         [@rel_it2, @coll_ex].each { |ri| ri.displayLabel.size.should == 0 }
       end
@@ -278,7 +278,7 @@ describe "Mods <relatedItem> Element" do
         it "relatedItem.recordInfo.recordIdentifier.source should match <relatedItem><recordInfo><recordIdentifier source> attribute" do
           @rel_it1.recordInfo.recordIdentifier.source.should == ['Gallica ARK']
         end
-      end # <recordInfo> child element    
+      end # <recordInfo> child element
 
       context "<titleInfo> child element" do
         it "relatedItem.titleInfo.title should access <relatedItem><titleInfo><title>" do
@@ -286,7 +286,7 @@ describe "Mods <relatedItem> Element" do
           @rel_it_mult.titleInfo.title.map { |n| n.text }.should == ['Complete atlas, or, Distinct view of the known world', 'Complete atlas, or, Distinct view of the known world']
           @rel_it2.titleInfo.title.map { |n| n.text }.should == ['Nuppineula.']
           @coll_ex.titleInfo.title.map { |n| n.text }.should == ['The Collier Collection of the Revs Institute for Automotive Research']
-        end      
+        end
       end # <titleInfo> child element
 
       context "<typeOfResource> child element" do
@@ -297,9 +297,9 @@ describe "Mods <relatedItem> Element" do
           @coll_ex.typeOfResource.collection.should == ['yes']
         end
       end # <typeOfResource> child element
-      
+
     end # WITHOUT namespaces
-    
+
   end # basic <related_item> terminology pieces
 
 end

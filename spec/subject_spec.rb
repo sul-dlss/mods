@@ -9,21 +9,21 @@ describe "Mods <subject> Element" do
   end
 
   it "should do something intelligent with duplicate values" do
-    pending "to be implemented"
+    skip "to be implemented"
   end
 
   it "should do some date parsing of temporal element based on encoding" do
-    pending "to be implemented"
+    skip "to be implemented"
   end
-  
+
   it "authority designation on the <subject> element should trickle down to child elements" do
-    pending "to be implemented"
+    skip "to be implemented"
   end
-  
+
   it "should subject personal name dates should be cleaned up???" do
-    pending "to be implemented"
+    skip "to be implemented"
   end
-  
+
   context "subterms for <name> child elements of <subject> element" do
     before(:all) do
       @both_types_sub = @mods_rec.from_str("<mods #{@ns_decl}><subject>
@@ -103,15 +103,15 @@ describe "Mods <subject> Element" do
       @mult_pers_name_sub.personal_name.date.map { |e| e.text }.should include("1818-1878")
     end
     it "should do the appropriate thing with the role for the value of a name" do
-      pending "name objects to be implemented"
+      skip "name objects to be implemented"
     end
     it "should do the appropriate thing with the date for the value of a name" do
-      pending "name objects to be implemented"
+      skip "name objects to be implemented"
     end
   end
 
   context "basic subject terminology pieces" do
-    
+
     context "WITH namespaces" do
       before(:all) do
         @four_subjects = @mods_rec.from_str("<mods #{@ns_decl}><subject authority='lcsh'>
@@ -137,7 +137,7 @@ describe "Mods <subject> Element" do
         @lcsh_subject = @mods_rec.from_str("<mods #{@ns_decl}><subject authority='lcsh'>
                   <geographic>Africa</geographic>
                   <genre>Maps</genre>
-                  <temporal>500-1400</temporal></subject></mods>").subject              
+                  <temporal>500-1400</temporal></subject></mods>").subject
       end
 
       it "should be a NodeSet" do
@@ -149,7 +149,7 @@ describe "Mods <subject> Element" do
         @lcsh_subject.size.should == 1
       end
       it "should recognize authority attribute on <subject> element" do
-        ['lcsh', 'ingest', 'lctgm'].each { |a| 
+        ['lcsh', 'ingest', 'lctgm'].each { |a|
           @mods_rec.from_str("<mods #{@ns_decl}><subject authority='#{a}'><topic>Ruler, English.</topic></subject></mods>").subject.authority.should == [a]
         }
       end
@@ -210,12 +210,12 @@ describe "Mods <subject> Element" do
           @temporal = @mods_rec.from_str("<mods #{@ns_decl}><subject>
                     <temporal encoding='iso8601'>20010203T040506+0700</temporal>
                     <!-- <temporal encoding='iso8601'>197505</temporal> -->
-                  </subject></mods>").subject.temporal        
+                  </subject></mods>").subject.temporal
         end
 
         it "should recognize the date attributes" do
           @temporal.encoding.should == ['iso8601']
-          Mods::DATE_ATTRIBS.each { |a| 
+          Mods::DATE_ATTRIBS.each { |a|
             @mods_rec.from_str("<mods #{@ns_decl}><subject><temporal #{a}='val'>now</temporal></subject></mods>").subject.temporal.send(a.to_sym).should == ['val']
           }
         end
@@ -259,22 +259,22 @@ describe "Mods <subject> Element" do
           @geo_code_subject.geographicCode.map { |n| n.text }.should == ['f------']
         end
         it "should recognize authority attributes" do
-          Mods::AUTHORITY_ATTRIBS.each { |a|  
+          Mods::AUTHORITY_ATTRIBS.each { |a|
             @mods_rec.from_str("<mods #{@ns_decl}><subject><geographicCode #{a}='attr_val'>f------</geographicCode></subject></mods>")
             @mods_rec.subject.geographicCode.send(a.to_sym).should == ['attr_val']
           }
         end
         it "should recognize the sanctioned authorities" do
-          Mods::Subject::GEO_CODE_AUTHORITIES.each { |a|  
+          Mods::Subject::GEO_CODE_AUTHORITIES.each { |a|
             @mods_rec.from_str("<mods #{@ns_decl}><subject><geographicCode authority='#{a}'>f------</geographicCode></subject></mods>")
             @mods_rec.subject.geographicCode.authority.should == [a]
           }
         end
         it "should not recognize unsanctioned authorities?" do
           @mods_rec.from_str("<mods #{@ns_decl}><subject><geographicCode authority='fake'>f------</geographicCode></subject></mods>")
-          pending "to be implemented"
+          skip "to be implemented"
           expect { @mods_rec.subject.geographicCode.authority }.to raise_error(/no idea/)
-        end 
+        end
         context "translated_value convenience method" do
           it "should be the translation of the code if it is a marcgac code" do
             @mods_rec.from_str("<mods #{@ns_decl}><subject><geographicCode authority='marcgac'>e-er</geographicCode></subject></mods>")
@@ -320,7 +320,7 @@ describe "Mods <subject> Element" do
           }
         end
         it "should understand all immediate child elements allowed on a <titleInfo> element" do
-          Mods::TitleInfo::CHILD_ELEMENTS.each { |e|  
+          Mods::TitleInfo::CHILD_ELEMENTS.each { |e|
             @mods_rec.from_str("<mods #{@ns_decl}><subject><titleInfo><#{e}>el_val</#{e}></titleInfo></subject></mods>").subject.titleInfo.send(e.to_sym).text.should == 'el_val'
           }
           @title_info.nonSort.map {|n| n.text}.should == ["The"]
@@ -346,7 +346,7 @@ describe "Mods <subject> Element" do
           }
         end
         it "should understand all immediate child elements allowed on a <name> element" do
-          Mods::Name::CHILD_ELEMENTS.each { |e|  
+          Mods::Name::CHILD_ELEMENTS.each { |e|
             name = @mods_rec.from_str("<mods #{@ns_decl}><subject><name><#{e}>el_val</#{e}></name></subject></mods>").subject.name_el
             if (e == 'description')
               name.description_el.text.should == 'el_val'
@@ -366,13 +366,13 @@ describe "Mods <subject> Element" do
 
       context "<hiearchicalGeographic> child element" do
         it "should recognize authority attributes" do
-          Mods::AUTHORITY_ATTRIBS.each { |a|  
+          Mods::AUTHORITY_ATTRIBS.each { |a|
             @mods_rec.from_str("<mods #{@ns_decl}><subject><hierarchicalGeographic #{a}='attr_val'><country>Albania</country></hierarchicalGeographic></subject></mods>")
             @mods_rec.subject.hierarchicalGeographic.send(a.to_sym).should == ['attr_val']
           }
         end
         it "should recognize allowed child elements" do
-          Mods::Subject::HIER_GEO_CHILD_ELEMENTS.each { |e|  
+          Mods::Subject::HIER_GEO_CHILD_ELEMENTS.each { |e|
             @mods_rec.from_str("<mods #{@ns_decl}><subject><hierarchicalGeographic><#{e}>el_val</#{e}></hierarchicalGeographic></subject></mods>")
             @mods_rec.subject.hierarchicalGeographic.send(e.to_sym).text.should == 'el_val'
           }
@@ -418,7 +418,7 @@ describe "Mods <subject> Element" do
           @multi_carto.size.should == 3
         end
         it "should recognize allowed child elements" do
-          Mods::Subject::CARTOGRAPHICS_CHILD_ELEMENTS.each { |e|  
+          Mods::Subject::CARTOGRAPHICS_CHILD_ELEMENTS.each { |e|
             @mods_rec.from_str("<mods #{@ns_decl}><subject><cartographics><#{e}>el_val</#{e}></cartographics></subject></mods>")
             @mods_rec.subject.cartographics.send(e.to_sym).text.should == 'el_val'
           }
@@ -450,14 +450,14 @@ describe "Mods <subject> Element" do
           @occupation.map { |n| n.text }.should == ['Migrant laborers']
         end
         it "should recognize authority attributes" do
-          Mods::AUTHORITY_ATTRIBS.each { |a|  
+          Mods::AUTHORITY_ATTRIBS.each { |a|
             @mods_rec.from_str("<mods #{@ns_decl}><subject><occupation #{a}='attr_val'>Flunkie</occupation></subject></mods>")
             @mods_rec.subject.occupation.send(a.to_sym).should == ['attr_val']
           }
         end
       end # <occupation>
     end # WITH namespaces
-            
+
     context "WITHOUT namespaces" do
       before(:all) do
         @four_subjects = @mods_rec.from_str("<mods><subject authority='lcsh'>
@@ -483,7 +483,7 @@ describe "Mods <subject> Element" do
         @lcsh_subject = @mods_rec.from_str("<mods><subject authority='lcsh'>
                   <geographic>Africa</geographic>
                   <genre>Maps</genre>
-                  <temporal>500-1400</temporal></subject></mods>", false).subject              
+                  <temporal>500-1400</temporal></subject></mods>", false).subject
       end
 
       it "should be a NodeSet" do
@@ -495,7 +495,7 @@ describe "Mods <subject> Element" do
         @lcsh_subject.size.should == 1
       end
       it "should recognize authority attribute on <subject> element" do
-        ['lcsh', 'ingest', 'lctgm'].each { |a| 
+        ['lcsh', 'ingest', 'lctgm'].each { |a|
           @mods_rec.from_str("<mods><subject authority='#{a}'><topic>Ruler, English.</topic></subject></mods>", false).subject.authority.should == [a]
         }
       end
@@ -556,12 +556,12 @@ describe "Mods <subject> Element" do
           @temporal = @mods_rec.from_str("<mods><subject>
                     <temporal encoding='iso8601'>20010203T040506+0700</temporal>
                     <!-- <temporal encoding='iso8601'>197505</temporal> -->
-                  </subject></mods>", false).subject.temporal        
+                  </subject></mods>", false).subject.temporal
         end
 
         it "should recognize the date attributes" do
           @temporal.encoding.should == ['iso8601']
-          Mods::DATE_ATTRIBS.each { |a| 
+          Mods::DATE_ATTRIBS.each { |a|
             @mods_rec.from_str("<mods><subject><temporal #{a}='val'>now</temporal></subject></mods>", false).subject.temporal.send(a.to_sym).should == ['val']
           }
         end
@@ -605,20 +605,20 @@ describe "Mods <subject> Element" do
           @geo_code_subject.geographicCode.map { |n| n.text }.should == ['f------']
         end
         it "should recognize authority attributes" do
-          Mods::AUTHORITY_ATTRIBS.each { |a|  
+          Mods::AUTHORITY_ATTRIBS.each { |a|
             @mods_rec.from_str("<mods><subject><geographicCode #{a}='attr_val'>f------</geographicCode></subject></mods>", false)
             @mods_rec.subject.geographicCode.send(a.to_sym).should == ['attr_val']
           }
         end
         it "should recognize the sanctioned authorities" do
-          Mods::Subject::GEO_CODE_AUTHORITIES.each { |a|  
+          Mods::Subject::GEO_CODE_AUTHORITIES.each { |a|
             @mods_rec.from_str("<mods><subject><geographicCode authority='#{a}'>f------</geographicCode></subject></mods>", false)
             @mods_rec.subject.geographicCode.authority.should == [a]
           }
         end
         it "should not recognize unsanctioned authorities?" do
           @mods_rec.from_str("<mods><subject><geographicCode authority='fake'>f------</geographicCode></subject></mods>", false)
-          pending "to be implemented"
+          skip "to be implemented"
           expect { @mods_rec.subject.geographicCode.authority }.to raise_error(/no idea/)
         end
         context "translated_value convenience method" do
@@ -666,7 +666,7 @@ describe "Mods <subject> Element" do
           }
         end
         it "should understand all immediate child elements allowed on a <titleInfo> element" do
-          Mods::TitleInfo::CHILD_ELEMENTS.each { |e|  
+          Mods::TitleInfo::CHILD_ELEMENTS.each { |e|
             @mods_rec.from_str("<mods><subject><titleInfo><#{e}>el_val</#{e}></titleInfo></subject></mods>", false).subject.titleInfo.send(e.to_sym).text.should == 'el_val'
           }
           @title_info.nonSort.map {|n| n.text}.should == ["The"]
@@ -692,7 +692,7 @@ describe "Mods <subject> Element" do
           }
         end
         it "should understand all immediate child elements allowed on a <name> element" do
-          Mods::Name::CHILD_ELEMENTS.each { |e|  
+          Mods::Name::CHILD_ELEMENTS.each { |e|
             name = @mods_rec.from_str("<mods><subject><name><#{e}>el_val</#{e}></name></subject></mods>", false).subject.name_el
             if (e == 'description')
               name.description_el.text.should == 'el_val'
@@ -712,13 +712,13 @@ describe "Mods <subject> Element" do
 
       context "<hiearchicalGeographic> child element" do
         it "should recognize authority attributes" do
-          Mods::AUTHORITY_ATTRIBS.each { |a|  
+          Mods::AUTHORITY_ATTRIBS.each { |a|
             @mods_rec.from_str("<mods><subject><hierarchicalGeographic #{a}='attr_val'><country>Albania</country></hierarchicalGeographic></subject></mods>", false)
             @mods_rec.subject.hierarchicalGeographic.send(a.to_sym).should == ['attr_val']
           }
         end
         it "should recognize allowed child elements" do
-          Mods::Subject::HIER_GEO_CHILD_ELEMENTS.each { |e|  
+          Mods::Subject::HIER_GEO_CHILD_ELEMENTS.each { |e|
             @mods_rec.from_str("<mods><subject><hierarchicalGeographic><#{e}>el_val</#{e}></hierarchicalGeographic></subject></mods>", false)
             @mods_rec.subject.hierarchicalGeographic.send(e.to_sym).text.should == 'el_val'
           }
@@ -764,7 +764,7 @@ describe "Mods <subject> Element" do
           @multi_carto.size.should == 3
         end
         it "should recognize allowed child elements" do
-          Mods::Subject::CARTOGRAPHICS_CHILD_ELEMENTS.each { |e|  
+          Mods::Subject::CARTOGRAPHICS_CHILD_ELEMENTS.each { |e|
             @mods_rec.from_str("<mods><subject><cartographics><#{e}>el_val</#{e}></cartographics></subject></mods>", false)
             @mods_rec.subject.cartographics.send(e.to_sym).text.should == 'el_val'
           }
@@ -796,14 +796,14 @@ describe "Mods <subject> Element" do
           @occupation.map { |n| n.text }.should == ['Migrant laborers']
         end
         it "should recognize authority attributes" do
-          Mods::AUTHORITY_ATTRIBS.each { |a|  
+          Mods::AUTHORITY_ATTRIBS.each { |a|
             @mods_rec.from_str("<mods><subject><occupation #{a}='attr_val'>Flunkie</occupation></subject></mods>", false)
             @mods_rec.subject.occupation.send(a.to_sym).should == ['attr_val']
           }
         end
       end # <occupation>
     end # WITHOUT namespaces
-        
+
   end # basic subject terminology
-  
+
 end

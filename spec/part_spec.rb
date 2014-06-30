@@ -7,11 +7,11 @@ describe "Mods <part> Element" do
   end
 
   it "should normalize dates" do
-    pending "to be implemented"
+    skip "to be implemented"
   end
-  
+
   context "basic <part> terminology pieces" do
-    
+
     context "WITH namespaces" do
       before(:all) do
         @ex = @mods_rec.from_str("<mods #{@ns_decl}><part>
@@ -38,7 +38,7 @@ describe "Mods <part> Element" do
                   </detail>
               </part></mods>").part
       end
-      
+
       it "should be a NodeSet" do
         [@ex, @ex2, @detail].each { |p| p.should be_an_instance_of(Nokogiri::XML::NodeSet) }
       end
@@ -205,7 +205,7 @@ describe "Mods <part> Element" do
           @date.size.should == 1
         end
         it "should recognize all date attributes except keyDate" do
-          Mods::DATE_ATTRIBS.reject { |n| n == 'keyDate' }.each { |a|  
+          Mods::DATE_ATTRIBS.reject { |n| n == 'keyDate' }.each { |a|
             @mods_rec.from_str("<mods #{@ns_decl}><part><date #{a}='attr_val'>zzz</date></part></mods>")
             @mods_rec.part.date.send(a.to_sym).should == ['attr_val']
           }
@@ -265,7 +265,7 @@ describe "Mods <part> Element" do
                   </detail>
               </part></mods>", false).part
       end
-      
+
       it "should be a NodeSet" do
         [@ex, @ex2, @detail].each { |p| p.should be_an_instance_of(Nokogiri::XML::NodeSet) }
       end
@@ -432,7 +432,7 @@ describe "Mods <part> Element" do
           @date.size.should == 1
         end
         it "should recognize all date attributes except keyDate" do
-          Mods::DATE_ATTRIBS.reject { |n| n == 'keyDate' }.each { |a|  
+          Mods::DATE_ATTRIBS.reject { |n| n == 'keyDate' }.each { |a|
             @mods_rec.from_str("<mods><part><date #{a}='attr_val'>zzz</date></part></mods>", false)
             @mods_rec.part.date.send(a.to_sym).should == ['attr_val']
           }

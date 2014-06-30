@@ -11,24 +11,24 @@ describe "Mods::Reader" do
     @example_ns_str = '<mods:mods xmlns:mods="http://www.loc.gov/mods/v3"><mods:note>ns</mods:note></mods:mods>'
     @example_no_ns_str = '<mods><note>no ns</note></mods>'
     @example_wrong_ns_str = '<mods xmlns="wrong"><note>wrong ns</note></mods>'
-    @doc_from_str_default_ns = Mods::Reader.new.from_str(@example_ns_str) 
-    @doc_from_str_ns = Mods::Reader.new.from_str(@example_ns_str) 
-    @doc_from_str_no_ns = Mods::Reader.new.from_str(@example_no_ns_str) 
-    @doc_from_str_wrong_ns = Mods::Reader.new.from_str(@example_wrong_ns_str)    
+    @doc_from_str_default_ns = Mods::Reader.new.from_str(@example_ns_str)
+    @doc_from_str_ns = Mods::Reader.new.from_str(@example_ns_str)
+    @doc_from_str_no_ns = Mods::Reader.new.from_str(@example_no_ns_str)
+    @doc_from_str_wrong_ns = Mods::Reader.new.from_str(@example_wrong_ns_str)
     @from_url = Mods::Reader.new.from_url(@example_url)
   end
-  
+
   it "from_str should turn an xml string into a Nokogiri::XML::Document object" do
     @doc_from_str_default_ns.class.should == Nokogiri::XML::Document
     @doc_from_str_ns.class.should == Nokogiri::XML::Document
     @doc_from_str_no_ns.class.should == Nokogiri::XML::Document
     @doc_from_str_wrong_ns.class.should == Nokogiri::XML::Document
   end
-  
+
   it "from_url should turn the contents at the url into a Nokogiri::XML::Document object" do
     @from_url.class.should == Nokogiri::XML::Document
   end
-  
+
   context "namespace awareness" do
     it "should care about namespace by default" do
       r = Mods::Reader.new
@@ -58,13 +58,13 @@ describe "Mods::Reader" do
       my_from_str_wrong_ns = r.from_str(@example_wrong_ns_str)
       my_from_str_wrong_ns.xpath('/m:mods/m:note', @ns_hash).size.should == 0
       my_from_str_wrong_ns.xpath('/mods/note').text.should == "wrong ns"
-    end    
+    end
   end
-  
+
   it "should do something useful when it gets unparseable XML" do
-    pending "need to implement error handling for bad xml"
+    skip "need to implement error handling for bad xml"
   end
-  
+
   context "normalizing mods" do
     it "should not lose UTF-8 encoding" do
       utf_mods = '<?xml version="1.0" encoding="UTF-8"?>
@@ -92,7 +92,7 @@ describe "Mods::Reader" do
       r.mods_ng_xml.root.attributes.keys.should_not include('xsi:schemaLocation')
     end
   end
-  
+
   context "from_nk_node" do
     before(:all) do
       oai_resp = '<?xml version="1.0" encoding="UTF-8"?>
@@ -132,7 +132,7 @@ describe "Mods::Reader" do
       mods_ng_doc.xpath('/m:mods/m:titleInfo/m:title', @ns_hash).size.should == 0
       mods_ng_doc.xpath('/mods/titleInfo/title').text.should == "boo"
       @r.namespace_aware = true
-    end  
+    end
   end # context from_nk_node
-  
+
 end

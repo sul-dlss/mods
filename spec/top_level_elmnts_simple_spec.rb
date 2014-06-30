@@ -5,13 +5,13 @@ describe "Mods Top Level Elements that do not have Child Elements" do
   before(:all) do
     @mods_rec = Mods::Record.new
   end
-  
+
   it "should deal with camelcase vs. ruby underscore convention" do
-    pending "need to implement ruby style version of (element/attribute) method names"
+    skip "need to implement ruby style version of (element/attribute) method names"
   end
 
   it "should get the text contents of any single complex top level element instance with no child elements" do
-    pending "to be implemented"
+    skip "to be implemented"
     Mods::TOP_LEVEL_ELEMENTS_COMPLEX.each { |elname|
       @mods_rec.from_str("<mods><#{elname}>hi</#{elname}></mods>", false)
       @mods_rec.send(elname.to_sym).map { |e| e.text }.should == ["hi"]
@@ -30,7 +30,7 @@ describe "Mods Top Level Elements that do not have Child Elements" do
     it "should return an array of strings when there are multiple occurrences of simple top level elements" do
       @mods_rec.from_str('<mods><note>hi</note><note>hello</note></mods>', false).note.map { |e| e.text }.should == ["hi", "hello"]
     end
-    
+
     context "<abstract> child element" do
       it ".abstract.displayLabel should be an accessor for displayLabel attribute on abstract element: <abstract displayLabel='foo'>" do
         @mods_rec.from_str('<mods><abstract displayLabel="Summary">blah blah blah</abstract></mods>', false)
@@ -68,7 +68,7 @@ describe "Mods Top Level Elements that do not have Child Elements" do
         @class1.edition.should == ['11']
       end
       it "should recognize all authority attributes" do
-        Mods::AUTHORITY_ATTRIBS.each { |a|  
+        Mods::AUTHORITY_ATTRIBS.each { |a|
           @mods_rec.from_str("<mods><classification #{a}='attr_val'>zzz</classification></mods>", false)
           @mods_rec.classification.send(a.to_sym).should == ['attr_val']
         }
@@ -101,7 +101,7 @@ describe "Mods Top Level Elements that do not have Child Elements" do
         @mods_rec.genre.usage.should == ['fer sure']
       end
       it "should recognize all authority attributes" do
-        Mods::AUTHORITY_ATTRIBS.each { |a|  
+        Mods::AUTHORITY_ATTRIBS.each { |a|
           @mods_rec.from_str("<mods><genre #{a}='attr_val'>zzz</genre></mods>", false)
           @mods_rec.genre.send(a.to_sym).should == ['attr_val']
         }
@@ -160,7 +160,7 @@ describe "Mods Top Level Elements that do not have Child Elements" do
         @mods_rec.targetAudience.displayLabel.should == ['ta da']
       end
       it "should recognize all authority attributes" do
-        Mods::AUTHORITY_ATTRIBS.each { |a|  
+        Mods::AUTHORITY_ATTRIBS.each { |a|
           @mods_rec.from_str("<mods><targetAudience #{a}='attr_val'>zzz</targetAudience></mods>", false)
           @mods_rec.targetAudience.send(a.to_sym).should == ['attr_val']
         }
@@ -188,9 +188,9 @@ describe "Mods Top Level Elements that do not have Child Elements" do
         @mods_rec.typeOfResource.usage.should == ['fer sure']
       end
     end
-    
+
   end # context without namespaces
-   
+
   context "parsing with namespaces" do
 
     before(:all) do
@@ -245,7 +245,7 @@ describe "Mods Top Level Elements that do not have Child Elements" do
         @class1.edition.should == ['11']
       end
       it "should recognize all authority attributes" do
-        Mods::AUTHORITY_ATTRIBS.each { |a|  
+        Mods::AUTHORITY_ATTRIBS.each { |a|
           @mods_rec.from_str(@mods_el_w_ns + "<classification #{a}='attr_val'>zzz</classification></mods>")
           @mods_rec.classification.send(a.to_sym).should == ['attr_val']
         }
@@ -278,7 +278,7 @@ describe "Mods Top Level Elements that do not have Child Elements" do
         @mods_rec.genre.usage.should == ['fer sure']
       end
       it "should recognize all authority attributes" do
-        Mods::AUTHORITY_ATTRIBS.each { |a|  
+        Mods::AUTHORITY_ATTRIBS.each { |a|
           @mods_rec.from_str(@mods_el_w_ns + "<genre #{a}='attr_val'>zzz</genre></mods>")
           @mods_rec.genre.send(a.to_sym).should == ['attr_val']
         }
@@ -337,7 +337,7 @@ describe "Mods Top Level Elements that do not have Child Elements" do
         @mods_rec.targetAudience.displayLabel.should == ['ta da']
       end
       it "should recognize all authority attributes" do
-        Mods::AUTHORITY_ATTRIBS.each { |a|  
+        Mods::AUTHORITY_ATTRIBS.each { |a|
           @mods_rec.from_str(@mods_el_w_ns + "<targetAudience #{a}='attr_val'>zzz</targetAudience></mods>")
           @mods_rec.targetAudience.send(a.to_sym).should == ['attr_val']
         }
@@ -362,8 +362,8 @@ describe "Mods Top Level Elements that do not have Child Elements" do
         @mods_rec.typeOfResource.usage.should == ['fer sure']
       end
     end
-    
+
   end # parsing with namespaces
-  
-  
+
+
 end
