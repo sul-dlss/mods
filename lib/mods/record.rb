@@ -5,16 +5,16 @@ module Mods
   class Record
 
     attr_reader :mods_ng_xml
-    # string to use when combining a title and subtitle, e.g. 
+    # string to use when combining a title and subtitle, e.g.
     #  for title "MODS" and subtitle "Metadata Odious Delimited Stuff" and delimiter " : "
     #  we get "MODS : Metadata Odious Delimited Stuff"
     attr_accessor :title_delimiter
 
     NS_HASH = {'m' => MODS_NS_V3}
-    
+
     ATTRIBUTES = ['id', 'version']
 
-    # @param (String) title_delimiter what to use when combining a title and subtitle, e.g. 
+    # @param (String) title_delimiter what to use when combining a title and subtitle, e.g.
     #  for title "MODS" and subtitle "Metadata Odious Delimited Stuff" and delimiter " : "
     #  we get "MODS : Metadata Odious Delimited Stuff"
     def initialize(title_delimiter = Mods::TitleInfo::DEFAULT_TITLE_DELIM)
@@ -33,9 +33,13 @@ module Mods
       end
     end
 
-    # convenience method to call Mods::Reader.new.from_url and to nom
+    # Convenience method to call Mods::Reader.new.from_url and to nom.
+    # Returns a new instance of Mods::Record instantiated with the content from the given URL.
     # @param namespace_aware true if the XML parsing should be strict about using namespaces.  Default is true
     # @param url (String) - url that has mods xml as its content
+    # @return Mods::Record
+    # @example
+    #   foo = Mods::Record.new.from_url('http://purl.stanford.edu/bb340tm8592.mods')
     def from_url(url, ns_aware = true)
       @mods_ng_xml = Mods::Reader.new(ns_aware).from_url(url)
       if ns_aware
@@ -43,6 +47,7 @@ module Mods
       else
         set_terminology_no_ns(@mods_ng_xml)
       end
+      return self
     end
 
     # convenience method to call Mods::Reader.new.from_nk_node and to nom
@@ -56,11 +61,11 @@ module Mods
         set_terminology_no_ns(@mods_ng_xml)
       end
     end
-    
-    # get the value for the terms, as a String. f there are multiple values, they will be joined with the separator. 
+
+    # get the value for the terms, as a String. f there are multiple values, they will be joined with the separator.
     #  If there are no values, the result will be nil.
     # @param [Symbol or String or Array<Symbol>] messages the single symbol of the message to send to the Stanford::Mods::Record object
-    #  (as a Symbol or a String), or an Array of (Symbols or Strings) to be sent as messages. 
+    #  (as a Symbol or a String), or an Array of (Symbols or Strings) to be sent as messages.
     #  Messages will usually be terms from the nom-xml terminology defined in the mods gem.)
     # @param [String] sep - the separator string to insert between multiple values
     # @return [String] a String representing the value(s) or nil.
@@ -72,7 +77,7 @@ module Mods
 
     # get the values for the terms, as an Array. If there are no values, the result will be nil.
     # @param [Symbol or String or Array<Symbol>] messages the single symbol of the message to send to the Stanford::Mods::Record object
-    #  (as a Symbol or a String), or an Array of (Symbols or Strings) to be sent as messages. 
+    #  (as a Symbol or a String), or an Array of (Symbols or Strings) to be sent as messages.
     #  Messages will usually be terms from the nom-xml terminology defined in the mods gem.)
     # @return [Array<String>] an Array with a String value for each result node's non-empty text, or nil if none
     def term_values messages
@@ -99,7 +104,7 @@ module Mods
 
       vals = []
       if nodes
-        nodes.each { |n| 
+        nodes.each { |n|
           vals << n.text unless n.text.empty?
         }
       end
@@ -108,7 +113,7 @@ module Mods
     rescue NoMethodError
       raise ArgumentError, "term_values called with unknown argument: #{messages.inspect}", caller
     end
-    
+
 
     # @return Array of Strings, each containing the text contents of <mods><titleInfo>   <nonSort> + ' ' + <title> elements
     #  but not including any titleInfo elements with type="alternative"
@@ -120,17 +125,17 @@ module Mods
     def full_titles
       @mods_ng_xml.title_info.full_title.map { |n| n }
     end
-        
+
     # @return Array of Strings, each containing the text contents of <mods><titleInfo @type="alternative"><title>  elements
     def alternative_titles
       @mods_ng_xml.title_info.alternative_title.map { |n| n }
     end
-    
+
     # @return String containing sortable title for this mods record
     def sort_title
       @mods_ng_xml.title_info.sort_title.find { |n| !n.nil? }
     end
-    
+
     # @return Array of Strings, each containing the computed display value of a personal name
     #   (see nom_terminology for algorithm)
     def personal_names
@@ -149,17 +154,17 @@ module Mods
     def corporate_names
       @mods_ng_xml.corporate_name.map { |n| n.display_value }
     end
-    
+
     # Translates iso-639 language codes, and leaves everything else alone.
     # @return Array of Strings, each a (hopefully English) name of a language
     def languages
       result = []
-      @mods_ng_xml.language.each { |n| 
+      @mods_ng_xml.language.each { |n|
         # get languageTerm codes and add their translations to the result
-        n.code_term.each { |ct| 
+        n.code_term.each { |ct|
           if ct.authority.match(/^iso639/)
             begin
-              vals = ct.text.split(/[,|\ ]/).reject {|x| x.strip.length == 0 } 
+              vals = ct.text.split(/[,|\ ]/).reject {|x| x.strip.length == 0 }
               vals.each do |v|
                 result << ISO_639.find(v.strip).english_name
               end
@@ -172,11 +177,11 @@ module Mods
           end
         }
         # add languageTerm text values
-        n.text_term.each { |tt| 
+        n.text_term.each { |tt|
           val = tt.text.strip
           result << val if val.length > 0
         }
-          
+
         # add language values that aren't in languageTerm subelement
         if n.languageTerm.size == 0
           result << n.text
@@ -192,7 +197,7 @@ module Mods
         super.method_missing(method_name, *args)
       end
     end
-    
+
   end # class Record
 
 end # module Mods

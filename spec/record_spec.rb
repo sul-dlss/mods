@@ -7,8 +7,8 @@ describe "Mods::Record" do
     @example_ns_str = "<mods #{@def_ns_decl}><note>default ns</note></mods>"
     @example_no_ns_str = '<mods><note>no ns</note></mods>'
     @example_record_url = 'http://www.loc.gov/standards/mods/modsrdf/examples/0001.xml'
-    @doc_from_str_ns = Mods::Reader.new.from_str(@example_ns_str) 
-    @doc_from_str_no_ns = Mods::Reader.new.from_str(@example_no_ns_str) 
+    @doc_from_str_ns = Mods::Reader.new.from_str(@example_ns_str)
+    @doc_from_str_no_ns = Mods::Reader.new.from_str(@example_no_ns_str)
   end
 
   context "from_str" do
@@ -35,14 +35,14 @@ describe "Mods::Record" do
     before(:all) do
       @mods_doc = Mods::Record.new.from_url(@example_record_url)
     end
-    it "should be a mods record" do
-      @mods_doc.kind_of? Mods::Record
+    it "should return a mods record" do
+      expect(@mods_doc).to be_a_kind_of(Mods::Record)
     end
     it "should raise an error on a bad url" do
       lambda{Mods::Record.new.from_url("http://example.org/fake.xml")}.should raise_error
     end
   end
-  
+
   context "from_nk_node" do
     before(:all) do
       oai_resp = '<?xml version="1.0" encoding="UTF-8"?>
@@ -76,7 +76,7 @@ describe "Mods::Record" do
 					</n:titleInfo>
 				</n:mods>
       </metadata>'
-      ng_xml = Nokogiri::XML(bad_ns_wrapped) 
+      ng_xml = Nokogiri::XML(bad_ns_wrapped)
       @mods_node_no_ns = ng_xml.xpath('//n:mods', {'n'=>'http://www.not.mods.org'}).first
     end
     it "should have namespace aware parsing turned on by default" do
@@ -94,7 +94,7 @@ describe "Mods::Record" do
       mods_ng_doc.title_info.title.map { |e| e.text }.should == ["What? No namespaces?"]
     end
   end # context from_nk_node
-  
+
   context "getting term values" do
     before(:all) do
       m = "<mods #{@def_ns_decl}>
@@ -108,7 +108,7 @@ describe "Mods::Record" do
       @mods_rec = Mods::Record.new
       @mods_rec.from_str(m)
     end
-    
+
     context "term_value (single value result)" do
       it "should return nil if there are no such values in the MODS" do
         @mods_rec.term_value(:identifier).should == nil
@@ -158,9 +158,9 @@ describe "Mods::Record" do
       it "should raise an error if the argument isn't a Symbol or an Array" do
         expect { @mods_rec.term_values(@mods_rec.subject) }.to raise_error(ArgumentError, /term_values called with unrecognized argument class:.*NodeSet.*/)
       end
-    end    
+    end
   end # getting term values
-  
+
   context "convenience methods for accessing tricky bits of terminology" do
     before(:all) do
       @mods_rec = Mods::Record.new
@@ -185,7 +185,7 @@ describe "Mods::Record" do
         @mods_rec.alternative_titles.should == ['12']
       end
     end
-    
+
     context "personal_names" do
       before(:all) do
         @pers_name = 'Crusty'
@@ -193,7 +193,7 @@ describe "Mods::Record" do
         @pers_role = 'creator'
         @mods_w_pers_name_role = "<mods #{@def_ns_decl}><name type='personal'><namePart>#{@pers_name}</namePart>"
         @given_family = '<mods xmlns="http://www.loc.gov/mods/v3"><name type="personal"><namePart type="given">Jorge Luis</namePart>
-                                <namePart type="family">Borges</namePart></name></mods>'        
+                                <namePart type="family">Borges</namePart></name></mods>'
         @given_family_date = '<mods xmlns="http://www.loc.gov/mods/v3"><name type="personal"><namePart type="given">Zaphod</namePart>
                                 <namePart type="family">Beeblebrox</namePart>
                                 <namePart type="date">1912-2362</namePart></name></mods>'
@@ -218,7 +218,7 @@ describe "Mods::Record" do
       it "should prefer displayForm over namePart pieces" do
         display_form_and_name_parts = '<mods xmlns="http://www.loc.gov/mods/v3"><name type="personal"><namePart type="given">Jorge Luis</namePart>
                                 <namePart type="family">Borges</namePart>
-                                <displayForm>display form</displayForm></name></mods>'        
+                                <displayForm>display form</displayForm></name></mods>'
         @mods_rec.from_str(display_form_and_name_parts)
         @mods_rec.personal_names.should include("display form")
       end
@@ -244,7 +244,7 @@ describe "Mods::Record" do
         @mods_rec.personal_names.should include("Borges, Jorge Luis")
       end
       it "should not include a comma when there is only a family or given name" do
-        [@family_only, @given_only].each { |mods_str|  
+        [@family_only, @given_only].each { |mods_str|
           @mods_rec.from_str(mods_str)
           @mods_rec.personal_names.first.should_not match(/,/)
         }
@@ -252,13 +252,13 @@ describe "Mods::Record" do
       it "should include terms of address" do
         @mods_rec.from_str(@all_name_parts)
         @mods_rec.personal_names.first.should match(/Mr./)
-      end      
-    end # personal_names 
-    
+      end
+    end # personal_names
+
     context "personal_names_w_dates" do
       before(:all) do
         @given_family = '<mods xmlns="http://www.loc.gov/mods/v3"><name type="personal"><namePart type="given">Jorge Luis</namePart>
-                                <namePart type="family">Borges</namePart></name></mods>'        
+                                <namePart type="family">Borges</namePart></name></mods>'
         @given_family_date = '<mods xmlns="http://www.loc.gov/mods/v3"><name type="personal"><namePart type="given">Zaphod</namePart>
                                 <namePart type="family">Beeblebrox</namePart>
                                 <namePart type="date">1912-2362</namePart></name></mods>'
@@ -276,13 +276,13 @@ describe "Mods::Record" do
         @mods_rec.personal_names_w_dates.first.should match(/, 1912-2362$/)
         @mods_rec.from_str(@all_name_parts)
         @mods_rec.personal_names_w_dates.first.should match(/, date$/)
-      end      
+      end
       it "should be just the personal_name if no date is available" do
         @mods_rec.from_str(@given_family)
         @mods_rec.personal_names_w_dates.first.should == 'Borges, Jorge Luis'
       end
     end
-      
+
     context "corporate_names" do
       before(:all) do
         @corp_name = 'ABC corp'
@@ -295,18 +295,18 @@ describe "Mods::Record" do
         corp_role = 'lithographer'
         mods_w_corp_name_role = "<mods #{@def_ns_decl}><name type='corporate'><namePart>#{@corp_name}</namePart>
           <role><roleTerm type='text'>#{corp_role}</roleTerm></role></name></mods>"
-        @mods_rec.from_str(mods_w_corp_name_role)      
+        @mods_rec.from_str(mods_w_corp_name_role)
         @mods_rec.corporate_names.first.should_not match(corp_role)
       end
 
       it "should prefer displayForm over namePart pieces" do
         display_form_and_name_parts = "<mods #{@def_ns_decl}><name type='corporate'><namePart>Food, Inc.</namePart>
-                                <displayForm>display form</displayForm></name></mods>"       
+                                <displayForm>display form</displayForm></name></mods>"
         @mods_rec.from_str(display_form_and_name_parts)
         @mods_rec.corporate_names.should include("display form")
       end
     end # corporate_names
-    
+
     context "languages" do
       before(:all) do
         @simple = "<mods #{@def_ns_decl}><language>Greek</language></mods>"

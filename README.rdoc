@@ -25,7 +25,9 @@ Or install it yourself as:
 
 == Usage
 
-TODO: Write usage instructions here
+Create a new Mods::Record from a url:
+
+  foo = Mods::Record.new.from_url('http://purl.stanford.edu/bb340tm8592.mods')
 
 == Contributing
 
