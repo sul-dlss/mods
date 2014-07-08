@@ -47,8 +47,8 @@ describe "Mods::Record" do
   # Be able to create a new Mods::Record from a file
   context "from_file" do
     before(:all) do
-      @fixture_dir = File.join(File.dirname(__FILE__), 'fixture_data', 'shpc')
-      @fixture_mods_file = File.join(@fixture_dir, 'bb340tm8592.mods.xml')
+      @fixture_dir = File.join(File.dirname(__FILE__), 'fixture_data')
+      @fixture_mods_file = File.join(@fixture_dir, 'shpc1.mods.xml')
       @mods_doc = Mods::Record.new.from_file(@fixture_mods_file)
     end
     it "should return a mods record" do

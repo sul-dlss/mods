@@ -1,3 +1,7 @@
+<!--
+Sample record from the Stanford Historical Photo Collection, house in the Stanford Digital Repository. 
+Also available at http://purl.stanford.edu/bb340tm8592.mods
+-->
 <mods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.4" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd">
   <titleInfo>
     <title>Arboretum, road with oaks</title>
