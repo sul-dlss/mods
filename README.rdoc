@@ -29,6 +29,10 @@ Create a new Mods::Record from a url:
 
   foo = Mods::Record.new.from_url('http://purl.stanford.edu/bb340tm8592.mods')
 
+Create a new Mods::Record from a file:
+
+  foo = Mods::Record.new.from_file('/path/to/mods/file.xml')
+
 == Contributing
 
 1. Fork it
