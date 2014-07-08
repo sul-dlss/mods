@@ -1,0 +1,39 @@
+<mods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.4" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd">
+  <titleInfo>
+    <title>Arboretum, road with oaks</title>
+  </titleInfo>
+  <name type="corporate" authority="naf" authorityURI="http://id.loc.gov/authorities/names/no98095678">
+    <namePart>PAHA (Palo Alto Historical Association</namePart>
+    <role>
+      <roleTerm type="text">donor</roleTerm>
+    </role>
+  </name>
+  <physicalDescription>
+    <form>black and white photographic print</form>
+    <internetMediaType>image/tiff</internetMediaType>
+    <note displayLabel="Dimensions">11 in. x 7 in.</note>
+  </physicalDescription>
+  <typeOfResource>still image</typeOfResource>
+  <language>
+    <languageTerm type="code" authority="iso639-2b">en</languageTerm>
+  </language>
+  <genre authority="ftamc">Photoprints.</genre>
+  <subject>
+    <topic>Arboretum</topic>
+    <topic>Trees</topic>
+  </subject>
+  <location>
+    <physicalLocation type="repository">Stanford University. Libraries. Dept. of Special Collections &amp; University Archives.</physicalLocation>
+  </location>
+  <identifier type="local" displayLabel="University Archives Photo ID">94</identifier>
+  <identifier type="local" displayLabel="Luna Object ID">1613</identifier>
+  <note>"PAHA 8/13/57" written on back.</note>
+  <relatedItem type="host">
+    <titleInfo>
+      <title>Stanford historical photograph collection, 1887-circa 1996</title>
+    </titleInfo>
+    <identifier type="uri">http://purl.stanford.edu/kx532cb7981</identifier>
+    <typeOfResource collection="yes"/>
+  </relatedItem>
+  <accessCondition type="useAndReproduction">Property rights reside with the repository. Literary rights reside with the creators of the documents or their heirs. To obtain permission to publish or reproduce, please contact the Special Collections Public Services Librarian at speccollref@stanford.edu.</accessCondition>
+</mods>

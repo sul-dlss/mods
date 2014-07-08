@@ -19,14 +19,30 @@ describe "Mods::Reader" do
   end
 
   it "from_str should turn an xml string into a Nokogiri::XML::Document object" do
-    @doc_from_str_default_ns.class.should == Nokogiri::XML::Document
-    @doc_from_str_ns.class.should == Nokogiri::XML::Document
-    @doc_from_str_no_ns.class.should == Nokogiri::XML::Document
-    @doc_from_str_wrong_ns.class.should == Nokogiri::XML::Document
+    expect(@doc_from_str_default_ns).to be_instance_of(Nokogiri::XML::Document)
+    expect(@doc_from_str_ns).to be_instance_of(Nokogiri::XML::Document)
+    expect(@doc_from_str_no_ns).to be_instance_of(Nokogiri::XML::Document)
+    expect(@doc_from_str_wrong_ns).to be_instance_of(Nokogiri::XML::Document)
   end
 
-  it "from_url should turn the contents at the url into a Nokogiri::XML::Document object" do
-    @from_url.class.should == Nokogiri::XML::Document
+  context "from_url" do
+    it "from_url should turn the contents at the url into a Nokogiri::XML::Document object" do
+      expect(@from_url).to be_instance_of(Nokogiri::XML::Document)
+    end
+  end
+
+  context "from_file" do
+    before(:all) do
+      @fixture_dir = File.join(File.dirname(__FILE__), 'fixture_data', 'shpc')
+      @fixture_mods_file = File.join(@fixture_dir, 'bb340tm8592.mods.xml')
+      @from_file = Mods::Reader.new.from_file(@fixture_mods_file)
+    end
+    it "should turn the contents of a file into a Nokogiri::XML::Document object" do
+      expect(@from_file).to be_instance_of(Nokogiri::XML::Document)
+    end
+    it "should give a meaningful error if passed a bad file" do
+      expect(lambda{Mods::Record.new.from_file('/fake/file')}).to raise_error
+    end
   end
 
   context "namespace awareness" do

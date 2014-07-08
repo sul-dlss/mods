@@ -31,6 +31,7 @@ describe "Mods::Record" do
     end
   end
 
+  # Be able to create a new Mods::Record from a url
   context "from_url" do
     before(:all) do
       @mods_doc = Mods::Record.new.from_url(@example_record_url)
@@ -40,6 +41,18 @@ describe "Mods::Record" do
     end
     it "should raise an error on a bad url" do
       lambda{Mods::Record.new.from_url("http://example.org/fake.xml")}.should raise_error
+    end
+  end
+
+  # Be able to create a new Mods::Record from a file
+  context "from_file" do
+    before(:all) do
+      @fixture_dir = File.join(File.dirname(__FILE__), 'fixture_data', 'shpc')
+      @fixture_mods_file = File.join(@fixture_dir, 'bb340tm8592.mods.xml')
+      @mods_doc = Mods::Record.new.from_file(@fixture_mods_file)
+    end
+    it "should return a mods record" do
+      expect(@mods_doc).to be_a_kind_of(Mods::Record)
     end
   end
 

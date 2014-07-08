@@ -35,13 +35,30 @@ module Mods
 
     # Convenience method to call Mods::Reader.new.from_url and to nom.
     # Returns a new instance of Mods::Record instantiated with the content from the given URL.
-    # @param namespace_aware true if the XML parsing should be strict about using namespaces.  Default is true
     # @param url (String) - url that has mods xml as its content
+    # @param namespace_aware true if the XML parsing should be strict about using namespaces.  Default is true
     # @return Mods::Record
     # @example
     #   foo = Mods::Record.new.from_url('http://purl.stanford.edu/bb340tm8592.mods')
     def from_url(url, ns_aware = true)
       @mods_ng_xml = Mods::Reader.new(ns_aware).from_url(url)
+      if ns_aware
+        set_terminology_ns(@mods_ng_xml)
+      else
+        set_terminology_no_ns(@mods_ng_xml)
+      end
+      return self
+    end
+
+    # Convenience method to call Mods::Reader.new.from_file.
+    # Returns a new instance of Mods::Record instantiated with the content from the given file.
+    # @param file (String) - path to file that has mods xml as its content
+    # @param namespace_aware true if the XML parsing should be strict about using namespaces.  Default is true
+    # @return Mods::Record
+    # @example
+    #   foo = Mods::Record.new.from_file('/path/to/file/bb340tm8592.mods')
+    def from_file(url, ns_aware = true)
+      @mods_ng_xml = Mods::Reader.new(ns_aware).from_file(url)
       if ns_aware
         set_terminology_ns(@mods_ng_xml)
       else
