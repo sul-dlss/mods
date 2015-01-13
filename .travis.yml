@@ -7,7 +7,7 @@ rvm:
   - 2.0.0
   - 1.9.3
   - ruby-head
-  - jruby-1.7.9-d19
+  - jruby-1.7.9-d19 # fails after 1.7.10 for some reason
 #  - jruby-19mode # JRuby in 1.9 mode
 #  - jruby-head
 notifications:
