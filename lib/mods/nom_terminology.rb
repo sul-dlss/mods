@@ -2,10 +2,12 @@ module Mods
   
   # from:  http://www.loc.gov/standards/mods/v3/mods-userguide-generalapp.html
   
-  # FIXME: didn't figure out a good way to deal with namespaced attribute for non-namespaced terminology
-#  LANG_ATTRIBS = ['lang', 'xml:lang', 'script', 'transliteration']
-  LANG_ATTRIBS = ['lang', 'script', 'transliteration']
+  LANG_ATTRIBS = ['script', 'transliteration']
   
+  if Nokogiri::VERSION < "1.6.6"
+    # Nokogiri 1.6.6 introduced lang as a built-in attribute
+    LANG_ATTRIBS += ['lang']
+  end
   LINKING_ATTRIBS = ['xlink', 'ID']
 
   DATE_ATTRIBS = ['encoding', 'point', 'keyDate', 'qualifier']

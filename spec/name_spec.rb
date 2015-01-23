@@ -33,6 +33,13 @@ describe "Mods <name> Element" do
       </name></mods>"
     @mods_w_pers_name_role_code = @mods_w_pers_name_role_code_ns.sub(" #{@ns_decl}", '')
   end
+
+  describe "lang" do
+    it "should have a lang attribute" do
+      @mods_rec.from_str("<mods #{@ns_decl}><name type='personal'><namePart xml:lang='fr-FR' type='given'>Jean</namePart><namePart xml:lang='en-US' type='given'>John</namePart></name></mods>")
+      expect(@mods_rec.personal_name.namePart.lang).to include "en-US", "fr-FR"
+    end
+  end
   
   context "personal name" do
     
