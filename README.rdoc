@@ -44,6 +44,7 @@ Create a new Mods::Record from a file:
 == Releases
 
 =======
+* <b>0.1.0</b> Pinned version of nokogiri to < 1.6.6 because of addition of Node#lang in 1.6.6.1 which conflicts which currently used nodes
 * <b>0.0.23</b> minor bug and typo fixes
 * <b>0.0.22</b> add displayLabel and lang attributes to every element
 * <b>0.0.21</b> bug fix to check for nil values in name nodes

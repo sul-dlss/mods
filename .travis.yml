@@ -2,7 +2,6 @@ language: ruby
 script: rake rspec
 rvm:
   - 2.2.0
-  - 2.1.5
   - 2.1.1
   - 2.0.0
   - 1.9.3
