@@ -31,8 +31,8 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "rdoc"
   gem.add_development_dependency "yard"
   # tests
-	gem.add_development_dependency 'rspec', '~> 3.0'
-	# using coveralls with travis 
-	# gem.add_development_dependency 'ruby-debug19'
+  gem.add_development_dependency 'rspec', '~> 3.0'
+  # using coveralls with travis
+  # gem.add_development_dependency 'ruby-debug19'
   gem.add_development_dependency 'equivalent-xml'
 end
