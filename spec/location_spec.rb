@@ -31,17 +31,17 @@ describe "Mods <location> Element" do
         end
         it "should have access to text value of element" do
           @mods_rec.from_str(@phys_loc_only)
-          @mods_rec.location.physicalLocation.text.should == "here"
+          expect(@mods_rec.location.physicalLocation.text).to eq("here")
           @mods_rec.from_str(@phys_loc_authority)
-          @mods_rec.location.physicalLocation.map { |n| n.text }.should == ["MnRM"]
+          expect(@mods_rec.location.physicalLocation.map { |n| n.text }).to eq(["MnRM"])
         end
         it "should recognize authority attribute" do
           @mods_rec.from_str(@phys_loc_authority)
-          @mods_rec.location.physicalLocation.authority.should == ["marcorg"]
+          expect(@mods_rec.location.physicalLocation.authority).to eq(["marcorg"])
         end
         it "should recognize displayLabel attribute" do
           @mods_rec.from_str("<mods #{@ns_decl}><location><physicalLocation displayLabel='Correspondence'>some address</physicalLocation></location></mods>")
-          @mods_rec.location.physicalLocation.displayLabel.should == ["Correspondence"]
+          expect(@mods_rec.location.physicalLocation.displayLabel).to eq(["Correspondence"])
         end      
       end
 
@@ -51,7 +51,7 @@ describe "Mods <location> Element" do
                         	<shelfLocator>DAG no. 1410</shelfLocator>
                       </location></mods>"
         @mods_rec.from_str(shelf_loc)
-        @mods_rec.location.shelfLocator.map { |n| n.text }.should == ["DAG no. 1410"]
+        expect(@mods_rec.location.shelfLocator.map { |n| n.text }).to eq(["DAG no. 1410"])
       end
 
       context "url child element" do
@@ -65,10 +65,10 @@ describe "Mods <location> Element" do
         end
         it "should have access to text value of element" do
           urls = @mods_rec.from_str(@mult_flavor_loc_urls).location.url.map { |e| e.text }
-          urls.size.should == 3
-          urls.should include("http://preview.org")
-          urls.should include("http://context.org")
-          urls.should include("http://object.org")
+          expect(urls.size).to eq(3)
+          expect(urls).to include("http://preview.org")
+          expect(urls).to include("http://context.org")
+          expect(urls).to include("http://object.org")
         end
         context "attributes" do
           before(:all) do
@@ -77,29 +77,29 @@ describe "Mods <location> Element" do
                       </location></mods>"
           end
           it "should recognize displayLabel attribute" do
-            @mods_rec.from_str(@url_attribs).location.url.displayLabel.should == ["Digital collection of 46 images available online"]
+            expect(@mods_rec.from_str(@url_attribs).location.url.displayLabel).to eq(["Digital collection of 46 images available online"])
           end
           it "should recognize access attribute" do
             vals = @mods_rec.from_str(@mult_flavor_loc_urls).location.url.access
-            vals.size.should == 3
-            vals.should include("preview")
-            vals.should include("object in context")
-            vals.should include("raw object")
+            expect(vals.size).to eq(3)
+            expect(vals).to include("preview")
+            expect(vals).to include("object in context")
+            expect(vals).to include("raw object")
           end
           it "should recognize usage attribute" do
-            @mods_rec.from_str(@url_attribs).location.url.usage.should == ["primary display"]
+            expect(@mods_rec.from_str(@url_attribs).location.url.usage).to eq(["primary display"])
           end
           it "should recognize note attribute" do
             @mods_rec.from_str("<mods #{@ns_decl}><location><url note='something'>http://somewhere.org</url></location></mods>")
-            @mods_rec.location.url.note.should == ["something"]
+            expect(@mods_rec.location.url.note).to eq(["something"])
           end
           it "should recognize dateLastAccessed attribute" do
             @mods_rec.from_str("<mods #{@ns_decl}><location><url dateLastAccessed='something'>http://somewhere.org</url></location></mods>")
-            @mods_rec.location.url.dateLastAccessed.should == ["something"]
+            expect(@mods_rec.location.url.dateLastAccessed).to eq(["something"])
           end
         end # attributes
         it "should have array with empty string for single empty url element" do
-          @mods_rec.from_str(@empty_loc_url).location.url.map { |n| n.text }.should == [""]
+          expect(@mods_rec.from_str(@empty_loc_url).location.url.map { |n| n.text }).to eq([""])
         end
       end # url child element
 
@@ -113,8 +113,8 @@ describe "Mods <location> Element" do
           	  	  	<enumerationAndChronology unitType='1'> v.1-v.8 1970-1976</enumerationAndChronology>
           	  	</copyInformation>
           	</holdingSimple></location></mods>"
-        @mods_rec.from_str(xml).location.holdingSimple.should be_an_instance_of(Nokogiri::XML::NodeSet)
-        @mods_rec.from_str(xml).location.holdingSimple.first.should be_an_instance_of(Nokogiri::XML::Element)
+        expect(@mods_rec.from_str(xml).location.holdingSimple).to be_an_instance_of(Nokogiri::XML::NodeSet)
+        expect(@mods_rec.from_str(xml).location.holdingSimple.first).to be_an_instance_of(Nokogiri::XML::Element)
       end
       it "holdingComplex child element" do
         xml = "<mods #{@ns_decl}>
@@ -143,8 +143,8 @@ describe "Mods <location> Element" do
           	  	</holding> 	  	  	 
           	  	  	  	</holdingExternal>
             </mods>"
-        @mods_rec.from_str(xml).location.holdingExternal.should be_an_instance_of(Nokogiri::XML::NodeSet)
-        @mods_rec.from_str(xml).location.holdingExternal.first.should be_an_instance_of(Nokogiri::XML::Element)
+        expect(@mods_rec.from_str(xml).location.holdingExternal).to be_an_instance_of(Nokogiri::XML::NodeSet)
+        expect(@mods_rec.from_str(xml).location.holdingExternal.first).to be_an_instance_of(Nokogiri::XML::Element)
       end
 
     end # WITH namespaces
@@ -172,17 +172,17 @@ describe "Mods <location> Element" do
         end
         it "should have access to text value of element" do
           @mods_rec.from_str(@phys_loc_only, false)
-          @mods_rec.location.physicalLocation.text.should == "here"
+          expect(@mods_rec.location.physicalLocation.text).to eq("here")
           @mods_rec.from_str(@phys_loc_authority, false)
-          @mods_rec.location.physicalLocation.map { |n| n.text }.should == ["MnRM"]
+          expect(@mods_rec.location.physicalLocation.map { |n| n.text }).to eq(["MnRM"])
         end
         it "should recognize authority attribute" do
           @mods_rec.from_str(@phys_loc_authority, false)
-          @mods_rec.location.physicalLocation.authority.should == ["marcorg"]
+          expect(@mods_rec.location.physicalLocation.authority).to eq(["marcorg"])
         end
         it "should recognize displayLabel attribute" do
           @mods_rec.from_str('<mods><location><physicalLocation displayLabel="Correspondence">some address</physicalLocation></location></mods>', false)
-          @mods_rec.location.physicalLocation.displayLabel.should == ["Correspondence"]
+          expect(@mods_rec.location.physicalLocation.displayLabel).to eq(["Correspondence"])
         end      
       end
 
@@ -192,7 +192,7 @@ describe "Mods <location> Element" do
                         	<shelfLocator>DAG no. 1410</shelfLocator>
                       </location></mods>'
         @mods_rec.from_str(shelf_loc, false)
-        @mods_rec.location.shelfLocator.map { |n| n.text }.should == ["DAG no. 1410"]
+        expect(@mods_rec.location.shelfLocator.map { |n| n.text }).to eq(["DAG no. 1410"])
       end
 
       context "url child element" do
@@ -206,10 +206,10 @@ describe "Mods <location> Element" do
         end
         it "should have access to text value of element" do
           urls = @mods_rec.from_str(@mult_flavor_loc_urls, false).location.url.map { |e| e.text }
-          urls.size.should == 3
-          urls.should include("http://preview.org")
-          urls.should include("http://context.org")
-          urls.should include("http://object.org")
+          expect(urls.size).to eq(3)
+          expect(urls).to include("http://preview.org")
+          expect(urls).to include("http://context.org")
+          expect(urls).to include("http://object.org")
         end
         context "attributes" do
           before(:all) do
@@ -218,29 +218,29 @@ describe "Mods <location> Element" do
                       </location></mods>'
           end
           it "should recognize displayLabel attribute" do
-            @mods_rec.from_str(@url_attribs, false).location.url.displayLabel.should == ["Digital collection of 46 images available online"]
+            expect(@mods_rec.from_str(@url_attribs, false).location.url.displayLabel).to eq(["Digital collection of 46 images available online"])
           end
           it "should recognize access attribute" do
             vals = @mods_rec.from_str(@mult_flavor_loc_urls, false).location.url.access
-            vals.size.should == 3
-            vals.should include("preview")
-            vals.should include("object in context")
-            vals.should include("raw object")
+            expect(vals.size).to eq(3)
+            expect(vals).to include("preview")
+            expect(vals).to include("object in context")
+            expect(vals).to include("raw object")
           end
           it "should recognize usage attribute" do
-            @mods_rec.from_str(@url_attribs, false).location.url.usage.should == ["primary display"]
+            expect(@mods_rec.from_str(@url_attribs, false).location.url.usage).to eq(["primary display"])
           end
           it "should recognize note attribute" do
             @mods_rec.from_str('<mods><location><url note="something">http://somewhere.org</url></location></mods>', false)
-            @mods_rec.location.url.note.should == ["something"]
+            expect(@mods_rec.location.url.note).to eq(["something"])
           end
           it "should recognize dateLastAccessed attribute" do
             @mods_rec.from_str('<mods><location><url dateLastAccessed="something">http://somewhere.org</url></location></mods>', false)
-            @mods_rec.location.url.dateLastAccessed.should == ["something"]
+            expect(@mods_rec.location.url.dateLastAccessed).to eq(["something"])
           end
         end # attributes
         it "should have array with empty string for single empty url element" do
-          @mods_rec.from_str(@empty_loc_url, false).location.url.map { |n| n.text }.should == [""]
+          expect(@mods_rec.from_str(@empty_loc_url, false).location.url.map { |n| n.text }).to eq([""])
         end
       end # url child element
 
@@ -254,8 +254,8 @@ describe "Mods <location> Element" do
           	  	  	<enumerationAndChronology unitType="1"> v.1-v.8 1970-1976</enumerationAndChronology>
           	  	</copyInformation>
           	</holdingSimple></location></mods>'
-        @mods_rec.from_str(xml, false).location.holdingSimple.should be_an_instance_of(Nokogiri::XML::NodeSet)
-        @mods_rec.from_str(xml, false).location.holdingSimple.first.should be_an_instance_of(Nokogiri::XML::Element)
+        expect(@mods_rec.from_str(xml, false).location.holdingSimple).to be_an_instance_of(Nokogiri::XML::NodeSet)
+        expect(@mods_rec.from_str(xml, false).location.holdingSimple.first).to be_an_instance_of(Nokogiri::XML::Element)
       end
       it "holdingComplex child element" do
         xml = '<mods>
@@ -284,8 +284,8 @@ describe "Mods <location> Element" do
           	  	</holding> 	  	  	 
           	  	  	  	</holdingExternal>
             </mods>'
-        @mods_rec.from_str(xml, false).location.holdingExternal.should be_an_instance_of(Nokogiri::XML::NodeSet)
-        @mods_rec.from_str(xml, false).location.holdingExternal.first.should be_an_instance_of(Nokogiri::XML::Element)
+        expect(@mods_rec.from_str(xml, false).location.holdingExternal).to be_an_instance_of(Nokogiri::XML::NodeSet)
+        expect(@mods_rec.from_str(xml, false).location.holdingExternal.first).to be_an_instance_of(Nokogiri::XML::Element)
       end
 
     end # WITHOUT namespaces

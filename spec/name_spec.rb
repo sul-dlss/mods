@@ -48,37 +48,37 @@ describe "Mods <name> Element" do
         Mods::Name::CHILD_ELEMENTS.reject{|e| e == "role"}.each { |e|
           @mods_rec.from_str("<mods #{@ns_decl}><name type='personal'><#{e}>oofda</#{e}></name></mods>")
           if e == 'description'
-            @mods_rec.personal_name.description_el.text.should == 'oofda'
+            expect(@mods_rec.personal_name.description_el.text).to eq('oofda')
           else
-            @mods_rec.personal_name.send(e).text.should == 'oofda'
+            expect(@mods_rec.personal_name.send(e).text).to eq('oofda')
           end
         }
       end
       it "should include name elements with type attr = personal" do
         @mods_rec.from_str(@mods_w_pers_name_ns)
-        @mods_rec.personal_name.namePart.text.should == @pers_name
-        @mods_rec.from_str(@mods_w_both_ns).personal_name.namePart.text.should == @pers_name
+        expect(@mods_rec.personal_name.namePart.text).to eq(@pers_name)
+        expect(@mods_rec.from_str(@mods_w_both_ns).personal_name.namePart.text).to eq(@pers_name)
       end
       it "should not include name elements with type attr != personal" do
         @mods_rec.from_str(@mods_w_corp_name_ns)
-        @mods_rec.personal_name.namePart.text.should == ""
-        @mods_rec.from_str(@mods_w_both_ns).personal_name.namePart.text.should_not match(@corp_name)
+        expect(@mods_rec.personal_name.namePart.text).to eq("")
+        expect(@mods_rec.from_str(@mods_w_both_ns).personal_name.namePart.text).not_to match(@corp_name)
       end
 
       context "roles" do
         it "should be possible to access a personal_name role easily" do
           @mods_rec.from_str(@mods_w_pers_name_role_ns)
-          @mods_rec.personal_name.role.roleTerm.text.should include(@pers_role)
+          expect(@mods_rec.personal_name.role.roleTerm.text).to include(@pers_role)
         end
         it "should get role type" do
           @mods_rec.from_str(@mods_w_pers_name_role_ns)
-          @mods_rec.personal_name.role.roleTerm.type_at.should == ["text"]
+          expect(@mods_rec.personal_name.role.roleTerm.type_at).to eq(["text"])
           @mods_rec.from_str(@mods_w_pers_name_role_code_ns)
-          @mods_rec.personal_name.role.roleTerm.type_at.should == ["code"]
+          expect(@mods_rec.personal_name.role.roleTerm.type_at).to eq(["code"])
         end
         it "should get role authority" do
           @mods_rec.from_str(@mods_w_pers_name_role_ns)
-          @mods_rec.personal_name.role.roleTerm.authority.should == ["marcrelator"]
+          expect(@mods_rec.personal_name.role.roleTerm.authority).to eq(["marcrelator"])
         end
       end # roles
     end # WITH namespaces (personal name)
@@ -88,37 +88,37 @@ describe "Mods <name> Element" do
         Mods::Name::CHILD_ELEMENTS.reject{|e| e == "role"}.each { |e|
           @mods_rec.from_str("<mods><name type='personal'><#{e}>oofda</#{e}></name></mods>", false)
           if e == 'description'
-            @mods_rec.personal_name.description_el.text.should == 'oofda'
+            expect(@mods_rec.personal_name.description_el.text).to eq('oofda')
           else
-            @mods_rec.personal_name.send(e).text.should == 'oofda'
+            expect(@mods_rec.personal_name.send(e).text).to eq('oofda')
           end
         }
       end
       it "should include name elements with type attr = personal" do
         @mods_rec.from_str(@mods_w_pers_name, false)
-        @mods_rec.personal_name.namePart.text.should == @pers_name
-        @mods_rec.from_str(@mods_w_both, false).personal_name.namePart.text.should == @pers_name
+        expect(@mods_rec.personal_name.namePart.text).to eq(@pers_name)
+        expect(@mods_rec.from_str(@mods_w_both, false).personal_name.namePart.text).to eq(@pers_name)
       end
       it "should not include name elements with type attr != personal" do
         @mods_rec.from_str(@mods_w_corp_name, false)
-        @mods_rec.personal_name.namePart.text.should == ""
-        @mods_rec.from_str(@mods_w_both, false).personal_name.namePart.text.should_not match(@corp_name)
+        expect(@mods_rec.personal_name.namePart.text).to eq("")
+        expect(@mods_rec.from_str(@mods_w_both, false).personal_name.namePart.text).not_to match(@corp_name)
       end
 
       context "roles" do
         it "should be possible to access a personal_name role easily" do
           @mods_rec.from_str(@mods_w_pers_name_role, false)
-          @mods_rec.personal_name.role.text.should include(@pers_role)
+          expect(@mods_rec.personal_name.role.text).to include(@pers_role)
         end
         it "should get role type" do
           @mods_rec.from_str(@mods_w_pers_name_role, false)
-          @mods_rec.personal_name.role.roleTerm.type_at.should == ["text"]
+          expect(@mods_rec.personal_name.role.roleTerm.type_at).to eq(["text"])
           @mods_rec.from_str(@mods_w_pers_name_role_code, false)
-          @mods_rec.personal_name.role.roleTerm.type_at.should == ["code"]
+          expect(@mods_rec.personal_name.role.roleTerm.type_at).to eq(["code"])
         end
         it "should get role authority" do
           @mods_rec.from_str(@mods_w_pers_name_role, false)
-          @mods_rec.personal_name.role.roleTerm.authority.should == ["marcrelator"]
+          expect(@mods_rec.personal_name.role.roleTerm.authority).to eq(["marcrelator"])
         end
       end # roles    
     end # WITHOUT namespaces
@@ -133,21 +133,21 @@ describe "Mods <name> Element" do
         Mods::Name::CHILD_ELEMENTS.reject{|e| e == "role" }.each { |e|
           @mods_rec.from_str("<mods #{@ns_decl}><name type='corporate'><#{e}>oofda</#{e}></name></mods>")
           if e == 'description'
-            @mods_rec.corporate_name.description_el.text.should == 'oofda'
+            expect(@mods_rec.corporate_name.description_el.text).to eq('oofda')
           else
-            @mods_rec.corporate_name.send(e).text.should == 'oofda'
+            expect(@mods_rec.corporate_name.send(e).text).to eq('oofda')
           end
         }
       end
       it "should include name elements with type attr = corporate" do
         @mods_rec.from_str(@mods_w_corp_name_ns)
-        @mods_rec.corporate_name.namePart.text.should == @corp_name
-        @mods_rec.from_str(@mods_w_both_ns).corporate_name.namePart.text.should == @corp_name
+        expect(@mods_rec.corporate_name.namePart.text).to eq(@corp_name)
+        expect(@mods_rec.from_str(@mods_w_both_ns).corporate_name.namePart.text).to eq(@corp_name)
       end
       it "should not include name elements with type attr != corporate" do
         @mods_rec.from_str(@mods_w_pers_name_ns)
-        @mods_rec.corporate_name.namePart.text.should == ""
-        @mods_rec.from_str(@mods_w_both_ns).corporate_name.namePart.text.should_not match(@pers_name)
+        expect(@mods_rec.corporate_name.namePart.text).to eq("")
+        expect(@mods_rec.from_str(@mods_w_both_ns).corporate_name.namePart.text).not_to match(@pers_name)
       end
     end # WITH namespaces
     context "WITHOUT namespaces" do
@@ -155,21 +155,21 @@ describe "Mods <name> Element" do
         Mods::Name::CHILD_ELEMENTS.reject{|e| e == "role" }.each { |e|
           @mods_rec.from_str("<mods><name type='corporate'><#{e}>oofda</#{e}></name></mods>", false)
           if e == 'description'
-            @mods_rec.corporate_name.description_el.text.should == 'oofda'
+            expect(@mods_rec.corporate_name.description_el.text).to eq('oofda')
           else
-            @mods_rec.corporate_name.send(e).text.should == 'oofda'
+            expect(@mods_rec.corporate_name.send(e).text).to eq('oofda')
           end
         }
       end
       it "should include name elements with type attr = corporate" do
         @mods_rec.from_str(@mods_w_corp_name, false)
-        @mods_rec.corporate_name.namePart.text.should == @corp_name
-        @mods_rec.from_str(@mods_w_both, false).corporate_name.namePart.text.should == @corp_name
+        expect(@mods_rec.corporate_name.namePart.text).to eq(@corp_name)
+        expect(@mods_rec.from_str(@mods_w_both, false).corporate_name.namePart.text).to eq(@corp_name)
       end
       it "should not include name elements with type attr != corporate" do
         @mods_rec.from_str(@mods_w_pers_name, false)
-        @mods_rec.corporate_name.namePart.text.should == ""
-        @mods_rec.from_str(@mods_w_both, false).corporate_name.namePart.text.should_not match(@pers_name)
+        expect(@mods_rec.corporate_name.namePart.text).to eq("")
+        expect(@mods_rec.from_str(@mods_w_both, false).corporate_name.namePart.text).not_to match(@pers_name)
       end
     end # WITHOUT namespaces
     
@@ -185,9 +185,9 @@ describe "Mods <name> Element" do
         Mods::Name::CHILD_ELEMENTS.reject{|e| e == "role"}.each { |e|
           @mods_rec.from_str("<mods #{@ns_decl}><name><#{e}>oofda</#{e}></name></mods>")
           if e == 'description'
-            @mods_rec.plain_name.description_el.text.should == 'oofda'
+            expect(@mods_rec.plain_name.description_el.text).to eq('oofda')
           else
-            @mods_rec.plain_name.send(e).text.should == 'oofda'
+            expect(@mods_rec.plain_name.send(e).text).to eq('oofda')
           end
         }
       end
@@ -195,9 +195,9 @@ describe "Mods <name> Element" do
         Mods::Name::ATTRIBUTES.each { |attrb| 
           @mods_rec.from_str("<mods #{@ns_decl}><name #{attrb}='hello'><displayForm>q</displayForm></name></mods>")
           if attrb != 'type'
-            @mods_rec.plain_name.send(attrb).should == ['hello']
+            expect(@mods_rec.plain_name.send(attrb)).to eq(['hello'])
           else
-            @mods_rec.plain_name.type_at.should == ['hello']
+            expect(@mods_rec.plain_name.type_at).to eq(['hello'])
           end
         }
       end
@@ -205,20 +205,20 @@ describe "Mods <name> Element" do
         it "should recognize type attribute on namePart element" do
           Mods::Name::NAME_PART_TYPES.each { |t|  
             @mods_rec.from_str("<mods #{@ns_decl}><name><namePart type='#{t}'>hi</namePart></name></mods>")
-            @mods_rec.plain_name.namePart.type_at.should == [t]
+            expect(@mods_rec.plain_name.namePart.type_at).to eq([t])
           }
         end
       end
       context "role child element" do
         it "should get role type" do
           @mods_rec.from_str(@mods_w_pers_name_role_ns)
-          @mods_rec.plain_name.role.roleTerm.type_at.should == ["text"]
+          expect(@mods_rec.plain_name.role.roleTerm.type_at).to eq(["text"])
           @mods_rec.from_str(@mods_w_pers_name_role_code_ns)
-          @mods_rec.plain_name.role.roleTerm.type_at.should == ["code"]
+          expect(@mods_rec.plain_name.role.roleTerm.type_at).to eq(["code"])
         end
         it "should get role authority" do
           @mods_rec.from_str(@mods_w_pers_name_role_ns)
-          @mods_rec.plain_name.role.roleTerm.authority.should == ["marcrelator"]
+          expect(@mods_rec.plain_name.role.roleTerm.authority).to eq(["marcrelator"])
         end
       end
       
@@ -229,9 +229,9 @@ describe "Mods <name> Element" do
         Mods::Name::CHILD_ELEMENTS.reject{|e| e == "role"}.each { |e|
           @mods_rec.from_str("<mods><name><#{e}>oofda</#{e}></name></mods>", false)
           if e == 'description'
-            @mods_rec.plain_name.description_el.text.should == 'oofda'
+            expect(@mods_rec.plain_name.description_el.text).to eq('oofda')
           else
-            @mods_rec.plain_name.send(e).text.should == 'oofda'
+            expect(@mods_rec.plain_name.send(e).text).to eq('oofda')
           end
         }
       end
@@ -239,9 +239,9 @@ describe "Mods <name> Element" do
         Mods::Name::ATTRIBUTES.each { |attrb| 
           @mods_rec.from_str("<mods><name #{attrb}='hello'><displayForm>q</displayForm></name></mods>", false)
           if attrb != 'type'
-            @mods_rec.plain_name.send(attrb).should == ['hello']
+            expect(@mods_rec.plain_name.send(attrb)).to eq(['hello'])
           else
-            @mods_rec.plain_name.type_at.should == ['hello']
+            expect(@mods_rec.plain_name.type_at).to eq(['hello'])
           end
         }
       end
@@ -249,20 +249,20 @@ describe "Mods <name> Element" do
         it "should recognize type attribute on namePart element" do
           Mods::Name::NAME_PART_TYPES.each { |t|  
             @mods_rec.from_str("<mods><name><namePart type='#{t}'>hi</namePart></name></mods>", false)
-            @mods_rec.plain_name.namePart.type_at.should == [t]
+            expect(@mods_rec.plain_name.namePart.type_at).to eq([t])
           }
         end
       end
       context "role child element" do
         it "should get role type" do
           @mods_rec.from_str(@mods_w_pers_name_role, false)
-          @mods_rec.plain_name.role.roleTerm.type_at.should == ["text"]
+          expect(@mods_rec.plain_name.role.roleTerm.type_at).to eq(["text"])
           @mods_rec.from_str(@mods_w_pers_name_role_code, false)
-          @mods_rec.plain_name.role.roleTerm.type_at.should == ["code"]
+          expect(@mods_rec.plain_name.role.roleTerm.type_at).to eq(["code"])
         end
         it "should get role authority" do
           @mods_rec.from_str(@mods_w_pers_name_role, false)
-          @mods_rec.plain_name.role.roleTerm.authority.should == ["marcrelator"]
+          expect(@mods_rec.plain_name.role.roleTerm.authority).to eq(["marcrelator"])
         end
       end
     end # context WITHOUT namespaces
@@ -270,7 +270,7 @@ describe "Mods <name> Element" do
   end # plain name
   
   it "should be able to translate the marc relator code into text" do
-    MARC_RELATOR['drt'].should == "Director"
+    expect(MARC_RELATOR['drt']).to eq("Director")
   end
   
   context "display_value and display_value_w_date" do
@@ -306,47 +306,47 @@ describe "Mods <name> Element" do
         @mods_namepart_date = Mods::Record.new.from_str(@namepart_xml)        
       end
       it "should be a string value for each name, not an Array" do
-        @mods_name.plain_name.first.display_value.should be_an_instance_of(String)
-        @mods_name.plain_name.first.display_value_w_date.should be_an_instance_of(String)
+        expect(@mods_name.plain_name.first.display_value).to be_an_instance_of(String)
+        expect(@mods_name.plain_name.first.display_value_w_date).to be_an_instance_of(String)
       end
       it "should return nil when there is no display_value" do
         x = "<mods #{@ns_decl}><name>
                   <namePart></namePart>
               </name></mods>"
         r = Mods::Record.new.from_str(x)
-        r.plain_name.first.display_value.should == nil
+        expect(r.plain_name.first.display_value).to eq(nil)
       end
       it "should be applicable to all name term flavors (plain_name, personal_name, corporate_name ...)" do
-        @mods_name.plain_name.first.display_value.should_not == nil
-        @mods_name.plain_name.first.display_value_w_date.should_not == nil
-        @mods_pname1.personal_name.first.display_value.should_not == nil
-        @mods_pname1.personal_name.first.display_value_w_date.should_not == nil
-        @mods_cname.corporate_name.first.display_value.should_not == nil
-        @mods_cname.corporate_name.first.display_value_w_date.should_not == nil
+        expect(@mods_name.plain_name.first.display_value).not_to eq(nil)
+        expect(@mods_name.plain_name.first.display_value_w_date).not_to eq(nil)
+        expect(@mods_pname1.personal_name.first.display_value).not_to eq(nil)
+        expect(@mods_pname1.personal_name.first.display_value_w_date).not_to eq(nil)
+        expect(@mods_cname.corporate_name.first.display_value).not_to eq(nil)
+        expect(@mods_cname.corporate_name.first.display_value_w_date).not_to eq(nil)
       end
       it "should not include <affiliation> text" do
-        @mods_name.plain_name.first.display_value.should_not =~ Regexp.new(@affl)
+        expect(@mods_name.plain_name.first.display_value).not_to match(Regexp.new(@affl))
       end
       it "should not include <description> text" do
-        @mods_name.plain_name.first.display_value.should_not =~  Regexp.new(@desc)
+        expect(@mods_name.plain_name.first.display_value).not_to match(Regexp.new(@desc))
       end
       it "should not include <role> info" do
-        @mods_name.plain_name.first.display_value.should_not =~  Regexp.new(@role)
+        expect(@mods_name.plain_name.first.display_value).not_to match(Regexp.new(@role))
       end
       it "should be the value of the <displayForm> subelement if it exists" do
-        @mods_pname1.plain_name.first.display_value.should == @disp_form
+        expect(@mods_pname1.plain_name.first.display_value).to eq(@disp_form)
         x = "<mods #{@ns_decl}><name type='personal'>
               	  <namePart>Alterman, Eric</namePart>
               	  <displayForm>Eric Alterman</displayForm>
               </name><mods>"
         r = Mods::Record.new.from_str(x)         
-        r.plain_name.first.display_value.should == 'Eric Alterman'
+        expect(r.plain_name.first.display_value).to eq('Eric Alterman')
       end
       it "display_value should not include <namePart type='date'>" do
-        @mods_namepart_date.plain_name.first.display_value.should == 'Suzy'
+        expect(@mods_namepart_date.plain_name.first.display_value).to eq('Suzy')
       end
       it "date text should be added to display_value_w_date when it is available" do
-        @mods_namepart_date.plain_name.first.display_value_w_date.should == 'Suzy, 1920-'
+        expect(@mods_namepart_date.plain_name.first.display_value_w_date).to eq('Suzy, 1920-')
       end
       it "date text should not be added to display_value_w_dates if dates are already included" do
         x = "<mods #{@ns_decl}><name>
@@ -355,7 +355,7 @@ describe "Mods <name> Element" do
                   <displayForm>Woolf, Virginia, 1882-1941</namePart>
               </name></mods>"
         r = Mods::Record.new.from_str(x) 
-        r.plain_name.first.display_value_w_date.should == 'Woolf, Virginia, 1882-1941'
+        expect(r.plain_name.first.display_value_w_date).to eq('Woolf, Virginia, 1882-1941')
       end
       context "personal names" do
         before(:all) do
@@ -384,20 +384,20 @@ describe "Mods <name> Element" do
                   <namePart type='family'>Huston</namePart>
              </name></mods>"
           r = Mods::Record.new.from_str(x)
-          r.personal_name.first.display_value.should == 'Huston, John'
-          @pope.personal_name.first.display_value.should == 'John Paul II, Pope'
+          expect(r.personal_name.first.display_value).to eq('Huston, John')
+          expect(@pope.personal_name.first.display_value).to eq('John Paul II, Pope')
         end
         it "should be concatenation of untyped <namePart> elements if there is no family or given name" do
-          @pname2.personal_name.first.display_value.should == 'Crusty The Clown'
+          expect(@pname2.personal_name.first.display_value).to eq('Crusty The Clown')
         end
         it "should include <termOfAddress> elements, in order, comma separated" do
-          @pope.personal_name.first.display_value.should == 'John Paul II, Pope'
+          expect(@pope.personal_name.first.display_value).to eq('John Paul II, Pope')
         end
         it "display_value should not include date" do
-          @pope.personal_name.first.display_value.should_not =~ Regexp.new(@d)
+          expect(@pope.personal_name.first.display_value).not_to match(Regexp.new(@d))
         end
         it "date should be included in display_value_w_date" do
-          @pope.personal_name.first.display_value_w_date.should == "John Paul II, Pope, #{@d}"
+          expect(@pope.personal_name.first.display_value_w_date).to eq("John Paul II, Pope, #{@d}")
         end
       end
       context "not personal name (e.g. corporate)" do
@@ -407,7 +407,7 @@ describe "Mods <name> Element" do
             	<namePart>Court of Appeals (2nd Circuit)</namePart>
           </name></mods>"
           r = Mods::Record.new.from_str(x)
-          r.corporate_name.first.display_value.should == 'United States Court of Appeals (2nd Circuit)'
+          expect(r.corporate_name.first.display_value).to eq('United States Court of Appeals (2nd Circuit)')
         end
       end
     end # WITH namespaces
@@ -420,47 +420,47 @@ describe "Mods <name> Element" do
         @mods_namepart_date = Mods::Record.new.from_str(@namepart_xml.sub(" #{@ns_decl}", ''), false)
       end
       it "should be a string value for each name, not an Array" do
-        @mods_name.plain_name.first.display_value.should be_an_instance_of(String)
-        @mods_name.plain_name.first.display_value_w_date.should be_an_instance_of(String)
+        expect(@mods_name.plain_name.first.display_value).to be_an_instance_of(String)
+        expect(@mods_name.plain_name.first.display_value_w_date).to be_an_instance_of(String)
       end
       it "should return nil when there is no display_value" do
         x = "<mods><name>
                   <namePart></namePart>
               </name></mods>"
         r = Mods::Record.new.from_str(x, false)
-        r.plain_name.first.display_value.should == nil
+        expect(r.plain_name.first.display_value).to eq(nil)
       end
       it "should be applicable to all name term flavors (plain_name, personal_name, corporate_name ...)" do
-        @mods_name.plain_name.first.display_value.should_not == nil
-        @mods_name.plain_name.first.display_value_w_date.should_not == nil
-        @mods_pname1.personal_name.first.display_value.should_not == nil
-        @mods_pname1.personal_name.first.display_value_w_date.should_not == nil
-        @mods_cname.corporate_name.first.display_value.should_not == nil
-        @mods_cname.corporate_name.first.display_value_w_date.should_not == nil
+        expect(@mods_name.plain_name.first.display_value).not_to eq(nil)
+        expect(@mods_name.plain_name.first.display_value_w_date).not_to eq(nil)
+        expect(@mods_pname1.personal_name.first.display_value).not_to eq(nil)
+        expect(@mods_pname1.personal_name.first.display_value_w_date).not_to eq(nil)
+        expect(@mods_cname.corporate_name.first.display_value).not_to eq(nil)
+        expect(@mods_cname.corporate_name.first.display_value_w_date).not_to eq(nil)
       end
       it "should not include <affiliation> text" do
-        @mods_name.plain_name.first.display_value.should_not =~ Regexp.new(@affl)
+        expect(@mods_name.plain_name.first.display_value).not_to match(Regexp.new(@affl))
       end
       it "should not include <description> text" do
-        @mods_name.plain_name.first.display_value.should_not =~  Regexp.new(@desc)
+        expect(@mods_name.plain_name.first.display_value).not_to match(Regexp.new(@desc))
       end
       it "should not include <role> info" do
-        @mods_name.plain_name.first.display_value.should_not =~  Regexp.new(@role)
+        expect(@mods_name.plain_name.first.display_value).not_to match(Regexp.new(@role))
       end
       it "should be the value of the <displayForm> subelement if it exists" do
-        @mods_pname1.plain_name.first.display_value.should == @disp_form
+        expect(@mods_pname1.plain_name.first.display_value).to eq(@disp_form)
         x = "<mods><name type='personal'>
               	  <namePart>Alterman, Eric</namePart>
               	  <displayForm>Eric Alterman</displayForm>
               </name><mods>"
         r = Mods::Record.new.from_str(x, false)         
-        r.plain_name.first.display_value.should == 'Eric Alterman'
+        expect(r.plain_name.first.display_value).to eq('Eric Alterman')
       end
       it "display_value should not include <namePart type='date'>" do
-        @mods_namepart_date.plain_name.first.display_value.should == 'Suzy'
+        expect(@mods_namepart_date.plain_name.first.display_value).to eq('Suzy')
       end
       it "date text should be added to display_value_w_date when it is available" do
-        @mods_namepart_date.plain_name.first.display_value_w_date.should == 'Suzy, 1920-'
+        expect(@mods_namepart_date.plain_name.first.display_value_w_date).to eq('Suzy, 1920-')
       end
       it "date text should not be added to display_value_w_dates if dates are already included" do
         x = "<mods><name>
@@ -469,7 +469,7 @@ describe "Mods <name> Element" do
                   <displayForm>Woolf, Virginia, 1882-1941</namePart>
               </name></mods>"
         r = Mods::Record.new.from_str(x, false) 
-        r.plain_name.first.display_value_w_date.should == 'Woolf, Virginia, 1882-1941'
+        expect(r.plain_name.first.display_value_w_date).to eq('Woolf, Virginia, 1882-1941')
       end
       context "personal names" do
         before(:all) do
@@ -498,20 +498,20 @@ describe "Mods <name> Element" do
                   <namePart type='family'>Huston</namePart>
              </name></mods>"
           r = Mods::Record.new.from_str(x, false)
-          r.personal_name.first.display_value.should == 'Huston, John'
-          @pope.personal_name.first.display_value.should == 'John Paul II, Pope'
+          expect(r.personal_name.first.display_value).to eq('Huston, John')
+          expect(@pope.personal_name.first.display_value).to eq('John Paul II, Pope')
         end
         it "should be concatenation of untyped <namePart> elements if there is no family or given name" do
-          @pname2.personal_name.first.display_value.should == 'Crusty The Clown'
+          expect(@pname2.personal_name.first.display_value).to eq('Crusty The Clown')
         end
         it "should include <termOfAddress> elements, in order, comma separated" do
-          @pope.personal_name.first.display_value.should == 'John Paul II, Pope'
+          expect(@pope.personal_name.first.display_value).to eq('John Paul II, Pope')
         end
         it "display_value should not include date" do
-          @pope.personal_name.first.display_value.should_not =~ Regexp.new(@d)
+          expect(@pope.personal_name.first.display_value).not_to match(Regexp.new(@d))
         end
         it "date should be included in display_value_w_date" do
-          @pope.personal_name.first.display_value_w_date.should == "John Paul II, Pope, #{@d}"
+          expect(@pope.personal_name.first.display_value_w_date).to eq("John Paul II, Pope, #{@d}")
         end
       end
       context "not personal name (e.g. corporate)" do
@@ -521,7 +521,7 @@ describe "Mods <name> Element" do
             	<namePart>Court of Appeals (2nd Circuit)</namePart>
           </name></mods>"
           r = Mods::Record.new.from_str(x, false)
-          r.corporate_name.first.display_value.should == 'United States Court of Appeals (2nd Circuit)'
+          expect(r.corporate_name.first.display_value).to eq('United States Court of Appeals (2nd Circuit)')
         end
       end
     end # WITHOUT namespaces
@@ -561,36 +561,36 @@ describe "Mods <name> Element" do
       end  
       context "value" do
         it "should be the value of a text roleTerm" do
-          @mods_w_text.plain_name.role.value.should == ["Actor"]
+          expect(@mods_w_text.plain_name.role.value).to eq(["Actor"])
         end  
         it "should be the translation of the code if it is a marcrelator code and there is no text roleTerm" do
-          @mods_w_code.plain_name.role.value.should == ["Director"]
+          expect(@mods_w_code.plain_name.role.value).to eq(["Director"])
         end
         it "should be the value of the text roleTerm if there are both a code and a text roleTerm" do
-          @mods_w_both.plain_name.role.value.should == ["CreatorFake"]
+          expect(@mods_w_both.plain_name.role.value).to eq(["CreatorFake"])
         end
         it "should have 2 values if there are 2 role elements" do
-          @mods_mult_roles.plain_name.role.value.should == ['Creator', 'Performer']
+          expect(@mods_mult_roles.plain_name.role.value).to eq(['Creator', 'Performer'])
         end
       end
       context "authority" do
         it "should be empty if it is missing from xml" do
-          @mods_wo_authority.plain_name.role.authority.size.should == 0
+          expect(@mods_wo_authority.plain_name.role.authority.size).to eq(0)
         end
         it "should be the value of the authority attribute on the roleTerm element" do
-          @mods_w_code.plain_name.role.authority.should == ["marcrelator"]
-          @mods_w_text.plain_name.role.authority.should == ["marcrelator"]
-          @mods_w_both.plain_name.role.authority.should == ["marcrelator"]
+          expect(@mods_w_code.plain_name.role.authority).to eq(["marcrelator"])
+          expect(@mods_w_text.plain_name.role.authority).to eq(["marcrelator"])
+          expect(@mods_w_both.plain_name.role.authority).to eq(["marcrelator"])
         end
       end
       context "code" do
         it "should be empty if the roleTerm is not of type code" do
-          @mods_w_text.plain_name.role.code.size.should == 0
-          @mods_wo_authority.plain_name.role.code.size.should == 0
+          expect(@mods_w_text.plain_name.role.code.size).to eq(0)
+          expect(@mods_wo_authority.plain_name.role.code.size).to eq(0)
         end
         it "should be the value of the roleTerm element if element's type attribute is 'code'" do
-          @mods_w_code.plain_name.role.code.should == ["drt"]
-          @mods_w_both.plain_name.role.code.should == ["cre"]
+          expect(@mods_w_code.plain_name.role.code).to eq(["drt"])
+          expect(@mods_w_both.plain_name.role.code).to eq(["cre"])
         end
       end
       context "pertaining to a specific name" do
@@ -620,34 +620,34 @@ describe "Mods <name> Element" do
         end
         it "roles should be empty array when there is no role element" do
           @mods_rec.from_str(@mods_w_pers_name_ns)
-          @mods_rec.personal_name.first.role.size.should == 0
+          expect(@mods_rec.personal_name.first.role.size).to eq(0)
         end
         it "object should have same number of roles as it has role nodes in xml" do
-          @mods_complex.plain_name[0].role.size.should == 1
-          @mods_complex.plain_name[1].role.size.should == 2
-          @mods_complex.plain_name[2].role.size.should == 1
+          expect(@mods_complex.plain_name[0].role.size).to eq(1)
+          expect(@mods_complex.plain_name[1].role.size).to eq(2)
+          expect(@mods_complex.plain_name[2].role.size).to eq(1)
         end
         context "name's roles should be correctly populated" do
           it "text attribute" do
-            @mods_complex.plain_name[0].role.value.should == ['Director']
-            @mods_complex.plain_name[1].role.value.should == ['CreatorFake', 'Actor']
-            @mods_complex.plain_name[2].role.value.should == ['Actor']
+            expect(@mods_complex.plain_name[0].role.value).to eq(['Director'])
+            expect(@mods_complex.plain_name[1].role.value).to eq(['CreatorFake', 'Actor'])
+            expect(@mods_complex.plain_name[2].role.value).to eq(['Actor'])
           end
           it "code attribute" do
-            @mods_complex.plain_name[0].role.code.should == ['drt']
-            @mods_complex.plain_name[1].role.code.should == ['cre']
-            @mods_complex.plain_name[2].role.code.should == ['cre']
+            expect(@mods_complex.plain_name[0].role.code).to eq(['drt'])
+            expect(@mods_complex.plain_name[1].role.code).to eq(['cre'])
+            expect(@mods_complex.plain_name[2].role.code).to eq(['cre'])
           end
           it "authority attribute" do
-            @mods_complex.plain_name[0].role.authority.should == ['marcrelator']
-            @mods_complex.plain_name[1].role.authority.should == ['marcrelator', 'marcrelator']
-            @mods_complex.plain_name[2].role.authority.should == ['marcrelator']
+            expect(@mods_complex.plain_name[0].role.authority).to eq(['marcrelator'])
+            expect(@mods_complex.plain_name[1].role.authority).to eq(['marcrelator', 'marcrelator'])
+            expect(@mods_complex.plain_name[2].role.authority).to eq(['marcrelator'])
           end
           it "multiple roles" do
-            @mods_mult_roles.plain_name.first.role.value.should == ['Creator', 'Performer']
-            @mods_mult_roles.plain_name.first.role.code.should == ['cre']
-            @mods_mult_roles.plain_name.role.first.roleTerm.authority.first.should == 'marcrelator'
-            @mods_mult_roles.plain_name.role.last.roleTerm.authority.size.should == 0
+            expect(@mods_mult_roles.plain_name.first.role.value).to eq(['Creator', 'Performer'])
+            expect(@mods_mult_roles.plain_name.first.role.code).to eq(['cre'])
+            expect(@mods_mult_roles.plain_name.role.first.roleTerm.authority.first).to eq('marcrelator')
+            expect(@mods_mult_roles.plain_name.role.last.roleTerm.authority.size).to eq(0)
           end      
         end
       end # pertaining to a specific name
@@ -663,36 +663,36 @@ describe "Mods <name> Element" do
       end
       context "value" do
         it "should be the value of a text roleTerm" do
-          @mods_w_text.plain_name.role.value.should == ["Actor"]
+          expect(@mods_w_text.plain_name.role.value).to eq(["Actor"])
         end  
         it "should be the translation of the code if it is a marcrelator code and there is no text roleTerm" do
-          @mods_w_code.plain_name.role.value.should == ["Director"]
+          expect(@mods_w_code.plain_name.role.value).to eq(["Director"])
         end
         it "should be the value of the text roleTerm if there are both a code and a text roleTerm" do
-          @mods_w_both.plain_name.role.value.should == ["CreatorFake"]
+          expect(@mods_w_both.plain_name.role.value).to eq(["CreatorFake"])
         end
         it "should have 2 values if there are 2 role elements" do
-          @mods_mult_roles.plain_name.role.value.should == ['Creator', 'Performer']
+          expect(@mods_mult_roles.plain_name.role.value).to eq(['Creator', 'Performer'])
         end
       end
       context "authority" do
         it "should be empty if it is missing from xml" do
-          @mods_wo_authority.plain_name.role.authority.size.should == 0
+          expect(@mods_wo_authority.plain_name.role.authority.size).to eq(0)
         end
         it "should be the value of the authority attribute on the roleTerm element" do
-          @mods_w_code.plain_name.role.authority.should == ["marcrelator"]
-          @mods_w_text.plain_name.role.authority.should == ["marcrelator"]
-          @mods_w_both.plain_name.role.authority.should == ["marcrelator"]
+          expect(@mods_w_code.plain_name.role.authority).to eq(["marcrelator"])
+          expect(@mods_w_text.plain_name.role.authority).to eq(["marcrelator"])
+          expect(@mods_w_both.plain_name.role.authority).to eq(["marcrelator"])
         end
       end
       context "code" do
         it "should be empty if the roleTerm is not of type code" do
-          @mods_w_text.plain_name.role.code.size.should == 0
-          @mods_wo_authority.plain_name.role.code.size.should == 0
+          expect(@mods_w_text.plain_name.role.code.size).to eq(0)
+          expect(@mods_wo_authority.plain_name.role.code.size).to eq(0)
         end
         it "should be the value of the roleTerm element if element's type attribute is 'code'" do
-          @mods_w_code.plain_name.role.code.should == ["drt"]
-          @mods_w_both.plain_name.role.code.should == ["cre"]
+          expect(@mods_w_code.plain_name.role.code).to eq(["drt"])
+          expect(@mods_w_both.plain_name.role.code).to eq(["cre"])
         end
       end
       context "pertaining to a specific name" do
@@ -722,34 +722,34 @@ describe "Mods <name> Element" do
         end
         it "roles should be empty array when there is no role element" do
           @mods_rec.from_str(@mods_w_pers_name_ns)
-          @mods_rec.personal_name.first.role.size.should == 0
+          expect(@mods_rec.personal_name.first.role.size).to eq(0)
         end
         it "object should have same number of roles as it has role nodes in xml" do
-          @mods_complex.plain_name[0].role.size.should == 1
-          @mods_complex.plain_name[1].role.size.should == 2
-          @mods_complex.plain_name[2].role.size.should == 1
+          expect(@mods_complex.plain_name[0].role.size).to eq(1)
+          expect(@mods_complex.plain_name[1].role.size).to eq(2)
+          expect(@mods_complex.plain_name[2].role.size).to eq(1)
         end
         context "name's roles should be correctly populated" do
           it "text attribute" do
-            @mods_complex.plain_name[0].role.value.should == ['Director']
-            @mods_complex.plain_name[1].role.value.should == ['CreatorFake', 'Actor']
-            @mods_complex.plain_name[2].role.value.should == ['Actor']
+            expect(@mods_complex.plain_name[0].role.value).to eq(['Director'])
+            expect(@mods_complex.plain_name[1].role.value).to eq(['CreatorFake', 'Actor'])
+            expect(@mods_complex.plain_name[2].role.value).to eq(['Actor'])
           end
           it "code attribute" do
-            @mods_complex.plain_name[0].role.code.should == ['drt']
-            @mods_complex.plain_name[1].role.code.should == ['cre']
-            @mods_complex.plain_name[2].role.code.should == ['cre']
+            expect(@mods_complex.plain_name[0].role.code).to eq(['drt'])
+            expect(@mods_complex.plain_name[1].role.code).to eq(['cre'])
+            expect(@mods_complex.plain_name[2].role.code).to eq(['cre'])
           end
           it "authority attribute" do
-            @mods_complex.plain_name[0].role.authority.should == ['marcrelator']
-            @mods_complex.plain_name[1].role.authority.should == ['marcrelator', 'marcrelator']
-            @mods_complex.plain_name[2].role.authority.should == ['marcrelator']
+            expect(@mods_complex.plain_name[0].role.authority).to eq(['marcrelator'])
+            expect(@mods_complex.plain_name[1].role.authority).to eq(['marcrelator', 'marcrelator'])
+            expect(@mods_complex.plain_name[2].role.authority).to eq(['marcrelator'])
           end
           it "multiple roles" do
-            @mods_mult_roles.plain_name.first.role.value.should == ['Creator', 'Performer']
-            @mods_mult_roles.plain_name.first.role.code.should == ['cre']
-            @mods_mult_roles.plain_name.role.first.roleTerm.authority.first.should == 'marcrelator'
-            @mods_mult_roles.plain_name.role.last.roleTerm.authority.size.should == 0
+            expect(@mods_mult_roles.plain_name.first.role.value).to eq(['Creator', 'Performer'])
+            expect(@mods_mult_roles.plain_name.first.role.code).to eq(['cre'])
+            expect(@mods_mult_roles.plain_name.role.first.roleTerm.authority.first).to eq('marcrelator')
+            expect(@mods_mult_roles.plain_name.role.last.roleTerm.authority.size).to eq(0)
           end      
         end
       end # pertaining to a specific name

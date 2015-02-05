@@ -218,15 +218,15 @@ describe "Mods <originInfo> Element" do
         context "<placeTerm> child element" do
           it "should get element values" do
             vals = @mods_rec.from_str(@place_term_plain_mult).origin_info.place.placeTerm.map { |e| e.text}
-            vals.size.should == 2
-            vals.should include("France")
-            vals.should include("Italy")
+            expect(vals.size).to eq(2)
+            expect(vals).to include("France")
+            expect(vals).to include("Italy")
           end
           it "should get authority attribute" do
-            @mods_rec.from_str(@place_term_code).origin_info.place.placeTerm.authority.should == ["marccountry"]
+            expect(@mods_rec.from_str(@place_term_code).origin_info.place.placeTerm.authority).to eq(["marccountry"])
           end
           it "should get type(_at) attribute" do
-            @mods_rec.from_str(@place_term_code).origin_info.place.placeTerm.type_at.should == ["code"]
+            expect(@mods_rec.from_str(@place_term_code).origin_info.place.placeTerm.type_at).to eq(["code"])
           end
         end # placeTerm
       end # place
@@ -239,7 +239,7 @@ describe "Mods <originInfo> Element" do
         end
         it "should get element values" do
           vals = @mods_rec.from_str("<mods #{@ns_decl}><originInfo><publisher>Olney</publisher></origin_info></mods>").origin_info.publisher
-          vals.map { |n| n.text }.should == ["Olney"]
+          expect(vals.map { |n| n.text }).to eq(["Olney"])
         end
       end
 
@@ -247,39 +247,39 @@ describe "Mods <originInfo> Element" do
         it "should recognize each element" do
           Mods::ORIGIN_INFO_DATE_ELEMENTS.each { |elname|
             @mods_rec.from_str("<mods #{@ns_decl}><originInfo><#{elname}>date</#{elname}></originInfo></mods>")
-            @mods_rec.origin_info.send(elname.to_sym).map { |n| n.text }.should == ["date"]
+            expect(@mods_rec.origin_info.send(elname.to_sym).map { |n| n.text }).to eq(["date"])
           }
         end
         it "should recognize encoding attribute on each element" do
           Mods::ORIGIN_INFO_DATE_ELEMENTS.each { |elname|
             @mods_rec.from_str("<mods #{@ns_decl}><originInfo><#{elname} encoding='foo'>date</#{elname}></originInfo></mods>")
-            @mods_rec.origin_info.send(elname.to_sym).encoding.should == ["foo"]
+            expect(@mods_rec.origin_info.send(elname.to_sym).encoding).to eq(["foo"])
           }
         end
         it "should recognize keyDate attribute" do
           Mods::ORIGIN_INFO_DATE_ELEMENTS.each { |elname|
             @mods_rec.from_str("<mods #{@ns_decl}><originInfo><#{elname} keyDate='foo'>date</#{elname}></originInfo></mods>")
-            @mods_rec.origin_info.send(elname.to_sym).keyDate.should == ["foo"]
+            expect(@mods_rec.origin_info.send(elname.to_sym).keyDate).to eq(["foo"])
           }
         end
         it "should recognize point attribute" do
           # NOTE: values allowed are 'start' and 'end'
           Mods::ORIGIN_INFO_DATE_ELEMENTS.each { |elname|
             @mods_rec.from_str("<mods #{@ns_decl}><originInfo><#{elname} point='foo'>date</#{elname}></originInfo></mods>")
-            @mods_rec.origin_info.send(elname.to_sym).point.should == ["foo"]
+            expect(@mods_rec.origin_info.send(elname.to_sym).point).to eq(["foo"])
           }
         end
         it "should recognize qualifier attribute" do
           Mods::ORIGIN_INFO_DATE_ELEMENTS.each { |elname|
             @mods_rec.from_str("<mods #{@ns_decl}><originInfo><#{elname} qualifier='foo'>date</#{elname}></originInfo></mods>")
-            @mods_rec.origin_info.send(elname.to_sym).qualifier.should == ["foo"]
+            expect(@mods_rec.origin_info.send(elname.to_sym).qualifier).to eq(["foo"])
           }
         end
         it "should recognize type attribute only on dateOther" do
           Mods::ORIGIN_INFO_DATE_ELEMENTS.each { |elname|
             @mods_rec.from_str("<mods #{@ns_decl}><originInfo><#{elname} type='foo'>date</#{elname}></originInfo></mods>")
             if elname == 'dateOther'
-              @mods_rec.origin_info.send(elname.to_sym).type_at.should == ["foo"]
+              expect(@mods_rec.origin_info.send(elname.to_sym).type_at).to eq(["foo"])
             else
               expect { @mods_rec.origin_info.send(elname.to_sym).type_at}.to raise_exception(NoMethodError, /type_at/)
             end
@@ -289,7 +289,7 @@ describe "Mods <originInfo> Element" do
 
       it "<edition> child element" do
         xml = "<mods #{@ns_decl}><originInfo><edition>7th ed.</edition></originInfo></mods>"
-        @mods_rec.from_str(xml).origin_info.edition.map { |n| n.text }.should == ['7th ed.']
+        expect(@mods_rec.from_str(xml).origin_info.edition.map { |n| n.text }).to eq(['7th ed.'])
       end
 
       context "<issuance> child element" do
@@ -297,7 +297,7 @@ describe "Mods <originInfo> Element" do
           @ex = "<mods #{@ns_decl}><originInfo><issuance>monographic</issuance></originInfo></mods>"
         end
         it "should get element value" do
-          @mods_rec.from_str(@ex).origin_info.issuance.map { |n| n.text }.should == ['monographic']
+          expect(@mods_rec.from_str(@ex).origin_info.issuance.map { |n| n.text }).to eq(['monographic'])
         end
       end
 
@@ -307,10 +307,10 @@ describe "Mods <originInfo> Element" do
           @origin_info = @mods_rec.from_str(xml).origin_info
         end
         it "should get element value" do
-          @origin_info.frequency.map { |n| n.text }.should == ["Annual"]
+          expect(@origin_info.frequency.map { |n| n.text }).to eq(["Annual"])
         end
         it "should recognize the authority attribute" do
-          @origin_info.frequency.authority.should == ["marcfrequency"]
+          expect(@origin_info.frequency.authority).to eq(["marcfrequency"])
         end
       end
     end # WITH namspaces
@@ -331,15 +331,15 @@ describe "Mods <originInfo> Element" do
         context "<placeTerm> child element" do
           it "should get element values" do
             vals = @mods_rec.from_str(@place_term_plain_mult, false).origin_info.place.placeTerm.map { |e| e.text}
-            vals.size.should == 2
-            vals.should include("France")
-            vals.should include("Italy")
+            expect(vals.size).to eq(2)
+            expect(vals).to include("France")
+            expect(vals).to include("Italy")
           end
           it "should get authority attribute" do
-            @mods_rec.from_str(@place_term_code, false).origin_info.place.placeTerm.authority.should == ["marccountry"]
+            expect(@mods_rec.from_str(@place_term_code, false).origin_info.place.placeTerm.authority).to eq(["marccountry"])
           end
           it "should get type(_at) attribute" do
-            @mods_rec.from_str(@place_term_code, false).origin_info.place.placeTerm.type_at.should == ["code"]
+            expect(@mods_rec.from_str(@place_term_code, false).origin_info.place.placeTerm.type_at).to eq(["code"])
           end
         end # placeTerm
       end # place
@@ -352,7 +352,7 @@ describe "Mods <originInfo> Element" do
         end
         it "should get element values" do
           vals = @mods_rec.from_str("<mods><originInfo><publisher>Olney</publisher></origin_info></mods>", false).origin_info.publisher
-          vals.map { |n| n.text }.should == ["Olney"]
+          expect(vals.map { |n| n.text }).to eq(["Olney"])
         end
       end
 
@@ -360,39 +360,39 @@ describe "Mods <originInfo> Element" do
         it "should recognize each element" do
           Mods::ORIGIN_INFO_DATE_ELEMENTS.each { |elname|
             @mods_rec.from_str("<mods><originInfo><#{elname}>date</#{elname}></originInfo></mods>", false)
-            @mods_rec.origin_info.send(elname.to_sym).map { |n| n.text }.should == ["date"]
+            expect(@mods_rec.origin_info.send(elname.to_sym).map { |n| n.text }).to eq(["date"])
           }
         end
         it "should recognize encoding attribute on each element" do
           Mods::ORIGIN_INFO_DATE_ELEMENTS.each { |elname|
             @mods_rec.from_str("<mods><originInfo><#{elname} encoding='foo'>date</#{elname}></originInfo></mods>", false)
-            @mods_rec.origin_info.send(elname.to_sym).encoding.should == ["foo"]
+            expect(@mods_rec.origin_info.send(elname.to_sym).encoding).to eq(["foo"])
           }
         end
         it "should recognize keyDate attribute" do
           Mods::ORIGIN_INFO_DATE_ELEMENTS.each { |elname|
             @mods_rec.from_str("<mods><originInfo><#{elname} keyDate='foo'>date</#{elname}></originInfo></mods>", false)
-            @mods_rec.origin_info.send(elname.to_sym).keyDate.should == ["foo"]
+            expect(@mods_rec.origin_info.send(elname.to_sym).keyDate).to eq(["foo"])
           }
         end
         it "should recognize point attribute" do
           # NOTE: values allowed are 'start' and 'end'
           Mods::ORIGIN_INFO_DATE_ELEMENTS.each { |elname|
             @mods_rec.from_str("<mods><originInfo><#{elname} point='foo'>date</#{elname}></originInfo></mods>", false)
-            @mods_rec.origin_info.send(elname.to_sym).point.should == ["foo"]
+            expect(@mods_rec.origin_info.send(elname.to_sym).point).to eq(["foo"])
           }
         end
         it "should recognize qualifier attribute" do
           Mods::ORIGIN_INFO_DATE_ELEMENTS.each { |elname|
             @mods_rec.from_str("<mods><originInfo><#{elname} qualifier='foo'>date</#{elname}></originInfo></mods>", false)
-            @mods_rec.origin_info.send(elname.to_sym).qualifier.should == ["foo"]
+            expect(@mods_rec.origin_info.send(elname.to_sym).qualifier).to eq(["foo"])
           }
         end
         it "should recognize type attribute only on dateOther" do
           Mods::ORIGIN_INFO_DATE_ELEMENTS.each { |elname|
             @mods_rec.from_str("<mods><originInfo><#{elname} type='foo'>date</#{elname}></originInfo></mods>", false)
             if elname == 'dateOther'
-              @mods_rec.origin_info.send(elname.to_sym).type_at.should == ["foo"]
+              expect(@mods_rec.origin_info.send(elname.to_sym).type_at).to eq(["foo"])
             else
               expect { @mods_rec.origin_info.send(elname.to_sym).type_at}.to raise_exception(NoMethodError, /type_at/)
             end
@@ -402,7 +402,7 @@ describe "Mods <originInfo> Element" do
 
       it "<edition> child element" do
         xml = "<mods><originInfo><edition>7th ed.</edition></originInfo></mods>"
-        @mods_rec.from_str(xml, false).origin_info.edition.map { |n| n.text }.should == ['7th ed.']
+        expect(@mods_rec.from_str(xml, false).origin_info.edition.map { |n| n.text }).to eq(['7th ed.'])
       end
 
       context "<issuance> child element" do
@@ -410,7 +410,7 @@ describe "Mods <originInfo> Element" do
           @ex = "<mods><originInfo><issuance>monographic</issuance></originInfo></mods>"
         end
         it "should get element value" do
-          @mods_rec.from_str(@ex, false).origin_info.issuance.map { |n| n.text }.should == ['monographic']
+          expect(@mods_rec.from_str(@ex, false).origin_info.issuance.map { |n| n.text }).to eq(['monographic'])
         end
       end
 
@@ -420,10 +420,10 @@ describe "Mods <originInfo> Element" do
           @origin_info = @mods_rec.from_str(xml, false).origin_info
         end
         it "should get element value" do
-          @origin_info.frequency.map { |n| n.text }.should == ["Annual"]
+          expect(@origin_info.frequency.map { |n| n.text }).to eq(["Annual"])
         end
         it "should recognize the authority attribute" do
-          @origin_info.frequency.authority.should == ["marcfrequency"]
+          expect(@origin_info.frequency.authority).to eq(["marcfrequency"])
         end
       end
     end # WITHOUT namspaces

@@ -8,21 +8,21 @@ describe "Mods::Reader" do
     # url is for a namespaced document
     @example_url = 'http://www.loc.gov/standards/mods/v3/mods99042030_linkedDataAdded.xml'
     @example_default_ns_str = '<mods xmlns="http://www.loc.gov/mods/v3"><note>default ns</note></mods>'
-    @example_ns_str = '<mods:mods xmlns:mods="http://www.loc.gov/mods/v3"><mods:note>ns</mods:note></mods:mods>'
-    @example_no_ns_str = '<mods><note>no ns</note></mods>'
-    @example_wrong_ns_str = '<mods xmlns="wrong"><note>wrong ns</note></mods>'
+    @example_ns_str         = '<mods:mods xmlns:mods="http://www.loc.gov/mods/v3"><mods:note>ns</mods:note></mods:mods>'
+    @example_no_ns_str      = '<mods><note>no ns</note></mods>'
+    @example_wrong_ns_str   = '<mods xmlns="wrong"><note>wrong ns</note></mods>'
     @doc_from_str_default_ns = Mods::Reader.new.from_str(@example_ns_str)
-    @doc_from_str_ns = Mods::Reader.new.from_str(@example_ns_str)
-    @doc_from_str_no_ns = Mods::Reader.new.from_str(@example_no_ns_str)
-    @doc_from_str_wrong_ns = Mods::Reader.new.from_str(@example_wrong_ns_str)
+    @doc_from_str_ns         = Mods::Reader.new.from_str(@example_ns_str)
+    @doc_from_str_no_ns      = Mods::Reader.new.from_str(@example_no_ns_str)
+    @doc_from_str_wrong_ns   = Mods::Reader.new.from_str(@example_wrong_ns_str)
     @from_url = Mods::Reader.new.from_url(@example_url)
   end
 
   it "from_str should turn an xml string into a Nokogiri::XML::Document object" do
     expect(@doc_from_str_default_ns).to be_instance_of(Nokogiri::XML::Document)
-    expect(@doc_from_str_ns).to be_instance_of(Nokogiri::XML::Document)
-    expect(@doc_from_str_no_ns).to be_instance_of(Nokogiri::XML::Document)
-    expect(@doc_from_str_wrong_ns).to be_instance_of(Nokogiri::XML::Document)
+    expect(@doc_from_str_ns        ).to be_instance_of(Nokogiri::XML::Document)
+    expect(@doc_from_str_no_ns     ).to be_instance_of(Nokogiri::XML::Document)
+    expect(@doc_from_str_wrong_ns  ).to be_instance_of(Nokogiri::XML::Document)
   end
 
   context "from_url" do
@@ -48,32 +48,32 @@ describe "Mods::Reader" do
   context "namespace awareness" do
     it "should care about namespace by default" do
       r = Mods::Reader.new
-      r.namespace_aware.should == true
-      @doc_from_str_default_ns.root.namespace.href.should ==  Mods::MODS_NS
-      @doc_from_str_default_ns.xpath('/m:mods/m:note', @ns_hash).text.should == "ns"
-      @doc_from_str_default_ns.xpath('/mods/note').size.should == 0
-      @doc_from_str_ns.root.namespace.href.should ==  Mods::MODS_NS
-      @doc_from_str_ns.xpath('/m:mods/m:note', @ns_hash).text.should == "ns"
-      @doc_from_str_ns.xpath('/mods/note').size.should == 0
-      @doc_from_str_no_ns.xpath('/m:mods/m:note', @ns_hash).size.should == 0
-      @doc_from_str_no_ns.xpath('/mods/note').text.should == "no ns"
-      @doc_from_str_wrong_ns.root.namespace.href.should ==  "wrong"
-      @doc_from_str_wrong_ns.xpath('/m:mods/m:note', @ns_hash).size.should == 0
-      @doc_from_str_wrong_ns.xpath('/mods/note').size.should == 0
+      expect(r.namespace_aware).to be_truthy
+      expect(@doc_from_str_default_ns.root.namespace.href).to eq(Mods::MODS_NS)
+      expect(@doc_from_str_default_ns.xpath('/m:mods/m:note', @ns_hash).text).to eq("ns")
+      expect(@doc_from_str_default_ns.xpath('/mods/note').size).to eq(0)
+      expect(@doc_from_str_ns.root.namespace.href).to eq(Mods::MODS_NS)
+      expect(@doc_from_str_ns.xpath('/m:mods/m:note', @ns_hash).text).to eq("ns")
+      expect(@doc_from_str_ns.xpath('/mods/note').size).to eq(0)
+      expect(@doc_from_str_no_ns.xpath('/m:mods/m:note', @ns_hash).size).to eq(0)
+      expect(@doc_from_str_no_ns.xpath('/mods/note').text).to eq("no ns")
+      expect(@doc_from_str_wrong_ns.root.namespace.href).to eq("wrong")
+      expect(@doc_from_str_wrong_ns.xpath('/m:mods/m:note', @ns_hash).size).to eq(0)
+      expect(@doc_from_str_wrong_ns.xpath('/mods/note').size).to eq(0)
     end
 
     it "should be allowed not to care about namespaces" do
       r = Mods::Reader.new(false)
-      r.namespace_aware.should == false
+      expect(r.namespace_aware).to be_falsey
       my_from_str_ns = r.from_str(@example_ns_str)
-      my_from_str_ns.xpath('/m:mods/m:note', @ns_hash).size.should == 0
-      my_from_str_ns.xpath('/mods/note').text.should == "ns"
+      expect(my_from_str_ns.xpath('/m:mods/m:note', @ns_hash).size).to eq(0)
+      expect(my_from_str_ns.xpath('/mods/note').text).to eq("ns")
       my_from_str_no_ns = r.from_str(@example_no_ns_str)
-      my_from_str_no_ns.xpath('/m:mods/m:note', @ns_hash).size.should == 0
-      my_from_str_no_ns.xpath('/mods/note').text.should == "no ns"
+      expect(my_from_str_no_ns.xpath('/m:mods/m:note', @ns_hash).size).to eq(0)
+      expect(my_from_str_no_ns.xpath('/mods/note').text).to eq("no ns")
       my_from_str_wrong_ns = r.from_str(@example_wrong_ns_str)
-      my_from_str_wrong_ns.xpath('/m:mods/m:note', @ns_hash).size.should == 0
-      my_from_str_wrong_ns.xpath('/mods/note').text.should == "wrong ns"
+      expect(my_from_str_wrong_ns.xpath('/m:mods/m:note', @ns_hash).size).to eq(0)
+      expect(my_from_str_wrong_ns.xpath('/mods/note').text).to eq("wrong ns")
     end
   end
 
@@ -92,20 +92,20 @@ describe "Mods::Reader" do
                     </mods:name>
                   </mods:mods>'
       reader = Mods::Reader.new.from_str(utf_mods)
-      reader.encoding.should eql("UTF-8")
+      expect(reader.encoding).to eql("UTF-8")
     end
     it "should remove xsi:schemaLocation attribute from mods element if removing namespaces" do
       str = '<ns3:mods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns3="http://www.loc.gov/mods/v3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-2.xsd">
-				<ns3:note>be very frightened</ns3:note></ns3:mods>'
-			ng_xml = Nokogiri::XML(str)
-			# Nokogiri treats namespaced attributes differently in jruby than in ruby
-			(ng_xml.root.has_attribute?('schemaLocation') || ng_xml.root.has_attribute?('xsi:schemaLocation')).should == true
-			r = Mods::Reader.new
+        <ns3:note>be very frightened</ns3:note></ns3:mods>'
+      ng_xml = Nokogiri::XML(str)
+      # Nokogiri treats namespaced attributes differently in jruby than in ruby
+      expect(ng_xml.root.has_attribute?('schemaLocation') || ng_xml.root.has_attribute?('xsi:schemaLocation')).to be_truthy
+      r = Mods::Reader.new
       r.namespace_aware = false
       r.from_nk_node(ng_xml)
       # the below are different depending on jruby or ruby ... oy
-      r.mods_ng_xml.root.attributes.keys.should_not include('schemaLocation')
-      r.mods_ng_xml.root.attributes.keys.should_not include('xsi:schemaLocation')
+      expect(r.mods_ng_xml.root.attributes.keys).not_to include('schemaLocation')
+      expect(r.mods_ng_xml.root.attributes.keys).not_to include('xsi:schemaLocation')
     end
   end
 
@@ -137,16 +137,16 @@ describe "Mods::Reader" do
       @mods_ng_doc = @r.from_nk_node(@mods_node)
     end
     it "should turn the Nokogiri::XML::Node into a Nokogiri::XML::Document object" do
-      @mods_ng_doc.should be_kind_of(Nokogiri::XML::Document)
+      expect(@mods_ng_doc).to be_kind_of(Nokogiri::XML::Document)
     end
     it "should care about namespace by default" do
-      @mods_ng_doc.xpath('/m:mods/m:titleInfo/m:title', @ns_hash).text.should == "boo"
+      expect(@mods_ng_doc.xpath('/m:mods/m:titleInfo/m:title', @ns_hash).text).to eq("boo")
     end
     it "should be able not to care about namespaces" do
       @r.namespace_aware = false
       mods_ng_doc = @r.from_nk_node(@mods_node)
-      mods_ng_doc.xpath('/m:mods/m:titleInfo/m:title', @ns_hash).size.should == 0
-      mods_ng_doc.xpath('/mods/titleInfo/title').text.should == "boo"
+      expect(mods_ng_doc.xpath('/m:mods/m:titleInfo/m:title', @ns_hash).size).to eq(0)
+      expect(mods_ng_doc.xpath('/mods/titleInfo/title').text).to eq("boo")
       @r.namespace_aware = true
     end
   end # context from_nk_node

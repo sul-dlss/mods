@@ -40,50 +40,50 @@ describe "Mods <part> Element" do
       end
 
       it "should be a NodeSet" do
-        [@ex, @ex2, @detail].each { |p| p.should be_an_instance_of(Nokogiri::XML::NodeSet) }
+        [@ex, @ex2, @detail].each { |p| expect(p).to be_an_instance_of(Nokogiri::XML::NodeSet) }
       end
       it "should have as many members as there are <part> elements in the xml" do
-        [@ex, @ex2, @detail].each { |p| p.size.should == 1 }
+        [@ex, @ex2, @detail].each { |p| expect(p.size).to eq(1) }
       end
       it "should recognize type(_at) attribute on <part> element" do
         @mods_rec.from_str("<mods #{@ns_decl}><part type='val'>anything</part></mods>")
-        @mods_rec.part.type_at.should == ['val']
+        expect(@mods_rec.part.type_at).to eq(['val'])
       end
       it "should recognize order attribute on <part> element" do
         @mods_rec.from_str("<mods #{@ns_decl}><part order='val'>anything</part></mods>")
-        @mods_rec.part.order.should == ['val']
+        expect(@mods_rec.part.order).to eq(['val'])
       end
       it "should recognize ID attribute on <part> element as id_at term" do
         @mods_rec.from_str("<mods #{@ns_decl}><part ID='val'>anything</part></mods>")
-        @mods_rec.part.id_at.should == ['val']
+        expect(@mods_rec.part.id_at).to eq(['val'])
       end
 
       context "<detail> child element" do
         it "should be a NodeSet" do
-          [@ex, @ex2, @detail].each { |p| p.detail.should be_an_instance_of(Nokogiri::XML::NodeSet) }
+          [@ex, @ex2, @detail].each { |p| expect(p.detail).to be_an_instance_of(Nokogiri::XML::NodeSet) }
         end
         it "detail NodeSet should have as many Nodes as there are <detail> elements in the xml" do
-          [@ex, @ex2, @detail].each { |p| p.detail.size.should == 1 }
+          [@ex, @ex2, @detail].each { |p| expect(p.detail.size).to eq(1) }
         end
         it "should recognize type(_at) attribute on <detail> element" do
-          @ex2.detail.type_at.should == ['page number']
-          @detail.detail.type_at.should == ['issue']
+          expect(@ex2.detail.type_at).to eq(['page number'])
+          expect(@detail.detail.type_at).to eq(['issue'])
         end
         it "should recognize level attribute on <detail> element" do
           @mods_rec.from_str("<mods #{@ns_decl}><part><detail level='val'>anything</detail></part></mods>")
-          @mods_rec.part.detail.level.should == ['val']
+          expect(@mods_rec.part.detail.level).to eq(['val'])
         end
         context "<number> child element" do
           it "should be a NodeSet" do
-            [@ex, @ex2, @detail].each { |p| p.detail.number.should be_an_instance_of(Nokogiri::XML::NodeSet) }
+            [@ex, @ex2, @detail].each { |p| expect(p.detail.number).to be_an_instance_of(Nokogiri::XML::NodeSet) }
           end
           it "number NodeSet should have as many Nodes as there are <number> elements in the xml" do
-            [@ex2, @detail].each { |p| p.detail.number.size.should == 1 }
-            @ex.detail.number.size.should == 0
+            [@ex2, @detail].each { |p| expect(p.detail.number.size).to eq(1) }
+            expect(@ex.detail.number.size).to eq(0)
           end
           it "text should get element value" do
-            @ex2.detail.number.map { |n| n.text }.should == ['3']
-            @detail.detail.number.map { |n| n.text }.should == ['1']
+            expect(@ex2.detail.number.map { |n| n.text }).to eq(['3'])
+            expect(@detail.detail.number.map { |n| n.text }).to eq(['1'])
           end
         end # <number>
         context "<caption> child element" do
@@ -92,68 +92,68 @@ describe "Mods <part> Element" do
             @caption = @mods_rec.part.detail.caption
           end
           it "should be a NodeSet" do
-            [@ex, @ex2, @detail].each { |p| p.detail.caption.should be_an_instance_of(Nokogiri::XML::NodeSet) }
-            @caption.should be_an_instance_of(Nokogiri::XML::NodeSet)
+            [@ex, @ex2, @detail].each { |p| expect(p.detail.caption).to be_an_instance_of(Nokogiri::XML::NodeSet) }
+            expect(@caption).to be_an_instance_of(Nokogiri::XML::NodeSet)
           end
           it "caption NodeSet should have as many Nodes as there are <caption> elements in the xml" do
-            [@ex, @ex2].each { |p| p.detail.caption.size.should == 0 }
-            @detail.detail.caption.size.should == 1
-            @caption.size.should == 1
+            [@ex, @ex2].each { |p| expect(p.detail.caption.size).to eq(0) }
+            expect(@detail.detail.caption.size).to eq(1)
+            expect(@caption.size).to eq(1)
           end
           it "text should get element value" do
-            @detail.detail.caption.map { |n| n.text }.should == ['no.']
-            @caption.map { |n| n.text }.should == ['anything']
+            expect(@detail.detail.caption.map { |n| n.text }).to eq(['no.'])
+            expect(@caption.map { |n| n.text }).to eq(['anything'])
           end
         end # <caption>
         context "<title> child element" do
           it "should be a NodeSet" do
-            [@ex, @ex2, @detail].each { |p| p.detail.title.should be_an_instance_of(Nokogiri::XML::NodeSet) }
+            [@ex, @ex2, @detail].each { |p| expect(p.detail.title).to be_an_instance_of(Nokogiri::XML::NodeSet) }
           end
           it "title NodeSet should have as many Nodes as there are <title> elements in the xml" do
-            @ex.detail.title.size.should == 1
-            [@ex2, @detail].each { |p| p.detail.title.size.should == 0 }
+            expect(@ex.detail.title.size).to eq(1)
+            [@ex2, @detail].each { |p| expect(p.detail.title.size).to eq(0) }
           end
           it "text should get element value" do
-            @ex.detail.title.map { |n| n.text }.should == ['Wayfarers (Poem)']
-            [@ex2, @detail].each { |p| p.detail.title.map { |n| n.text }.should == [] }
+            expect(@ex.detail.title.map { |n| n.text }).to eq(['Wayfarers (Poem)'])
+            [@ex2, @detail].each { |p| expect(p.detail.title.map { |n| n.text }).to eq([]) }
           end
         end # <title>
       end # <detail>
 
       context "<extent> child element" do
         it "should be a NodeSet" do
-          [@ex, @ex2, @detail].each { |p| p.extent.should be_an_instance_of(Nokogiri::XML::NodeSet) }
+          [@ex, @ex2, @detail].each { |p| expect(p.extent).to be_an_instance_of(Nokogiri::XML::NodeSet) }
         end
         it "extent NodeSet should have as many Nodes as there are <extent> elements in the xml" do
-          [@ex, @ex2].each { |p| p.extent.size.should == 1 }
-          @detail.extent.size.should == 0
+          [@ex, @ex2].each { |p| expect(p.extent.size).to eq(1) }
+          expect(@detail.extent.size).to eq(0)
         end
         it "should recognize unit attribute on <extent> element" do
-          [@ex, @ex2].each { |p| p.extent.unit.should == ['pages'] }
+          [@ex, @ex2].each { |p| expect(p.extent.unit).to eq(['pages']) }
         end
         context "<start> child element" do
           it "should be a NodeSet" do
-            [@ex, @ex2, @detail].each { |p| p.extent.start.should be_an_instance_of(Nokogiri::XML::NodeSet) }
+            [@ex, @ex2, @detail].each { |p| expect(p.extent.start).to be_an_instance_of(Nokogiri::XML::NodeSet) }
           end
           it "start NodeSet should have as many Nodes as there are <start> elements in the xml" do
-            [@ex, @ex2].each { |p| p.extent.start.size.should == 1 }
-            @detail.extent.start.size.should == 0
+            [@ex, @ex2].each { |p| expect(p.extent.start.size).to eq(1) }
+            expect(@detail.extent.start.size).to eq(0)
           end
           it "text should get element value" do
-            @ex.extent.start.map { |n| n.text }.should == ['97']
-            @ex2.extent.start.map { |n| n.text }.should == ['3']
+            expect(@ex.extent.start.map { |n| n.text }).to eq(['97'])
+            expect(@ex2.extent.start.map { |n| n.text }).to eq(['3'])
           end
         end # <start>
         context "<end> child element" do
           it "should be a NodeSet" do
-            [@ex, @ex2, @detail].each { |p| p.extent.end.should be_an_instance_of(Nokogiri::XML::NodeSet) }
+            [@ex, @ex2, @detail].each { |p| expect(p.extent.end).to be_an_instance_of(Nokogiri::XML::NodeSet) }
           end
           it "end NodeSet should have as many Nodes as there are <end> elements in the xml" do
-            @ex.extent.end.size.should == 1
-            [@ex2, @detail].each { |p| p.extent.end.size.should == 0 }
+            expect(@ex.extent.end.size).to eq(1)
+            [@ex2, @detail].each { |p| expect(p.extent.end.size).to eq(0) }
           end
           it "text should get element value" do
-            @ex.extent.end.map { |n| n.text }.should == ['98']
+            expect(@ex.extent.end.map { |n| n.text }).to eq(['98'])
           end
         end # <end>
         context "<total> child element" do
@@ -162,15 +162,15 @@ describe "Mods <part> Element" do
             @total = @mods_rec.part.extent.total
           end
           it "should be a NodeSet" do
-            [@ex, @ex2, @detail].each { |p| p.extent.total.should be_an_instance_of(Nokogiri::XML::NodeSet) }
-            @total.should be_an_instance_of(Nokogiri::XML::NodeSet)
+            [@ex, @ex2, @detail].each { |p| expect(p.extent.total).to be_an_instance_of(Nokogiri::XML::NodeSet) }
+            expect(@total).to be_an_instance_of(Nokogiri::XML::NodeSet)
           end
           it "total NodeSet should have as many Nodes as there are <total> elements in the xml" do
-            [@ex, @ex2, @detail].each { |p| p.extent.total.size.should == 0 }
-            @total.size.should == 1
+            [@ex, @ex2, @detail].each { |p| expect(p.extent.total.size).to eq(0) }
+            expect(@total.size).to eq(1)
           end
           it "text should get element value" do
-            @total.map { |n| n.text }.should == ['anything']
+            expect(@total.map { |n| n.text }).to eq(['anything'])
           end
         end # <total>
         context "<list> child element" do
@@ -179,15 +179,15 @@ describe "Mods <part> Element" do
             @list = @mods_rec.part.extent.list
           end
           it "should be a NodeSet" do
-            [@ex, @ex2, @detail].each { |p| p.extent.list.should be_an_instance_of(Nokogiri::XML::NodeSet) }
-            @list.should be_an_instance_of(Nokogiri::XML::NodeSet)
+            [@ex, @ex2, @detail].each { |p| expect(p.extent.list).to be_an_instance_of(Nokogiri::XML::NodeSet) }
+            expect(@list).to be_an_instance_of(Nokogiri::XML::NodeSet)
           end
           it "list NodeSet should have as many Nodes as there are <list> elements in the xml" do
-            [@ex, @ex2, @detail].each { |p| p.extent.list.size.should == 0 }
-            @list.size.should == 1
+            [@ex, @ex2, @detail].each { |p| expect(p.extent.list.size).to eq(0) }
+            expect(@list.size).to eq(1)
           end
           it "text should get element value" do
-            @list.map { |n| n.text }.should == ['anything']
+            expect(@list.map { |n| n.text }).to eq(['anything'])
           end
         end # <list>
       end # <extent>
@@ -197,17 +197,17 @@ describe "Mods <part> Element" do
           @date = @mods_rec.from_str("<mods #{@ns_decl}><part><date encoding='w3cdtf'>1999</date></part></mods>").part.date
         end
         it "should be a NodeSet" do
-          [@ex, @ex2, @detail].each { |p| p.date.should be_an_instance_of(Nokogiri::XML::NodeSet) }
-          @date.should be_an_instance_of(Nokogiri::XML::NodeSet)
+          [@ex, @ex2, @detail].each { |p| expect(p.date).to be_an_instance_of(Nokogiri::XML::NodeSet) }
+          expect(@date).to be_an_instance_of(Nokogiri::XML::NodeSet)
         end
         it "extent NodeSet should have as many Nodes as there are <extent> elements in the xml" do
-          [@ex, @ex2, @detail].each { |p| p.date.size.should == 0 }
-          @date.size.should == 1
+          [@ex, @ex2, @detail].each { |p| expect(p.date.size).to eq(0) }
+          expect(@date.size).to eq(1)
         end
         it "should recognize all date attributes except keyDate" do
           Mods::DATE_ATTRIBS.reject { |n| n == 'keyDate' }.each { |a|
             @mods_rec.from_str("<mods #{@ns_decl}><part><date #{a}='attr_val'>zzz</date></part></mods>")
-            @mods_rec.part.date.send(a.to_sym).should == ['attr_val']
+            expect(@mods_rec.part.date.send(a.to_sym)).to eq(['attr_val'])
           }
         end
         it "should not recognize keyDate attribute" do
@@ -221,20 +221,20 @@ describe "Mods <part> Element" do
           @text_ns = @mods_rec.from_str("<mods #{@ns_decl}><part><text encoding='w3cdtf'>1999</text></part></mods>").part.text_el
         end
         it "should be a NodeSet" do
-          [@ex, @ex2, @detail].each { |p| p.text_el.should be_an_instance_of(Nokogiri::XML::NodeSet) }
-          @text_ns.should be_an_instance_of(Nokogiri::XML::NodeSet)
+          [@ex, @ex2, @detail].each { |p| expect(p.text_el).to be_an_instance_of(Nokogiri::XML::NodeSet) }
+          expect(@text_ns).to be_an_instance_of(Nokogiri::XML::NodeSet)
         end
         it "text_el NodeSet should have as many Nodes as there are <text> elements in the xml" do
-          [@ex, @ex2, @detail].each { |p| p.text_el.size.should == 0 }
-          @text_ns.size.should == 1
+          [@ex, @ex2, @detail].each { |p| expect(p.text_el.size).to eq(0) }
+          expect(@text_ns.size).to eq(1)
         end
         it "should recognize displayLabel attribute" do
           @mods_rec.from_str("<mods #{@ns_decl}><part><text displayLabel='foo'>zzz</text></part></mods>")
-          @mods_rec.part.text_el.displayLabel.should == ['foo']
+          expect(@mods_rec.part.text_el.displayLabel).to eq(['foo'])
         end
         it "should recognize type(_at) attribute on <text> element" do
           @mods_rec.from_str("<mods #{@ns_decl}><part><text type='bar'>anything</text></part></mods>")
-          @mods_rec.part.text_el.type_at.should == ['bar']
+          expect(@mods_rec.part.text_el.type_at).to eq(['bar'])
         end
       end # <text>
     end # WITH namespaces
@@ -267,50 +267,50 @@ describe "Mods <part> Element" do
       end
 
       it "should be a NodeSet" do
-        [@ex, @ex2, @detail].each { |p| p.should be_an_instance_of(Nokogiri::XML::NodeSet) }
+        [@ex, @ex2, @detail].each { |p| expect(p).to be_an_instance_of(Nokogiri::XML::NodeSet) }
       end
       it "should have as many members as there are <part> elements in the xml" do
-        [@ex, @ex2, @detail].each { |p| p.size.should == 1 }
+        [@ex, @ex2, @detail].each { |p| expect(p.size).to eq(1) }
       end
       it "should recognize type(_at) attribute on <part> element" do
         @mods_rec.from_str("<mods><part type='val'>anything</part></mods>", false)
-        @mods_rec.part.type_at.should == ['val']
+        expect(@mods_rec.part.type_at).to eq(['val'])
       end
       it "should recognize order attribute on <part> element" do
         @mods_rec.from_str("<mods><part order='val'>anything</part></mods>", false)
-        @mods_rec.part.order.should == ['val']
+        expect(@mods_rec.part.order).to eq(['val'])
       end
       it "should recognize ID attribute on <part> element as id_at term" do
         @mods_rec.from_str("<mods><part ID='val'>anything</part></mods>", false)
-        @mods_rec.part.id_at.should == ['val']
+        expect(@mods_rec.part.id_at).to eq(['val'])
       end
 
       context "<detail> child element" do
         it "should be a NodeSet" do
-          [@ex, @ex2, @detail].each { |p| p.detail.should be_an_instance_of(Nokogiri::XML::NodeSet) }
+          [@ex, @ex2, @detail].each { |p| expect(p.detail).to be_an_instance_of(Nokogiri::XML::NodeSet) }
         end
         it "detail NodeSet should have as many Nodes as there are <detail> elements in the xml" do
-          [@ex, @ex2, @detail].each { |p| p.detail.size.should == 1 }
+          [@ex, @ex2, @detail].each { |p| expect(p.detail.size).to eq(1) }
         end
         it "should recognize type(_at) attribute on <detail> element" do
-          @ex2.detail.type_at.should == ['page number']
-          @detail.detail.type_at.should == ['issue']
+          expect(@ex2.detail.type_at).to eq(['page number'])
+          expect(@detail.detail.type_at).to eq(['issue'])
         end
         it "should recognize level attribute on <detail> element" do
           @mods_rec.from_str("<mods><part><detail level='val'>anything</detail></part></mods>", false)
-          @mods_rec.part.detail.level.should == ['val']
+          expect(@mods_rec.part.detail.level).to eq(['val'])
         end
         context "<number> child element" do
           it "should be a NodeSet" do
-            [@ex, @ex2, @detail].each { |p| p.detail.number.should be_an_instance_of(Nokogiri::XML::NodeSet) }
+            [@ex, @ex2, @detail].each { |p| expect(p.detail.number).to be_an_instance_of(Nokogiri::XML::NodeSet) }
           end
           it "number NodeSet should have as many Nodes as there are <number> elements in the xml" do
-            [@ex2, @detail].each { |p| p.detail.number.size.should == 1 }
-            @ex.detail.number.size.should == 0
+            [@ex2, @detail].each { |p| expect(p.detail.number.size).to eq(1) }
+            expect(@ex.detail.number.size).to eq(0)
           end
           it "text should get element value" do
-            @ex2.detail.number.map { |n| n.text }.should == ['3']
-            @detail.detail.number.map { |n| n.text }.should == ['1']
+            expect(@ex2.detail.number.map { |n| n.text }).to eq(['3'])
+            expect(@detail.detail.number.map { |n| n.text }).to eq(['1'])
           end
         end # <number>
         context "<caption> child element" do
@@ -319,68 +319,68 @@ describe "Mods <part> Element" do
             @caption = @mods_rec.part.detail.caption
           end
           it "should be a NodeSet" do
-            [@ex, @ex2, @detail].each { |p| p.detail.caption.should be_an_instance_of(Nokogiri::XML::NodeSet) }
-            @caption.should be_an_instance_of(Nokogiri::XML::NodeSet)
+            [@ex, @ex2, @detail].each { |p| expect(p.detail.caption).to be_an_instance_of(Nokogiri::XML::NodeSet) }
+            expect(@caption).to be_an_instance_of(Nokogiri::XML::NodeSet)
           end
           it "caption NodeSet should have as many Nodes as there are <caption> elements in the xml" do
-            [@ex, @ex2].each { |p| p.detail.caption.size.should == 0 }
-            @detail.detail.caption.size.should == 1
-            @caption.size.should == 1
+            [@ex, @ex2].each { |p| expect(p.detail.caption.size).to eq(0) }
+            expect(@detail.detail.caption.size).to eq(1)
+            expect(@caption.size).to eq(1)
           end
           it "text should get element value" do
-            @detail.detail.caption.map { |n| n.text }.should == ['no.']
-            @caption.map { |n| n.text }.should == ['anything']
+            expect(@detail.detail.caption.map { |n| n.text }).to eq(['no.'])
+            expect(@caption.map { |n| n.text }).to eq(['anything'])
           end
         end # <caption>
         context "<title> child element" do
           it "should be a NodeSet" do
-            [@ex, @ex2, @detail].each { |p| p.detail.title.should be_an_instance_of(Nokogiri::XML::NodeSet) }
+            [@ex, @ex2, @detail].each { |p| expect(p.detail.title).to be_an_instance_of(Nokogiri::XML::NodeSet) }
           end
           it "title NodeSet should have as many Nodes as there are <title> elements in the xml" do
-            @ex.detail.title.size.should == 1
-            [@ex2, @detail].each { |p| p.detail.title.size.should == 0 }
+            expect(@ex.detail.title.size).to eq(1)
+            [@ex2, @detail].each { |p| expect(p.detail.title.size).to eq(0) }
           end
           it "text should get element value" do
-            @ex.detail.title.map { |n| n.text }.should == ['Wayfarers (Poem)']
-            [@ex2, @detail].each { |p| p.detail.title.map { |n| n.text }.should == [] }
+            expect(@ex.detail.title.map { |n| n.text }).to eq(['Wayfarers (Poem)'])
+            [@ex2, @detail].each { |p| expect(p.detail.title.map { |n| n.text }).to eq([]) }
           end
         end # <title>
       end # <detail>
 
       context "<extent> child element" do
         it "should be a NodeSet" do
-          [@ex, @ex2, @detail].each { |p| p.extent.should be_an_instance_of(Nokogiri::XML::NodeSet) }
+          [@ex, @ex2, @detail].each { |p| expect(p.extent).to be_an_instance_of(Nokogiri::XML::NodeSet) }
         end
         it "extent NodeSet should have as many Nodes as there are <extent> elements in the xml" do
-          [@ex, @ex2].each { |p| p.extent.size.should == 1 }
-          @detail.extent.size.should == 0
+          [@ex, @ex2].each { |p| expect(p.extent.size).to eq(1) }
+          expect(@detail.extent.size).to eq(0)
         end
         it "should recognize unit attribute on <extent> element" do
-          [@ex, @ex2].each { |p| p.extent.unit.should == ['pages'] }
+          [@ex, @ex2].each { |p| expect(p.extent.unit).to eq(['pages']) }
         end
         context "<start> child element" do
           it "should be a NodeSet" do
-            [@ex, @ex2, @detail].each { |p| p.extent.start.should be_an_instance_of(Nokogiri::XML::NodeSet) }
+            [@ex, @ex2, @detail].each { |p| expect(p.extent.start).to be_an_instance_of(Nokogiri::XML::NodeSet) }
           end
           it "start NodeSet should have as many Nodes as there are <start> elements in the xml" do
-            [@ex, @ex2].each { |p| p.extent.start.size.should == 1 }
-            @detail.extent.start.size.should == 0
+            [@ex, @ex2].each { |p| expect(p.extent.start.size).to eq(1) }
+            expect(@detail.extent.start.size).to eq(0)
           end
           it "text should get element value" do
-            @ex.extent.start.map { |n| n.text }.should == ['97']
-            @ex2.extent.start.map { |n| n.text }.should == ['3']
+            expect(@ex.extent.start.map { |n| n.text }).to eq(['97'])
+            expect(@ex2.extent.start.map { |n| n.text }).to eq(['3'])
           end
         end # <start>
         context "<end> child element" do
           it "should be a NodeSet" do
-            [@ex, @ex2, @detail].each { |p| p.extent.end.should be_an_instance_of(Nokogiri::XML::NodeSet) }
+            [@ex, @ex2, @detail].each { |p| expect(p.extent.end).to be_an_instance_of(Nokogiri::XML::NodeSet) }
           end
           it "end NodeSet should have as many Nodes as there are <end> elements in the xml" do
-            @ex.extent.end.size.should == 1
-            [@ex2, @detail].each { |p| p.extent.end.size.should == 0 }
+            expect(@ex.extent.end.size).to eq(1)
+            [@ex2, @detail].each { |p| expect(p.extent.end.size).to eq(0) }
           end
           it "text should get element value" do
-            @ex.extent.end.map { |n| n.text }.should == ['98']
+            expect(@ex.extent.end.map { |n| n.text }).to eq(['98'])
           end
         end # <end>
         context "<total> child element" do
@@ -389,15 +389,15 @@ describe "Mods <part> Element" do
             @total = @mods_rec.part.extent.total
           end
           it "should be a NodeSet" do
-            [@ex, @ex2, @detail].each { |p| p.extent.total.should be_an_instance_of(Nokogiri::XML::NodeSet) }
-            @total.should be_an_instance_of(Nokogiri::XML::NodeSet)
+            [@ex, @ex2, @detail].each { |p| expect(p.extent.total).to be_an_instance_of(Nokogiri::XML::NodeSet) }
+            expect(@total).to be_an_instance_of(Nokogiri::XML::NodeSet)
           end
           it "total NodeSet should have as many Nodes as there are <total> elements in the xml" do
-            [@ex, @ex2, @detail].each { |p| p.extent.total.size.should == 0 }
-            @total.size.should == 1
+            [@ex, @ex2, @detail].each { |p| expect(p.extent.total.size).to eq(0) }
+            expect(@total.size).to eq(1)
           end
           it "text should get element value" do
-            @total.map { |n| n.text }.should == ['anything']
+            expect(@total.map { |n| n.text }).to eq(['anything'])
           end
         end # <total>
         context "<list> child element" do
@@ -406,15 +406,15 @@ describe "Mods <part> Element" do
             @list = @mods_rec.part.extent.list
           end
           it "should be a NodeSet" do
-            [@ex, @ex2, @detail].each { |p| p.extent.list.should be_an_instance_of(Nokogiri::XML::NodeSet) }
-            @list.should be_an_instance_of(Nokogiri::XML::NodeSet)
+            [@ex, @ex2, @detail].each { |p| expect(p.extent.list).to be_an_instance_of(Nokogiri::XML::NodeSet) }
+            expect(@list).to be_an_instance_of(Nokogiri::XML::NodeSet)
           end
           it "list NodeSet should have as many Nodes as there are <list> elements in the xml" do
-            [@ex, @ex2, @detail].each { |p| p.extent.list.size.should == 0 }
-            @list.size.should == 1
+            [@ex, @ex2, @detail].each { |p| expect(p.extent.list.size).to eq(0) }
+            expect(@list.size).to eq(1)
           end
           it "text should get element value" do
-            @list.map { |n| n.text }.should == ['anything']
+            expect(@list.map { |n| n.text }).to eq(['anything'])
           end
         end # <list>
       end # <extent>
@@ -424,17 +424,17 @@ describe "Mods <part> Element" do
           @date = @mods_rec.from_str("<mods><part><date encoding='w3cdtf'>1999</date></part></mods>", false).part.date
         end
         it "should be a NodeSet" do
-          [@ex, @ex2, @detail].each { |p| p.date.should be_an_instance_of(Nokogiri::XML::NodeSet) }
-          @date.should be_an_instance_of(Nokogiri::XML::NodeSet)
+          [@ex, @ex2, @detail].each { |p| expect(p.date).to be_an_instance_of(Nokogiri::XML::NodeSet) }
+          expect(@date).to be_an_instance_of(Nokogiri::XML::NodeSet)
         end
         it "extent NodeSet should have as many Nodes as there are <extent> elements in the xml" do
-          [@ex, @ex2, @detail].each { |p| p.date.size.should == 0 }
-          @date.size.should == 1
+          [@ex, @ex2, @detail].each { |p| expect(p.date.size).to eq(0) }
+          expect(@date.size).to eq(1)
         end
         it "should recognize all date attributes except keyDate" do
           Mods::DATE_ATTRIBS.reject { |n| n == 'keyDate' }.each { |a|
             @mods_rec.from_str("<mods><part><date #{a}='attr_val'>zzz</date></part></mods>", false)
-            @mods_rec.part.date.send(a.to_sym).should == ['attr_val']
+            expect(@mods_rec.part.date.send(a.to_sym)).to eq(['attr_val'])
           }
         end
         it "should not recognize keyDate attribute" do
@@ -448,20 +448,20 @@ describe "Mods <part> Element" do
           @text_ns = @mods_rec.from_str("<mods><part><text encoding='w3cdtf'>1999</text></part></mods>", false).part.text_el
         end
         it "should be a NodeSet" do
-          [@ex, @ex2, @detail].each { |p| p.text_el.should be_an_instance_of(Nokogiri::XML::NodeSet) }
-          @text_ns.should be_an_instance_of(Nokogiri::XML::NodeSet)
+          [@ex, @ex2, @detail].each { |p| expect(p.text_el).to be_an_instance_of(Nokogiri::XML::NodeSet) }
+          expect(@text_ns).to be_an_instance_of(Nokogiri::XML::NodeSet)
         end
         it "text_el NodeSet should have as many Nodes as there are <text> elements in the xml" do
-          [@ex, @ex2, @detail].each { |p| p.text_el.size.should == 0 }
-          @text_ns.size.should == 1
+          [@ex, @ex2, @detail].each { |p| expect(p.text_el.size).to eq(0) }
+          expect(@text_ns.size).to eq(1)
         end
         it "should recognize displayLabel attribute" do
           @mods_rec.from_str("<mods><part><text displayLabel='foo'>zzz</text></part></mods>", false)
-          @mods_rec.part.text_el.displayLabel.should == ['foo']
+          expect(@mods_rec.part.text_el.displayLabel).to eq(['foo'])
         end
         it "should recognize type(_at) attribute on <text> element" do
           @mods_rec.from_str("<mods><part><text type='bar'>anything</text></part></mods>", false)
-          @mods_rec.part.text_el.type_at.should == ['bar']
+          expect(@mods_rec.part.text_el.type_at).to eq(['bar'])
         end
       end # <text>
     end # WITHOUT namespaces

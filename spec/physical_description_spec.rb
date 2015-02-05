@@ -12,7 +12,7 @@ describe "Mods <physicalDescription> Element" do
 
       it "extent child element" do
         @mods_rec.from_str("<mods #{@ns_decl}><physicalDescription><extent>extent</extent></physicalDescription></mods>")
-        @mods_rec.physical_description.extent.map { |n| n.text }.should == ["extent"]
+        expect(@mods_rec.physical_description.extent.map { |n| n.text }).to eq(["extent"])
       end
 
       context "note child element" do
@@ -26,10 +26,10 @@ describe "Mods <physicalDescription> Element" do
           @mods_rec.from_str(forms_and_notes)
         end
         it "should understand note element" do
-          @mods_rec.physical_description.note.map { |n| n.text }.should == ["dimension text", "condition text"]
+          expect(@mods_rec.physical_description.note.map { |n| n.text }).to eq(["dimension text", "condition text"])
         end
         it "should understand displayLabel attribute on note element" do
-          @mods_rec.physical_description.note.displayLabel.should == ["Dimensions", "Condition"]
+          expect(@mods_rec.physical_description.note.displayLabel).to eq(["Dimensions", "Condition"])
         end
       end
 
@@ -43,13 +43,13 @@ describe "Mods <physicalDescription> Element" do
           @mods_rec.from_str(forms_and_extent)
         end
         it "should understand form element" do
-          @mods_rec.physical_description.form.map { |n| n.text }.should == ["map", "foo"]
+          expect(@mods_rec.physical_description.form.map { |n| n.text }).to eq(["map", "foo"])
         end
         it "should understand authority attribute on form element" do
-          @mods_rec.physical_description.form.authority.should == ["smd"]
+          expect(@mods_rec.physical_description.form.authority).to eq(["smd"])
         end
         it "should understand type attribute on form element" do
-          @mods_rec.physical_description.form.type_at.should == ["material"]
+          expect(@mods_rec.physical_description.form.type_at).to eq(["material"])
         end
       end
 
@@ -63,13 +63,13 @@ describe "Mods <physicalDescription> Element" do
           @mods_rec.from_str(digital)
         end
         it "should understand reformattingQuality child element" do
-          @mods_rec.physical_description.reformattingQuality.map { |n| n.text }.should == ["preservation"]
+          expect(@mods_rec.physical_description.reformattingQuality.map { |n| n.text }).to eq(["preservation"])
         end
         it "should understand digitalOrigin child element" do
-          @mods_rec.physical_description.digitalOrigin.map { |n| n.text }.should == ["reformatted digital"]
+          expect(@mods_rec.physical_description.digitalOrigin.map { |n| n.text }).to eq(["reformatted digital"])
         end
         it "should understand internetMediaType child element" do
-          @mods_rec.physical_description.internetMediaType.map { |n| n.text }.should == ["image/jp2"]
+          expect(@mods_rec.physical_description.internetMediaType.map { |n| n.text }).to eq(["image/jp2"])
         end
       end
     end # WITH namespaces
@@ -77,7 +77,7 @@ describe "Mods <physicalDescription> Element" do
     context "WITHOUT namespaces" do
       it "extent child element" do
         @mods_rec.from_str('<mods><physicalDescription><extent>extent</extent></physicalDescription></mods>', false)
-        @mods_rec.physical_description.extent.map { |n| n.text }.should == ["extent"]
+        expect(@mods_rec.physical_description.extent.map { |n| n.text }).to eq(["extent"])
       end
 
       context "note child element" do
@@ -91,10 +91,10 @@ describe "Mods <physicalDescription> Element" do
           @mods_rec.from_str(forms_and_notes, false)
         end
         it "should understand note element" do
-          @mods_rec.physical_description.note.map { |n| n.text }.should == ["dimension text", "condition text"]
+          expect(@mods_rec.physical_description.note.map { |n| n.text }).to eq(["dimension text", "condition text"])
         end
         it "should understand displayLabel attribute on note element" do
-          @mods_rec.physical_description.note.displayLabel.should == ["Dimensions", "Condition"]
+          expect(@mods_rec.physical_description.note.displayLabel).to eq(["Dimensions", "Condition"])
         end
       end
 
@@ -108,13 +108,13 @@ describe "Mods <physicalDescription> Element" do
           @mods_rec.from_str(forms_and_extent, false)
         end
         it "should understand form element" do
-          @mods_rec.physical_description.form.map { |n| n.text }.should == ["map", "foo"]
+          expect(@mods_rec.physical_description.form.map { |n| n.text }).to eq(["map", "foo"])
         end
         it "should understand authority attribute on form element" do
-          @mods_rec.physical_description.form.authority.should == ["smd"]
+          expect(@mods_rec.physical_description.form.authority).to eq(["smd"])
         end
         it "should understand type attribute on form element" do
-          @mods_rec.physical_description.form.type_at.should == ["material"]
+          expect(@mods_rec.physical_description.form.type_at).to eq(["material"])
         end
       end
 
@@ -128,13 +128,13 @@ describe "Mods <physicalDescription> Element" do
           @mods_rec.from_str(digital, false)
         end
         it "should understand reformattingQuality child element" do
-          @mods_rec.physical_description.reformattingQuality.map { |n| n.text }.should == ["preservation"]
+          expect(@mods_rec.physical_description.reformattingQuality.map { |n| n.text }).to eq(["preservation"])
         end
         it "should understand digitalOrigin child element" do
-          @mods_rec.physical_description.digitalOrigin.map { |n| n.text }.should == ["reformatted digital"]
+          expect(@mods_rec.physical_description.digitalOrigin.map { |n| n.text }).to eq(["reformatted digital"])
         end
         it "should understand internetMediaType child element" do
-          @mods_rec.physical_description.internetMediaType.map { |n| n.text }.should == ["image/jp2"]
+          expect(@mods_rec.physical_description.internetMediaType.map { |n| n.text }).to eq(["image/jp2"])
         end
       end
     end # WITHOUT namespaces

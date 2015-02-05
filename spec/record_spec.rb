@@ -16,18 +16,18 @@ describe "Mods::Record" do
       @mods_ng_doc_w_ns = Mods::Record.new.from_str(@example_ns_str)
     end
     it "should have namespace aware parsing turned on by default" do
-      @mods_ng_doc_w_ns.namespaces.size.should > 0
+      expect(@mods_ng_doc_w_ns.namespaces.size).to be > 0
     end
     it "terminology should work with Record object defaults when mods string has namespaces" do
-      @mods_ng_doc_w_ns.note.map { |e| e.text }.should == ['default ns']
+      expect(@mods_ng_doc_w_ns.note.map { |e| e.text }).to eq(['default ns'])
     end
     it "terminology should not work with Record object defaults when mods string has NO namespaces" do
       mods_ng_doc = Mods::Record.new.from_str(@example_no_ns_str)
-      mods_ng_doc.note.size.should == 0
+      expect(mods_ng_doc.note.size).to eq(0)
     end
     it "should be allowed not to care about namespaces" do
       mods_ng_doc = Mods::Record.new.from_str(@example_no_ns_str, false)
-      mods_ng_doc.note.map { |e| e.text }.should == ['no ns']
+      expect(mods_ng_doc.note.map { |e| e.text }).to eq(['no ns'])
     end
   end
 
@@ -40,7 +40,7 @@ describe "Mods::Record" do
       expect(@mods_doc).to be_a_kind_of(Mods::Record)
     end
     it "should raise an error on a bad url" do
-      lambda{Mods::Record.new.from_url("http://example.org/fake.xml")}.should raise_error
+      expect{Mods::Record.new.from_url("http://example.org/fake.xml")}.to raise_error
     end
   end
 
@@ -93,18 +93,18 @@ describe "Mods::Record" do
       @mods_node_no_ns = ng_xml.xpath('//n:mods', {'n'=>'http://www.not.mods.org'}).first
     end
     it "should have namespace aware parsing turned on by default" do
-      @mods_ng_doc.namespaces.size.should > 0
+      expect(@mods_ng_doc.namespaces.size).to be > 0
     end
     it "terminology should work with Record object defaults when mods string has namespaces" do
-      @mods_ng_doc.title_info.title.map { |e| e.text }.should == ["boo"]
+      expect(@mods_ng_doc.title_info.title.map { |e| e.text }).to eq(["boo"])
     end
     it "terminology should not work with Record object defaults when mods node has NO namespaces" do
       mods_ng_doc = Mods::Record.new.from_nk_node(@mods_node_no_ns)
-      mods_ng_doc.title_info.title.size.should == 0
+      expect(mods_ng_doc.title_info.title.size).to eq(0)
     end
     it "should be allowed not to care about namespaces" do
       mods_ng_doc = Mods::Record.new.from_nk_node(@mods_node_no_ns, false)
-      mods_ng_doc.title_info.title.map { |e| e.text }.should == ["What? No namespaces?"]
+      expect(mods_ng_doc.title_info.title.map { |e| e.text }).to eq(["What? No namespaces?"])
     end
   end # context from_nk_node
 
@@ -124,43 +124,43 @@ describe "Mods::Record" do
 
     context "term_value (single value result)" do
       it "should return nil if there are no such values in the MODS" do
-        @mods_rec.term_value(:identifier).should == nil
+        expect(@mods_rec.term_value(:identifier)).to eq(nil)
       end
       it "should return nil if there are only empty values in the MODS" do
-        @mods_rec.term_value(:genre).should == nil
+        expect(@mods_rec.term_value(:genre)).to eq(nil)
       end
       it "should return a String for a single value" do
-        @mods_rec.term_value(:abstract).should == 'single'
+        expect(@mods_rec.term_value(:abstract)).to eq('single')
       end
       it "should return a String containing all values, with separator, for multiple values" do
-        @mods_rec.term_value(:note).should == 'mult1 mult2'
+        expect(@mods_rec.term_value(:note)).to eq('mult1 mult2')
       end
       it "should work with an Array of messages passed as the argument" do
-        @mods_rec.term_value([:subject, 'topic']).should == 'topic1 topic2 topic3'
+        expect(@mods_rec.term_value([:subject, 'topic'])).to eq('topic1 topic2 topic3')
       end
       it "should take a separator argument" do
-        @mods_rec.term_value(:note, ' -|-').should == 'mult1 -|-mult2'
+        expect(@mods_rec.term_value(:note, ' -|-')).to eq('mult1 -|-mult2')
       end
     end
 
     context "term_values (multiple values)" do
       it "should return nil if there are no such values in the MODS" do
-        @mods_rec.term_values(:identifier).should == nil
+        expect(@mods_rec.term_values(:identifier)).to eq(nil)
       end
       it "should return nil if there are only empty values in the MODS" do
-        @mods_rec.term_values(:genre).should == nil
+        expect(@mods_rec.term_values(:genre)).to eq(nil)
       end
       it "should return an array of size one for a single value" do
-        @mods_rec.term_values(:abstract).should == ['single']
+        expect(@mods_rec.term_values(:abstract)).to eq(['single'])
       end
       it "should return an array of values for multiple values" do
-        @mods_rec.term_values(:note).should == ['mult1', 'mult2']
+        expect(@mods_rec.term_values(:note)).to eq(['mult1', 'mult2'])
       end
       it "should work with an Array of messages passed as the argument" do
-        @mods_rec.term_values([:subject, 'topic']).should == ['topic1', 'topic2', 'topic3']
+        expect(@mods_rec.term_values([:subject, 'topic'])).to eq(['topic1', 'topic2', 'topic3'])
       end
       it "should work with a String passed as the argument" do
-        @mods_rec.term_values('abstract').should == ['single']
+        expect(@mods_rec.term_values('abstract')).to eq(['single'])
       end
       it "should raise an error for an unrecognized message symbol" do
         expect { @mods_rec.term_values(:not_there) }.to raise_error(ArgumentError, "term_values called with unknown argument: :not_there")
@@ -181,21 +181,21 @@ describe "Mods::Record" do
     context "title methods" do
       it "short_titles should return an Array of Strings (multiple titles are legal in Mods)" do
         @mods_rec.from_str("<mods #{@def_ns_decl}><titleInfo><title>Jerk</title><nonSort>The</nonSort></titleInfo><titleInfo><title>Joke</title></titleInfo></mods>")
-        @mods_rec.short_titles.should == ["The Jerk", "Joke"]
+        expect(@mods_rec.short_titles).to eq(["The Jerk", "Joke"])
       end
       it "full_titles should return an Array of Strings (multiple titles are legal in Mods)" do
         @mods_rec.from_str("<mods #{@def_ns_decl}><titleInfo><title>Jerk</title><nonSort>The</nonSort></titleInfo><titleInfo><title>Joke</title></titleInfo></mods>")
-        @mods_rec.full_titles.should == ["The Jerk", "Joke"]
+        expect(@mods_rec.full_titles).to eq(["The Jerk", "Joke"])
       end
       it "sort_title should return a String (sortable fields are single valued)" do
         @mods_rec.from_str("<mods #{@def_ns_decl}><titleInfo><title>Jerk</title><subTitle>A Tale of Tourettes</subTitle><nonSort>The</nonSort></titleInfo></mods>")
-        @mods_rec.sort_title.should == "Jerk A Tale of Tourettes"
+        expect(@mods_rec.sort_title).to eq("Jerk A Tale of Tourettes")
       end
       it "alternative_titles should return an Array of Strings (multiple alternative titles when there are multiple titleInfo elements)" do
         @mods_rec.from_str("<mods #{@def_ns_decl}><titleInfo type='alternative'><title>1</title></titleInfo><titleInfo type='alternative'><title>2</title></titleInfo></mods>")
-        @mods_rec.alternative_titles.should == ['1', '2']
+        expect(@mods_rec.alternative_titles).to eq(['1', '2'])
         @mods_rec.from_str("<mods #{@def_ns_decl}><titleInfo type='alternative'><title>1</title><title>2</title></titleInfo></mods>")
-        @mods_rec.alternative_titles.should == ['12']
+        expect(@mods_rec.alternative_titles).to eq(['12'])
       end
     end
 
@@ -220,12 +220,12 @@ describe "Mods::Record" do
 
       it "should return an Array of Strings" do
         @mods_rec.from_str(@mods_w_pers_name)
-        @mods_rec.personal_names.should == [@pers_name]
+        expect(@mods_rec.personal_names).to eq([@pers_name])
       end
 
       it "should not include the role text" do
         @mods_rec.from_str(@mods_w_pers_name_role)
-        @mods_rec.personal_names.first.should_not match(@pers_role)
+        expect(@mods_rec.personal_names.first).not_to match(@pers_role)
       end
 
       it "should prefer displayForm over namePart pieces" do
@@ -233,38 +233,38 @@ describe "Mods::Record" do
                                 <namePart type="family">Borges</namePart>
                                 <displayForm>display form</displayForm></name></mods>'
         @mods_rec.from_str(display_form_and_name_parts)
-        @mods_rec.personal_names.should include("display form")
+        expect(@mods_rec.personal_names).to include("display form")
       end
 
       it "should put the family namePart first" do
         @mods_rec.from_str(@given_family)
-        @mods_rec.personal_names.first.should match(/^Borges/)
+        expect(@mods_rec.personal_names.first).to match(/^Borges/)
         @mods_rec.from_str(@given_family_date)
-        @mods_rec.personal_names.first.should match(/^Beeblebrox/)
+        expect(@mods_rec.personal_names.first).to match(/^Beeblebrox/)
       end
       it "should not include date" do
         @mods_rec.from_str(@given_family_date)
-        @mods_rec.personal_names.first.should_not match(/19/)
+        expect(@mods_rec.personal_names.first).not_to match(/19/)
         @mods_rec.from_str(@all_name_parts)
-        @mods_rec.personal_names.first.should_not match('date')
+        expect(@mods_rec.personal_names.first).not_to match('date')
       end
       it "should include a comma when there is both a family and a given name" do
         @mods_rec.from_str(@all_name_parts)
-        @mods_rec.personal_names.should include("Family, Given Mr.")
+        expect(@mods_rec.personal_names).to include("Family, Given Mr.")
       end
       it "should include multiple words in a namePart" do
         @mods_rec.from_str(@given_family)
-        @mods_rec.personal_names.should include("Borges, Jorge Luis")
+        expect(@mods_rec.personal_names).to include("Borges, Jorge Luis")
       end
       it "should not include a comma when there is only a family or given name" do
         [@family_only, @given_only].each { |mods_str|
           @mods_rec.from_str(mods_str)
-          @mods_rec.personal_names.first.should_not match(/,/)
+          expect(@mods_rec.personal_names.first).not_to match(/,/)
         }
       end
       it "should include terms of address" do
         @mods_rec.from_str(@all_name_parts)
-        @mods_rec.personal_names.first.should match(/Mr./)
+        expect(@mods_rec.personal_names.first).to match(/Mr./)
       end
     end # personal_names
 
@@ -282,17 +282,17 @@ describe "Mods::Record" do
       end
       it "should return an Array of Strings" do
         @mods_rec.from_str(@given_family_date)
-        @mods_rec.personal_names_w_dates.should be_an_instance_of(Array)
+        expect(@mods_rec.personal_names_w_dates).to be_an_instance_of(Array)
       end
       it "should include the date when it is available" do
         @mods_rec.from_str(@given_family_date)
-        @mods_rec.personal_names_w_dates.first.should match(/, 1912-2362$/)
+        expect(@mods_rec.personal_names_w_dates.first).to match(/, 1912-2362$/)
         @mods_rec.from_str(@all_name_parts)
-        @mods_rec.personal_names_w_dates.first.should match(/, date$/)
+        expect(@mods_rec.personal_names_w_dates.first).to match(/, date$/)
       end
       it "should be just the personal_name if no date is available" do
         @mods_rec.from_str(@given_family)
-        @mods_rec.personal_names_w_dates.first.should == 'Borges, Jorge Luis'
+        expect(@mods_rec.personal_names_w_dates.first).to eq('Borges, Jorge Luis')
       end
     end
 
@@ -302,21 +302,21 @@ describe "Mods::Record" do
       end
       it "should return an Array of Strings" do
         @mods_rec.from_str("<mods #{@def_ns_decl}><name type='corporate'><namePart>#{@corp_name}</namePart></name></mods>")
-        @mods_rec.corporate_names.should == [@corp_name]
+        expect(@mods_rec.corporate_names).to eq([@corp_name])
       end
       it "should not include the role text" do
         corp_role = 'lithographer'
         mods_w_corp_name_role = "<mods #{@def_ns_decl}><name type='corporate'><namePart>#{@corp_name}</namePart>
           <role><roleTerm type='text'>#{corp_role}</roleTerm></role></name></mods>"
         @mods_rec.from_str(mods_w_corp_name_role)
-        @mods_rec.corporate_names.first.should_not match(corp_role)
+        expect(@mods_rec.corporate_names.first).not_to match(corp_role)
       end
 
       it "should prefer displayForm over namePart pieces" do
         display_form_and_name_parts = "<mods #{@def_ns_decl}><name type='corporate'><namePart>Food, Inc.</namePart>
                                 <displayForm>display form</displayForm></name></mods>"
         @mods_rec.from_str(display_form_and_name_parts)
-        @mods_rec.corporate_names.should include("display form")
+        expect(@mods_rec.corporate_names).to include("display form")
       end
     end # corporate_names
 
@@ -329,21 +329,21 @@ describe "Mods::Record" do
       end
       it "should translate iso639-2b codes to English" do
         @mods_rec.from_str(@iso639_2b_code)
-        @mods_rec.languages.should == ["French"]
+        expect(@mods_rec.languages).to eq(["French"])
       end
       it "should pass thru language values that are already text (not code)" do
         @mods_rec.from_str(@iso639_2b_text)
-        @mods_rec.languages.should == ["English"]
+        expect(@mods_rec.languages).to eq(["English"])
       end
       it "should keep values that are not inside <languageTerm> elements" do
         @mods_rec.from_str(@simple)
-        @mods_rec.languages.should == ["Greek"]
+        expect(@mods_rec.languages).to eq(["Greek"])
       end
       it "should create a separate value for each language in a comma, space, or | separated list " do
         @mods_rec.from_str(@mult_codes)
-        @mods_rec.languages.should include("Arabic")
-        @mods_rec.languages.should include("Persian")
-        @mods_rec.languages.should include("Dutch; Flemish")
+        expect(@mods_rec.languages).to include("Arabic")
+        expect(@mods_rec.languages).to include("Persian")
+        expect(@mods_rec.languages).to include("Dutch; Flemish")
       end
     end
   end # convenience methods for tricky bits of terminology

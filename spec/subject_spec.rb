@@ -90,17 +90,17 @@ describe "Mods <subject> Element" do
                    </name></subject></mods>").subject
     end
     it "should be able to identify corporate names" do
-      @both_types_sub.corporate_name.namePart.map { |e| e.text }.should == ['Britton & Rey.']
+      expect(@both_types_sub.corporate_name.namePart.map { |e| e.text }).to eq(['Britton & Rey.'])
     end
     it "should be able to identify personal names" do
-      @both_types_sub.personal_name.namePart.map { |e| e.text }.should == ['Bridgens, R.P']
-      @pers_name_sub.personal_name.displayForm.map { |e| e.text }.should == ['Edward VI , king of England, 1537-1553']
+      expect(@both_types_sub.personal_name.namePart.map { |e| e.text }).to eq(['Bridgens, R.P'])
+      expect(@pers_name_sub.personal_name.displayForm.map { |e| e.text }).to eq(['Edward VI , king of England, 1537-1553'])
     end
     it "should be able to identify roles associated with a name" do
-      @mult_corp_name_sub.corporate_name.role.roleTerm.map { |e| e.text }.should == ['lithographers.']
+      expect(@mult_corp_name_sub.corporate_name.role.roleTerm.map { |e| e.text }).to eq(['lithographers.'])
     end
     it "should be able to identify dates associated with a name" do
-      @mult_pers_name_sub.personal_name.date.map { |e| e.text }.should include("1818-1878")
+      expect(@mult_pers_name_sub.personal_name.date.map { |e| e.text }).to include("1818-1878")
     end
     it "should do the appropriate thing with the role for the value of a name" do
       skip "name objects to be implemented"
@@ -141,16 +141,16 @@ describe "Mods <subject> Element" do
       end
 
       it "should be a NodeSet" do
-        @four_subjects.should be_an_instance_of(Nokogiri::XML::NodeSet)
-        @lcsh_subject.should be_an_instance_of(Nokogiri::XML::NodeSet)
+        expect(@four_subjects).to be_an_instance_of(Nokogiri::XML::NodeSet)
+        expect(@lcsh_subject).to be_an_instance_of(Nokogiri::XML::NodeSet)
       end
       it "should have as many members as there are <subject> elements in the xml" do
-        @four_subjects.size.should == 4
-        @lcsh_subject.size.should == 1
+        expect(@four_subjects.size).to eq(4)
+        expect(@lcsh_subject.size).to eq(1)
       end
       it "should recognize authority attribute on <subject> element" do
         ['lcsh', 'ingest', 'lctgm'].each { |a|
-          @mods_rec.from_str("<mods #{@ns_decl}><subject authority='#{a}'><topic>Ruler, English.</topic></subject></mods>").subject.authority.should == [a]
+          expect(@mods_rec.from_str("<mods #{@ns_decl}><subject authority='#{a}'><topic>Ruler, English.</topic></subject></mods>").subject.authority).to eq([a])
         }
       end
 
@@ -166,42 +166,42 @@ describe "Mods <subject> Element" do
           @multi_topic = @mods_rec.from_str(multi_topic).subject.topic
         end
         it "should be a NodeSet" do
-          @topic_simple.should be_an_instance_of(Nokogiri::XML::NodeSet)
-          @multi_topic.should be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@topic_simple).to be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@multi_topic).to be_an_instance_of(Nokogiri::XML::NodeSet)
         end
         it "topic NodeSet should have as many Nodes as there are <topic> elements in the xml" do
-          @topic_simple.size.should == 1
-          @multi_topic.size.should == 3
-          @four_subjects.topic.size.should == 3
-          @geo_code_subject.topic.size.should == 0
+          expect(@topic_simple.size).to eq(1)
+          expect(@multi_topic.size).to eq(3)
+          expect(@four_subjects.topic.size).to eq(3)
+          expect(@geo_code_subject.topic.size).to eq(0)
         end
         it "text should get element value" do
-          @topic_simple.text.should == "History"
-          @multi_topic.text.should include("California as an island--Maps--1662?")
-          @multi_topic.text.should include("North America--Maps--To 1800")
-          @multi_topic.text.should include("North America--Maps--1662?")
-          @four_subjects.topic.text.should include("History")
+          expect(@topic_simple.text).to eq("History")
+          expect(@multi_topic.text).to include("California as an island--Maps--1662?")
+          expect(@multi_topic.text).to include("North America--Maps--To 1800")
+          expect(@multi_topic.text).to include("North America--Maps--1662?")
+          expect(@four_subjects.topic.text).to include("History")
         end
       end # <topic>
 
       context "<geographic> child element" do
         it "should be a NodeSet" do
-          @four_subjects.geographic.should be_an_instance_of(Nokogiri::XML::NodeSet)
-          @lcsh_subject.geographic.should be_an_instance_of(Nokogiri::XML::NodeSet)
-          @geo_code_subject.geographic.should be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@four_subjects.geographic).to be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@lcsh_subject.geographic).to be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@geo_code_subject.geographic).to be_an_instance_of(Nokogiri::XML::NodeSet)
         end
         it "geographic NodeSet should have as many Nodes as there are <geographic> elements in the xml" do
-          @four_subjects.geographic.size.should == 3
-          @lcsh_subject.geographic.size.should == 1
-          @geo_code_subject.geographic.size.should == 0
+          expect(@four_subjects.geographic.size).to eq(3)
+          expect(@lcsh_subject.geographic.size).to eq(1)
+          expect(@geo_code_subject.geographic.size).to eq(0)
         end
         it "text should get element value" do
-          @four_subjects.geographic.text.should include("San Francisco (Calif.)")
-          @four_subjects.geographic.text.should include("San Diego (Calif.)")
-          @four_subjects.geographic.text.should include("San Luis Rey (Calif.)")
+          expect(@four_subjects.geographic.text).to include("San Francisco (Calif.)")
+          expect(@four_subjects.geographic.text).to include("San Diego (Calif.)")
+          expect(@four_subjects.geographic.text).to include("San Luis Rey (Calif.)")
         end
         it "should not include <geographicCode> element" do
-          @geo_code_subject.geographic.size.should == 0
+          expect(@geo_code_subject.geographic.size).to eq(0)
         end
       end # <geographic>
 
@@ -214,60 +214,60 @@ describe "Mods <subject> Element" do
         end
 
         it "should recognize the date attributes" do
-          @temporal.encoding.should == ['iso8601']
+          expect(@temporal.encoding).to eq(['iso8601'])
           Mods::DATE_ATTRIBS.each { |a|
-            @mods_rec.from_str("<mods #{@ns_decl}><subject><temporal #{a}='val'>now</temporal></subject></mods>").subject.temporal.send(a.to_sym).should == ['val']
+            expect(@mods_rec.from_str("<mods #{@ns_decl}><subject><temporal #{a}='val'>now</temporal></subject></mods>").subject.temporal.send(a.to_sym)).to eq(['val'])
           }
         end
         it "should be a NodeSet" do
-          @lcsh_subject.temporal.should be_an_instance_of(Nokogiri::XML::NodeSet)
-          @temporal.should be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@lcsh_subject.temporal).to be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@temporal).to be_an_instance_of(Nokogiri::XML::NodeSet)
         end
         it "temporal NodeSet should have as many Nodes as there are <temporal> elements in the xml" do
-          @lcsh_subject.temporal.size.should == 1
-          @temporal.size.should == 1
+          expect(@lcsh_subject.temporal.size).to eq(1)
+          expect(@temporal.size).to eq(1)
         end
         it "text should get element value" do
-          @lcsh_subject.temporal.map { |n| n.text }.should == ['500-1400']
-          @temporal.map { |n| n.text }.should == ['20010203T040506+0700']
+          expect(@lcsh_subject.temporal.map { |n| n.text }).to eq(['500-1400'])
+          expect(@temporal.map { |n| n.text }).to eq(['20010203T040506+0700'])
         end
       end # <temporal>
 
       context "<genre> child element" do
         it "should be a NodeSet" do
-          @lcsh_subject.genre.should be_an_instance_of(Nokogiri::XML::NodeSet)
-          @four_subjects.genre.should be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@lcsh_subject.genre).to be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@four_subjects.genre).to be_an_instance_of(Nokogiri::XML::NodeSet)
         end
         it "genre NodeSet should have as many Nodes as there are <genre> elements in the xml" do
-          @lcsh_subject.genre.size.should == 1
-          @four_subjects.genre.size.should == 4
+          expect(@lcsh_subject.genre.size).to eq(1)
+          expect(@four_subjects.genre.size).to eq(4)
         end
         it "text should get element value" do
-          @lcsh_subject.genre.map { |n| n.text }.should == ['Maps']
-          @four_subjects.genre.map { |n| n.text }.should include("Pictorial works")
+          expect(@lcsh_subject.genre.map { |n| n.text }).to eq(['Maps'])
+          expect(@four_subjects.genre.map { |n| n.text }).to include("Pictorial works")
         end
       end # <genre>
 
       context "<geographicCode> child element" do
         it "should be a NodeSet" do
-          @geo_code_subject.geographicCode.should be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@geo_code_subject.geographicCode).to be_an_instance_of(Nokogiri::XML::NodeSet)
         end
         it "cartographics NodeSet should have as many Nodes as there are <geographicCode> elements in the xml" do
-          @geo_code_subject.geographicCode.size.should == 1
+          expect(@geo_code_subject.geographicCode.size).to eq(1)
         end
         it "text should get element value" do
-          @geo_code_subject.geographicCode.map { |n| n.text }.should == ['f------']
+          expect(@geo_code_subject.geographicCode.map { |n| n.text }).to eq(['f------'])
         end
         it "should recognize authority attributes" do
           Mods::AUTHORITY_ATTRIBS.each { |a|
             @mods_rec.from_str("<mods #{@ns_decl}><subject><geographicCode #{a}='attr_val'>f------</geographicCode></subject></mods>")
-            @mods_rec.subject.geographicCode.send(a.to_sym).should == ['attr_val']
+            expect(@mods_rec.subject.geographicCode.send(a.to_sym)).to eq(['attr_val'])
           }
         end
         it "should recognize the sanctioned authorities" do
           Mods::Subject::GEO_CODE_AUTHORITIES.each { |a|
             @mods_rec.from_str("<mods #{@ns_decl}><subject><geographicCode authority='#{a}'>f------</geographicCode></subject></mods>")
-            @mods_rec.subject.geographicCode.authority.should == [a]
+            expect(@mods_rec.subject.geographicCode.authority).to eq([a])
           }
         end
         it "should not recognize unsanctioned authorities?" do
@@ -278,23 +278,23 @@ describe "Mods <subject> Element" do
         context "translated_value convenience method" do
           it "should be the translation of the code if it is a marcgac code" do
             @mods_rec.from_str("<mods #{@ns_decl}><subject><geographicCode authority='marcgac'>e-er</geographicCode></subject></mods>")
-            @mods_rec.subject.geographicCode.translated_value.should == ["Estonia"]
+            expect(@mods_rec.subject.geographicCode.translated_value).to eq(["Estonia"])
           end
           it "should be the translation of the code if it is a marccountry code" do
             @mods_rec.from_str("<mods #{@ns_decl}><subject><geographicCode authority='marccountry'>mg</geographicCode></subject></mods>")
-            @mods_rec.subject.geographicCode.translated_value.should == ["Madagascar"]
+            expect(@mods_rec.subject.geographicCode.translated_value).to eq(["Madagascar"])
           end
           it "should be nil if the code is invalid" do
             @mods_rec.from_str("<mods #{@ns_decl}><subject><geographicCode authority='marcgac'>zzz</geographicCode></subject></mods>")
-            @mods_rec.subject.geographicCode.translated_value.size.should == 0
+            expect(@mods_rec.subject.geographicCode.translated_value.size).to eq(0)
           end
           it "should be nil if we don't have a translation for the authority" do
             @mods_rec.from_str("<mods #{@ns_decl}><subject><geographicCode authority='iso3166'>zzz</geographicCode></subject></mods>")
-            @mods_rec.subject.geographicCode.translated_value.size.should == 0
+            expect(@mods_rec.subject.geographicCode.translated_value.size).to eq(0)
           end
           it "should work with non-ascii characters" do
             @mods_rec.from_str("<mods #{@ns_decl}><subject><geographicCode authority='marccountry'>co</geographicCode></subject></mods>")
-            @mods_rec.subject.geographicCode.translated_value.should == ["Curaçao"]
+            expect(@mods_rec.subject.geographicCode.translated_value).to eq(["Curaçao"])
           end
         end
       end # <geographicCode>
@@ -313,24 +313,24 @@ describe "Mods <subject> Element" do
           Mods::TitleInfo::ATTRIBUTES.each { |a|
             ti = @mods_rec.from_str("<mods #{@ns_decl}><subject><titleInfo #{a}='attr_val'>THE</titleInfo></subject></mods>").subject.titleInfo
             if (a == 'type')
-              ti.type_at.should == ['attr_val']
+              expect(ti.type_at).to eq(['attr_val'])
             else
-              ti.send(a.to_sym).should == ['attr_val']
+              expect(ti.send(a.to_sym)).to eq(['attr_val'])
             end
           }
         end
         it "should understand all immediate child elements allowed on a <titleInfo> element" do
           Mods::TitleInfo::CHILD_ELEMENTS.each { |e|
-            @mods_rec.from_str("<mods #{@ns_decl}><subject><titleInfo><#{e}>el_val</#{e}></titleInfo></subject></mods>").subject.titleInfo.send(e.to_sym).text.should == 'el_val'
+            expect(@mods_rec.from_str("<mods #{@ns_decl}><subject><titleInfo><#{e}>el_val</#{e}></titleInfo></subject></mods>").subject.titleInfo.send(e.to_sym).text).to eq('el_val')
           }
-          @title_info.nonSort.map {|n| n.text}.should == ["The"]
+          expect(@title_info.nonSort.map {|n| n.text}).to eq(["The"])
         end
 
         it "should recognize authority attribute on the <titleInfo> element" do
-          @mods_rec.from_str("<mods #{@ns_decl}><subject>
+          expect(@mods_rec.from_str("<mods #{@ns_decl}><subject>
             	<titleInfo type='uniform' authority='naf'>
             	  	<title>Missale Carnotense</title>
-            	</titleInfo></subject></mods>").subject.titleInfo.authority.should == ["naf"]
+            	</titleInfo></subject></mods>").subject.titleInfo.authority).to eq(["naf"])
         end
       end # <titleInfo>
 
@@ -339,9 +339,9 @@ describe "Mods <subject> Element" do
           Mods::Name::ATTRIBUTES.each { |a|
             name = @mods_rec.from_str("<mods #{@ns_decl}><subject><name #{a}='attr_val'>Obadiah</name></subject></mods>").subject.name_el
             if (a == 'type')
-              name.type_at.should == ['attr_val']
+              expect(name.type_at).to eq(['attr_val'])
             else
-              name.send(a.to_sym).should == ['attr_val']
+              expect(name.send(a.to_sym)).to eq(['attr_val'])
             end
           }
         end
@@ -349,18 +349,18 @@ describe "Mods <subject> Element" do
           Mods::Name::CHILD_ELEMENTS.each { |e|
             name = @mods_rec.from_str("<mods #{@ns_decl}><subject><name><#{e}>el_val</#{e}></name></subject></mods>").subject.name_el
             if (e == 'description')
-              name.description_el.text.should == 'el_val'
+              expect(name.description_el.text).to eq('el_val')
             elsif (e != 'role')
-              name.send(e.to_sym).text.should == 'el_val'
+              expect(name.send(e.to_sym).text).to eq('el_val')
             end
           }
         end
         it "should recognize authority attribute on the <name> element" do
-          @mods_rec.from_str("<mods #{@ns_decl}><subject>
+          expect(@mods_rec.from_str("<mods #{@ns_decl}><subject>
              <name type='personal' authority='lcsh'>
                <namePart>Nahl, Charles Christian</namePart>
                <namePart type='date'>1818-1878</namePart>
-             </name></mods>").subject.name_el.authority.should == ["lcsh"]
+             </name></mods>").subject.name_el.authority).to eq(["lcsh"])
         end
       end # <name>
 
@@ -368,15 +368,15 @@ describe "Mods <subject> Element" do
         it "should recognize authority attributes" do
           Mods::AUTHORITY_ATTRIBS.each { |a|
             @mods_rec.from_str("<mods #{@ns_decl}><subject><hierarchicalGeographic #{a}='attr_val'><country>Albania</country></hierarchicalGeographic></subject></mods>")
-            @mods_rec.subject.hierarchicalGeographic.send(a.to_sym).should == ['attr_val']
+            expect(@mods_rec.subject.hierarchicalGeographic.send(a.to_sym)).to eq(['attr_val'])
           }
         end
         it "should recognize allowed child elements" do
           Mods::Subject::HIER_GEO_CHILD_ELEMENTS.each { |e|
             @mods_rec.from_str("<mods #{@ns_decl}><subject><hierarchicalGeographic><#{e}>el_val</#{e}></hierarchicalGeographic></subject></mods>")
-            @mods_rec.subject.hierarchicalGeographic.send(e.to_sym).text.should == 'el_val'
+            expect(@mods_rec.subject.hierarchicalGeographic.send(e.to_sym).text).to eq('el_val')
           }
-          Mods::Subject::HIER_GEO_CHILD_ELEMENTS.size.should == 12
+          expect(Mods::Subject::HIER_GEO_CHILD_ELEMENTS.size).to eq(12)
         end
       end # <hierarchicalGeographic>
 
@@ -408,31 +408,31 @@ describe "Mods <subject> Element" do
                    </subject></mods>").subject.cartographics
         end
         it "should be a NodeSet" do
-          @carto_scale.should be_an_instance_of(Nokogiri::XML::NodeSet)
-          @carto_empties.should be_an_instance_of(Nokogiri::XML::NodeSet)
-          @multi_carto.should be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@carto_scale).to be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@carto_empties).to be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@multi_carto).to be_an_instance_of(Nokogiri::XML::NodeSet)
         end
         it "cartographics NodeSet should have as many Nodes as there are <cartographics> elements in the xml" do
-          @carto_scale.size.should == 1
-          @carto_empties.size.should == 1
-          @multi_carto.size.should == 3
+          expect(@carto_scale.size).to eq(1)
+          expect(@carto_empties.size).to eq(1)
+          expect(@multi_carto.size).to eq(3)
         end
         it "should recognize allowed child elements" do
           Mods::Subject::CARTOGRAPHICS_CHILD_ELEMENTS.each { |e|
             @mods_rec.from_str("<mods #{@ns_decl}><subject><cartographics><#{e}>el_val</#{e}></cartographics></subject></mods>")
-            @mods_rec.subject.cartographics.send(e.to_sym).text.should == 'el_val'
+            expect(@mods_rec.subject.cartographics.send(e.to_sym).text).to eq('el_val')
           }
-          Mods::Subject::CARTOGRAPHICS_CHILD_ELEMENTS.size.should == 3
+          expect(Mods::Subject::CARTOGRAPHICS_CHILD_ELEMENTS.size).to eq(3)
         end
         it "should get the number of populated <coordinates> elements for coordinates term" do
           @multi_carto.coordinates.size == 2
         end
         it "should be able to get the value of populated elements" do
-          @carto_scale.scale.map { |n| n.text }.should == ['[ca.1:90,000,000], [173']
-          @carto_empties.coordinates.map { |n| n.text }.should == ['W1730000 W0100000 N840000 N071000']
+          expect(@carto_scale.scale.map { |n| n.text }).to eq(['[ca.1:90,000,000], [173'])
+          expect(@carto_empties.coordinates.map { |n| n.text }).to eq(['W1730000 W0100000 N840000 N071000'])
         end
         it "should get the empty string for empty elements?" do
-          @carto_empties.projection.map { |n| n.text }.should == ['']
+          expect(@carto_empties.projection.map { |n| n.text }).to eq([''])
         end
       end # <cartographics>
 
@@ -441,18 +441,18 @@ describe "Mods <subject> Element" do
           @occupation = @mods_rec.from_str("<mods #{@ns_decl}><subject><occupation>Migrant laborers</occupation></mods>").subject.occupation
         end
         it "should be a NodeSet" do
-          @occupation.should be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@occupation).to be_an_instance_of(Nokogiri::XML::NodeSet)
         end
         it "occupation NodeSet should have as many Nodes as there are <occupation> elements in the xml" do
-          @occupation.size.should == 1
+          expect(@occupation.size).to eq(1)
         end
         it "text should get element value" do
-          @occupation.map { |n| n.text }.should == ['Migrant laborers']
+          expect(@occupation.map { |n| n.text }).to eq(['Migrant laborers'])
         end
         it "should recognize authority attributes" do
           Mods::AUTHORITY_ATTRIBS.each { |a|
             @mods_rec.from_str("<mods #{@ns_decl}><subject><occupation #{a}='attr_val'>Flunkie</occupation></subject></mods>")
-            @mods_rec.subject.occupation.send(a.to_sym).should == ['attr_val']
+            expect(@mods_rec.subject.occupation.send(a.to_sym)).to eq(['attr_val'])
           }
         end
       end # <occupation>
@@ -487,16 +487,16 @@ describe "Mods <subject> Element" do
       end
 
       it "should be a NodeSet" do
-        @four_subjects.should be_an_instance_of(Nokogiri::XML::NodeSet)
-        @lcsh_subject.should be_an_instance_of(Nokogiri::XML::NodeSet)
+        expect(@four_subjects).to be_an_instance_of(Nokogiri::XML::NodeSet)
+        expect(@lcsh_subject).to be_an_instance_of(Nokogiri::XML::NodeSet)
       end
       it "should have as many members as there are <subject> elements in the xml" do
-        @four_subjects.size.should == 4
-        @lcsh_subject.size.should == 1
+        expect(@four_subjects.size).to eq(4)
+        expect(@lcsh_subject.size).to eq(1)
       end
       it "should recognize authority attribute on <subject> element" do
         ['lcsh', 'ingest', 'lctgm'].each { |a|
-          @mods_rec.from_str("<mods><subject authority='#{a}'><topic>Ruler, English.</topic></subject></mods>", false).subject.authority.should == [a]
+          expect(@mods_rec.from_str("<mods><subject authority='#{a}'><topic>Ruler, English.</topic></subject></mods>", false).subject.authority).to eq([a])
         }
       end
 
@@ -512,42 +512,42 @@ describe "Mods <subject> Element" do
           @multi_topic = @mods_rec.from_str(multi_topic, false).subject.topic
         end
         it "should be a NodeSet" do
-          @topic_simple.should be_an_instance_of(Nokogiri::XML::NodeSet)
-          @multi_topic.should be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@topic_simple).to be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@multi_topic).to be_an_instance_of(Nokogiri::XML::NodeSet)
         end
         it "topic NodeSet should have as many Nodes as there are <topic> elements in the xml" do
-          @topic_simple.size.should == 1
-          @multi_topic.size.should == 3
-          @four_subjects.topic.size.should == 3
-          @geo_code_subject.topic.size.should == 0
+          expect(@topic_simple.size).to eq(1)
+          expect(@multi_topic.size).to eq(3)
+          expect(@four_subjects.topic.size).to eq(3)
+          expect(@geo_code_subject.topic.size).to eq(0)
         end
         it "text should get element value" do
-          @topic_simple.text.should == "History"
-          @multi_topic.text.should include("California as an island--Maps--1662?")
-          @multi_topic.text.should include("North America--Maps--To 1800")
-          @multi_topic.text.should include("North America--Maps--1662?")
-          @four_subjects.topic.text.should include("History")
+          expect(@topic_simple.text).to eq("History")
+          expect(@multi_topic.text).to include("California as an island--Maps--1662?")
+          expect(@multi_topic.text).to include("North America--Maps--To 1800")
+          expect(@multi_topic.text).to include("North America--Maps--1662?")
+          expect(@four_subjects.topic.text).to include("History")
         end
       end # <topic>
 
       context "<geographic> child element" do
         it "should be a NodeSet" do
-          @four_subjects.geographic.should be_an_instance_of(Nokogiri::XML::NodeSet)
-          @lcsh_subject.geographic.should be_an_instance_of(Nokogiri::XML::NodeSet)
-          @geo_code_subject.geographic.should be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@four_subjects.geographic).to be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@lcsh_subject.geographic).to be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@geo_code_subject.geographic).to be_an_instance_of(Nokogiri::XML::NodeSet)
         end
         it "geographic NodeSet should have as many Nodes as there are <geographic> elements in the xml" do
-          @four_subjects.geographic.size.should == 3
-          @lcsh_subject.geographic.size.should == 1
-          @geo_code_subject.geographic.size.should == 0
+          expect(@four_subjects.geographic.size).to eq(3)
+          expect(@lcsh_subject.geographic.size).to eq(1)
+          expect(@geo_code_subject.geographic.size).to eq(0)
         end
         it "text should get element value" do
-          @four_subjects.geographic.text.should include("San Francisco (Calif.)")
-          @four_subjects.geographic.text.should include("San Diego (Calif.)")
-          @four_subjects.geographic.text.should include("San Luis Rey (Calif.)")
+          expect(@four_subjects.geographic.text).to include("San Francisco (Calif.)")
+          expect(@four_subjects.geographic.text).to include("San Diego (Calif.)")
+          expect(@four_subjects.geographic.text).to include("San Luis Rey (Calif.)")
         end
         it "should not include <geographicCode> element" do
-          @geo_code_subject.geographic.size.should == 0
+          expect(@geo_code_subject.geographic.size).to eq(0)
         end
       end # <geographic>
 
@@ -560,60 +560,60 @@ describe "Mods <subject> Element" do
         end
 
         it "should recognize the date attributes" do
-          @temporal.encoding.should == ['iso8601']
+          expect(@temporal.encoding).to eq(['iso8601'])
           Mods::DATE_ATTRIBS.each { |a|
-            @mods_rec.from_str("<mods><subject><temporal #{a}='val'>now</temporal></subject></mods>", false).subject.temporal.send(a.to_sym).should == ['val']
+            expect(@mods_rec.from_str("<mods><subject><temporal #{a}='val'>now</temporal></subject></mods>", false).subject.temporal.send(a.to_sym)).to eq(['val'])
           }
         end
         it "should be a NodeSet" do
-          @lcsh_subject.temporal.should be_an_instance_of(Nokogiri::XML::NodeSet)
-          @temporal.should be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@lcsh_subject.temporal).to be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@temporal).to be_an_instance_of(Nokogiri::XML::NodeSet)
         end
         it "temporal NodeSet should have as many Nodes as there are <temporal> elements in the xml" do
-          @lcsh_subject.temporal.size.should == 1
-          @temporal.size.should == 1
+          expect(@lcsh_subject.temporal.size).to eq(1)
+          expect(@temporal.size).to eq(1)
         end
         it "text should get element value" do
-          @lcsh_subject.temporal.map { |n| n.text }.should == ['500-1400']
-          @temporal.map { |n| n.text }.should == ['20010203T040506+0700']
+          expect(@lcsh_subject.temporal.map { |n| n.text }).to eq(['500-1400'])
+          expect(@temporal.map { |n| n.text }).to eq(['20010203T040506+0700'])
         end
       end # <temporal>
 
       context "<genre> child element" do
         it "should be a NodeSet" do
-          @lcsh_subject.genre.should be_an_instance_of(Nokogiri::XML::NodeSet)
-          @four_subjects.genre.should be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@lcsh_subject.genre).to be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@four_subjects.genre).to be_an_instance_of(Nokogiri::XML::NodeSet)
         end
         it "genre NodeSet should have as many Nodes as there are <genre> elements in the xml" do
-          @lcsh_subject.genre.size.should == 1
-          @four_subjects.genre.size.should == 4
+          expect(@lcsh_subject.genre.size).to eq(1)
+          expect(@four_subjects.genre.size).to eq(4)
         end
         it "text should get element value" do
-          @lcsh_subject.genre.map { |n| n.text }.should == ['Maps']
-          @four_subjects.genre.map { |n| n.text }.should include("Pictorial works")
+          expect(@lcsh_subject.genre.map { |n| n.text }).to eq(['Maps'])
+          expect(@four_subjects.genre.map { |n| n.text }).to include("Pictorial works")
         end
       end # <genre>
 
       context "<geographicCode> child element" do
         it "should be a NodeSet" do
-          @geo_code_subject.geographicCode.should be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@geo_code_subject.geographicCode).to be_an_instance_of(Nokogiri::XML::NodeSet)
         end
         it "cartographics NodeSet should have as many Nodes as there are <geographicCode> elements in the xml" do
-          @geo_code_subject.geographicCode.size.should == 1
+          expect(@geo_code_subject.geographicCode.size).to eq(1)
         end
         it "text should get element value" do
-          @geo_code_subject.geographicCode.map { |n| n.text }.should == ['f------']
+          expect(@geo_code_subject.geographicCode.map { |n| n.text }).to eq(['f------'])
         end
         it "should recognize authority attributes" do
           Mods::AUTHORITY_ATTRIBS.each { |a|
             @mods_rec.from_str("<mods><subject><geographicCode #{a}='attr_val'>f------</geographicCode></subject></mods>", false)
-            @mods_rec.subject.geographicCode.send(a.to_sym).should == ['attr_val']
+            expect(@mods_rec.subject.geographicCode.send(a.to_sym)).to eq(['attr_val'])
           }
         end
         it "should recognize the sanctioned authorities" do
           Mods::Subject::GEO_CODE_AUTHORITIES.each { |a|
             @mods_rec.from_str("<mods><subject><geographicCode authority='#{a}'>f------</geographicCode></subject></mods>", false)
-            @mods_rec.subject.geographicCode.authority.should == [a]
+            expect(@mods_rec.subject.geographicCode.authority).to eq([a])
           }
         end
         it "should not recognize unsanctioned authorities?" do
@@ -624,23 +624,23 @@ describe "Mods <subject> Element" do
         context "translated_value convenience method" do
           it "should be the translation of the code if it is a marcgac code" do
             @mods_rec.from_str("<mods><subject><geographicCode authority='marcgac'>e-er</geographicCode></subject></mods>", false)
-            @mods_rec.subject.geographicCode.translated_value.should == ["Estonia"]
+            expect(@mods_rec.subject.geographicCode.translated_value).to eq(["Estonia"])
           end
           it "should be the translation of the code if it is a marccountry code" do
             @mods_rec.from_str("<mods><subject><geographicCode authority='marccountry'>mg</geographicCode></subject></mods>", false)
-            @mods_rec.subject.geographicCode.translated_value.should == ["Madagascar"]
+            expect(@mods_rec.subject.geographicCode.translated_value).to eq(["Madagascar"])
           end
           it "should be empty if the code is invalid" do
             @mods_rec.from_str("<mods><subject><geographicCode authority='marcgac'>zzz</geographicCode></subject></mods>", false)
-            @mods_rec.subject.geographicCode.translated_value.size.should == 0
+            expect(@mods_rec.subject.geographicCode.translated_value.size).to eq(0)
           end
           it "should be empty if we don't have a translation for the authority" do
             @mods_rec.from_str("<mods><subject><geographicCode authority='iso3166'>zzz</geographicCode></subject></mods>", false)
-            @mods_rec.subject.geographicCode.translated_value.size.should == 0
+            expect(@mods_rec.subject.geographicCode.translated_value.size).to eq(0)
           end
           it "should work with non-ascii characters" do
             @mods_rec.from_str("<mods><subject><geographicCode authority='marccountry'>co</geographicCode></subject></mods>", false)
-            @mods_rec.subject.geographicCode.translated_value.should == ["Curaçao"]
+            expect(@mods_rec.subject.geographicCode.translated_value).to eq(["Curaçao"])
           end
         end
       end # <geographicCode>
@@ -659,24 +659,24 @@ describe "Mods <subject> Element" do
           Mods::TitleInfo::ATTRIBUTES.each { |a|
             ti = @mods_rec.from_str("<mods><subject><titleInfo #{a}='attr_val'>THE</titleInfo></subject></mods>", false).subject.titleInfo
             if (a == 'type')
-              ti.type_at.should == ['attr_val']
+              expect(ti.type_at).to eq(['attr_val'])
             else
-              ti.send(a.to_sym).should == ['attr_val']
+              expect(ti.send(a.to_sym)).to eq(['attr_val'])
             end
           }
         end
         it "should understand all immediate child elements allowed on a <titleInfo> element" do
           Mods::TitleInfo::CHILD_ELEMENTS.each { |e|
-            @mods_rec.from_str("<mods><subject><titleInfo><#{e}>el_val</#{e}></titleInfo></subject></mods>", false).subject.titleInfo.send(e.to_sym).text.should == 'el_val'
+            expect(@mods_rec.from_str("<mods><subject><titleInfo><#{e}>el_val</#{e}></titleInfo></subject></mods>", false).subject.titleInfo.send(e.to_sym).text).to eq('el_val')
           }
-          @title_info.nonSort.map {|n| n.text}.should == ["The"]
+          expect(@title_info.nonSort.map {|n| n.text}).to eq(["The"])
         end
 
         it "should recognize authority attribute on the <titleInfo> element" do
-          @mods_rec.from_str("<mods><subject>
+          expect(@mods_rec.from_str("<mods><subject>
             	<titleInfo type='uniform' authority='naf'>
             	  	<title>Missale Carnotense</title>
-            	</titleInfo></subject></mods>", false).subject.titleInfo.authority.should == ["naf"]
+            	</titleInfo></subject></mods>", false).subject.titleInfo.authority).to eq(["naf"])
         end
       end # <titleInfo>
 
@@ -685,9 +685,9 @@ describe "Mods <subject> Element" do
           Mods::Name::ATTRIBUTES.each { |a|
             name = @mods_rec.from_str("<mods><subject><name #{a}='attr_val'>Obadiah</name></subject></mods>", false).subject.name_el
             if (a == 'type')
-              name.type_at.should == ['attr_val']
+              expect(name.type_at).to eq(['attr_val'])
             else
-              name.send(a.to_sym).should == ['attr_val']
+              expect(name.send(a.to_sym)).to eq(['attr_val'])
             end
           }
         end
@@ -695,18 +695,18 @@ describe "Mods <subject> Element" do
           Mods::Name::CHILD_ELEMENTS.each { |e|
             name = @mods_rec.from_str("<mods><subject><name><#{e}>el_val</#{e}></name></subject></mods>", false).subject.name_el
             if (e == 'description')
-              name.description_el.text.should == 'el_val'
+              expect(name.description_el.text).to eq('el_val')
             elsif (e != 'role')
-              name.send(e.to_sym).text.should == 'el_val'
+              expect(name.send(e.to_sym).text).to eq('el_val')
             end
           }
         end
         it "should recognize authority attribute on the <name> element" do
-          @mods_rec.from_str("<mods><subject>
+          expect(@mods_rec.from_str("<mods><subject>
              <name type='personal' authority='lcsh'>
                <namePart>Nahl, Charles Christian</namePart>
                <namePart type='date'>1818-1878</namePart>
-             </name></mods>", false).subject.name_el.authority.should == ["lcsh"]
+             </name></mods>", false).subject.name_el.authority).to eq(["lcsh"])
         end
       end # <name>
 
@@ -714,15 +714,15 @@ describe "Mods <subject> Element" do
         it "should recognize authority attributes" do
           Mods::AUTHORITY_ATTRIBS.each { |a|
             @mods_rec.from_str("<mods><subject><hierarchicalGeographic #{a}='attr_val'><country>Albania</country></hierarchicalGeographic></subject></mods>", false)
-            @mods_rec.subject.hierarchicalGeographic.send(a.to_sym).should == ['attr_val']
+            expect(@mods_rec.subject.hierarchicalGeographic.send(a.to_sym)).to eq(['attr_val'])
           }
         end
         it "should recognize allowed child elements" do
           Mods::Subject::HIER_GEO_CHILD_ELEMENTS.each { |e|
             @mods_rec.from_str("<mods><subject><hierarchicalGeographic><#{e}>el_val</#{e}></hierarchicalGeographic></subject></mods>", false)
-            @mods_rec.subject.hierarchicalGeographic.send(e.to_sym).text.should == 'el_val'
+            expect(@mods_rec.subject.hierarchicalGeographic.send(e.to_sym).text).to eq('el_val')
           }
-          Mods::Subject::HIER_GEO_CHILD_ELEMENTS.size.should == 12
+          expect(Mods::Subject::HIER_GEO_CHILD_ELEMENTS.size).to eq(12)
         end
       end # <hierarchicalGeographic>
 
@@ -754,31 +754,31 @@ describe "Mods <subject> Element" do
                    </subject></mods>", false).subject.cartographics
         end
         it "should be a NodeSet" do
-          @carto_scale.should be_an_instance_of(Nokogiri::XML::NodeSet)
-          @carto_empties.should be_an_instance_of(Nokogiri::XML::NodeSet)
-          @multi_carto.should be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@carto_scale).to be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@carto_empties).to be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@multi_carto).to be_an_instance_of(Nokogiri::XML::NodeSet)
         end
         it "cartographics NodeSet should have as many Nodes as there are <cartographics> elements in the xml" do
-          @carto_scale.size.should == 1
-          @carto_empties.size.should == 1
-          @multi_carto.size.should == 3
+          expect(@carto_scale.size).to eq(1)
+          expect(@carto_empties.size).to eq(1)
+          expect(@multi_carto.size).to eq(3)
         end
         it "should recognize allowed child elements" do
           Mods::Subject::CARTOGRAPHICS_CHILD_ELEMENTS.each { |e|
             @mods_rec.from_str("<mods><subject><cartographics><#{e}>el_val</#{e}></cartographics></subject></mods>", false)
-            @mods_rec.subject.cartographics.send(e.to_sym).text.should == 'el_val'
+            expect(@mods_rec.subject.cartographics.send(e.to_sym).text).to eq('el_val')
           }
-          Mods::Subject::CARTOGRAPHICS_CHILD_ELEMENTS.size.should == 3
+          expect(Mods::Subject::CARTOGRAPHICS_CHILD_ELEMENTS.size).to eq(3)
         end
         it "should get the number of populated <coordinates> elements for coordinates term" do
           @multi_carto.coordinates.size == 2
         end
         it "should be able to get the value of populated elements" do
-          @carto_scale.scale.map { |n| n.text }.should == ['[ca.1:90,000,000], [173']
-          @carto_empties.coordinates.map { |n| n.text }.should == ['W1730000 W0100000 N840000 N071000']
+          expect(@carto_scale.scale.map { |n| n.text }).to eq(['[ca.1:90,000,000], [173'])
+          expect(@carto_empties.coordinates.map { |n| n.text }).to eq(['W1730000 W0100000 N840000 N071000'])
         end
         it "should get the empty string for empty elements?" do
-          @carto_empties.projection.map { |n| n.text }.should == ['']
+          expect(@carto_empties.projection.map { |n| n.text }).to eq([''])
         end
       end # <cartographics>
 
@@ -787,18 +787,18 @@ describe "Mods <subject> Element" do
           @occupation = @mods_rec.from_str("<mods><subject><occupation>Migrant laborers</occupation></mods>", false).subject.occupation
         end
         it "should be a NodeSet" do
-          @occupation.should be_an_instance_of(Nokogiri::XML::NodeSet)
+          expect(@occupation).to be_an_instance_of(Nokogiri::XML::NodeSet)
         end
         it "occupation NodeSet should have as many Nodes as there are <occupation> elements in the xml" do
-          @occupation.size.should == 1
+          expect(@occupation.size).to eq(1)
         end
         it "text should get element value" do
-          @occupation.map { |n| n.text }.should == ['Migrant laborers']
+          expect(@occupation.map { |n| n.text }).to eq(['Migrant laborers'])
         end
         it "should recognize authority attributes" do
           Mods::AUTHORITY_ATTRIBS.each { |a|
             @mods_rec.from_str("<mods><subject><occupation #{a}='attr_val'>Flunkie</occupation></subject></mods>", false)
-            @mods_rec.subject.occupation.send(a.to_sym).should == ['attr_val']
+            expect(@mods_rec.subject.occupation.send(a.to_sym)).to eq(['attr_val'])
           }
         end
       end # <occupation>
