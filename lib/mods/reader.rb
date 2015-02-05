@@ -19,7 +19,6 @@ module Mods
     def from_str(str)
       @mods_ng_xml = Nokogiri::XML(str, nil, str.encoding.to_s)
       normalize_mods
-      @mods_ng_xml
     end
 
     # Read in the contents of a Mods file from a url.
@@ -31,7 +30,6 @@ module Mods
       require 'open-uri'
       @mods_ng_xml = Nokogiri::XML(open(url).read)
       normalize_mods
-      @mods_ng_xml
     end
 
     # Read in the contents of a Mods record from a file.
@@ -44,7 +42,6 @@ module Mods
       @mods_ng_xml = Nokogiri::XML(file)
       file.close
       normalize_mods
-      @mods_ng_xml
     end
 
     # @param node (Nokogiri::XML::Node) - Nokogiri::XML::Node that is the top level element of a mods record
@@ -52,10 +49,10 @@ module Mods
     def from_nk_node(node)
       @mods_ng_xml = Nokogiri::XML(node.to_s, nil, node.document.encoding)
       normalize_mods
-      @mods_ng_xml
     end
 
     # Whatever we get, normalize it into a Nokogiri::XML::Document,
+    # @return mods_ng_xml (Nokogiri::XML::Document) normalized doc
     def normalize_mods
       if !@namespace_aware
         @mods_ng_xml.remove_namespaces!
@@ -68,6 +65,7 @@ module Mods
 #        @mods_ng_xml = Nokogiri::XML(@mods_ng_xml.to_s, nil, @mods_ng_xml.encoding, Nokogiri::XML::ParseOptions::PEDANTIC)
         @mods_ng_xml = Nokogiri::XML(@mods_ng_xml.to_s, nil, @mods_ng_xml.encoding)
       end
+      @mods_ng_xml
     end
 
   end # class
