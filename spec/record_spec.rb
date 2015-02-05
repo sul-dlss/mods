@@ -4,16 +4,19 @@ describe "Mods::Record" do
   before(:all) do
     @ns_hash = {'mods' => Mods::MODS_NS}
     @def_ns_decl = "xmlns='#{Mods::MODS_NS}'"
-    @example_ns_str = "<mods #{@def_ns_decl}><note>default ns</note></mods>"
-    @example_no_ns_str = '<mods><note>no ns</note></mods>'
+    @example_ns_str     = "<mods #{@def_ns_decl}><note>default ns</note></mods>"
+    @example_no_ns_str  = '<mods><note>no ns</note></mods>'
     @example_record_url = 'http://www.loc.gov/standards/mods/modsrdf/examples/0001.xml'
-    @doc_from_str_ns = Mods::Reader.new.from_str(@example_ns_str)
+    @doc_from_str_ns    = Mods::Reader.new.from_str(@example_ns_str)
     @doc_from_str_no_ns = Mods::Reader.new.from_str(@example_no_ns_str)
   end
 
   context "from_str" do
     before(:all) do
       @mods_ng_doc_w_ns = Mods::Record.new.from_str(@example_ns_str)
+    end
+    it "should return a mods record" do
+      expect(@mods_ng_doc_w_ns).to be_a_kind_of(Mods::Record)
     end
     it "should have namespace aware parsing turned on by default" do
       expect(@mods_ng_doc_w_ns.namespaces.size).to be > 0
@@ -48,8 +51,7 @@ describe "Mods::Record" do
   context "from_file" do
     before(:all) do
       @fixture_dir = File.join(File.dirname(__FILE__), 'fixture_data')
-      @fixture_mods_file = File.join(@fixture_dir, 'shpc1.mods.xml')
-      @mods_doc = Mods::Record.new.from_file(@fixture_mods_file)
+      @mods_doc = Mods::Record.new.from_file(File.join(@fixture_dir, 'shpc1.mods.xml'))
     end
     it "should return a mods record" do
       expect(@mods_doc).to be_a_kind_of(Mods::Record)
@@ -92,6 +94,9 @@ describe "Mods::Record" do
       ng_xml = Nokogiri::XML(bad_ns_wrapped)
       @mods_node_no_ns = ng_xml.xpath('//n:mods', {'n'=>'http://www.not.mods.org'}).first
     end
+    it "should return a mods record" do
+      expect(@mods_ng_doc).to be_a_kind_of(Mods::Record)
+    end
     it "should have namespace aware parsing turned on by default" do
       expect(@mods_ng_doc.namespaces.size).to be > 0
     end
@@ -124,10 +129,10 @@ describe "Mods::Record" do
 
     context "term_value (single value result)" do
       it "should return nil if there are no such values in the MODS" do
-        expect(@mods_rec.term_value(:identifier)).to eq(nil)
+        expect(@mods_rec.term_value(:identifier)).to be_nil
       end
       it "should return nil if there are only empty values in the MODS" do
-        expect(@mods_rec.term_value(:genre)).to eq(nil)
+        expect(@mods_rec.term_value(:genre)).to be_nil
       end
       it "should return a String for a single value" do
         expect(@mods_rec.term_value(:abstract)).to eq('single')
@@ -145,10 +150,10 @@ describe "Mods::Record" do
 
     context "term_values (multiple values)" do
       it "should return nil if there are no such values in the MODS" do
-        expect(@mods_rec.term_values(:identifier)).to eq(nil)
+        expect(@mods_rec.term_values(:identifier)).to be_nil
       end
       it "should return nil if there are only empty values in the MODS" do
-        expect(@mods_rec.term_values(:genre)).to eq(nil)
+        expect(@mods_rec.term_values(:genre)).to be_nil
       end
       it "should return an array of size one for a single value" do
         expect(@mods_rec.term_values(:abstract)).to eq(['single'])
@@ -215,7 +220,7 @@ describe "Mods::Record" do
                                 <namePart type="termsOfAddress">Mr.</namePart>
                                 <namePart type="date">date</namePart></name></mods>'
         @family_only = '<mods xmlns="http://www.loc.gov/mods/v3"><name type="personal"><namePart type="family">Family</namePart></name></mods>'
-        @given_only = '<mods xmlns="http://www.loc.gov/mods/v3"><name type="personal"><namePart type="given">Given</namePart></name></mods>'
+        @given_only  = '<mods xmlns="http://www.loc.gov/mods/v3"><name type="personal"><namePart type="given">Given</namePart></name></mods>'
       end
 
       it "should return an Array of Strings" do
@@ -322,10 +327,10 @@ describe "Mods::Record" do
 
     context "languages" do
       before(:all) do
-        @simple = "<mods #{@def_ns_decl}><language>Greek</language></mods>"
+        @simple         = "<mods #{@def_ns_decl}><language>Greek</language></mods>"
         @iso639_2b_code = "<mods #{@def_ns_decl}><language><languageTerm authority='iso639-2b' type='code'>fre</languageTerm></language></mods>"
         @iso639_2b_text = "<mods #{@def_ns_decl}><language><languageTerm authority='iso639-2b' type='text'>English</languageTerm></language></mods>"
-        @mult_codes = "<mods #{@def_ns_decl}><language><languageTerm authority='iso639-2b' type='code'>per ara, dut</languageTerm></language></mods>"
+        @mult_codes     = "<mods #{@def_ns_decl}><language><languageTerm authority='iso639-2b' type='code'>per ara, dut</languageTerm></language></mods>"
       end
       it "should translate iso639-2b codes to English" do
         @mods_rec.from_str(@iso639_2b_code)

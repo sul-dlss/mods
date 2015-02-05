@@ -24,6 +24,7 @@ module Mods
     # convenience method to call Mods::Reader.new.from_str and to nom
     # @param ns_aware true if the XML parsing should be strict about using namespaces.  Default is true
     # @param str - a string containing mods xml
+    # @return Mods::Record
     def from_str(str, ns_aware = true)
       @mods_ng_xml = Mods::Reader.new(ns_aware).from_str(str)
       if ns_aware
@@ -31,6 +32,7 @@ module Mods
       else
         set_terminology_no_ns(@mods_ng_xml)
       end
+      return self
     end
 
     # Convenience method to call Mods::Reader.new.from_url and to nom.
@@ -68,8 +70,9 @@ module Mods
     end
 
     # convenience method to call Mods::Reader.new.from_nk_node and to nom
-    # @param ns_aware true if the XML parsing should be strict about using namespaces.  Default is true
     # @param node (Nokogiri::XML::Node) - Nokogiri::XML::Node that is the top level element of a mods record
+    # @param ns_aware true if the XML parsing should be strict about using namespaces.  Default is true
+    # @return Mods::Record
     def from_nk_node(node, ns_aware = true)
       @mods_ng_xml = Mods::Reader.new(ns_aware).from_nk_node(node)
       if ns_aware
@@ -77,6 +80,7 @@ module Mods
       else
         set_terminology_no_ns(@mods_ng_xml)
       end
+      return self
     end
 
     # get the value for the terms, as a String. f there are multiple values, they will be joined with the separator.

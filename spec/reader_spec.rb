@@ -145,6 +145,7 @@ describe "Mods::Reader" do
     it "should be able not to care about namespaces" do
       @r.namespace_aware = false
       mods_ng_doc = @r.from_nk_node(@mods_node)
+      expect(mods_ng_doc).to be_kind_of(Nokogiri::XML::Document)
       expect(mods_ng_doc.xpath('/m:mods/m:titleInfo/m:title', @ns_hash).size).to eq(0)
       expect(mods_ng_doc.xpath('/mods/titleInfo/title').text).to eq("boo")
       @r.namespace_aware = true
