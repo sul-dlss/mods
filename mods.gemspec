@@ -10,7 +10,7 @@ Gem::Specification.new do |gem|
   gem.summary       = "Parse MODS (Metadata Object Description Schema) records."
   gem.homepage      = "https://github.com/sul-dlss/mods"
 
-  gem.extra_rdoc_files = ["LICENSE", "README.rdoc"]
+  gem.extra_rdoc_files = ["LICENSE", "README.md"]
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^spec/})
