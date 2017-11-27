@@ -243,6 +243,15 @@ describe "Mods <originInfo> Element" do
         end
       end
 
+      describe '#as_object' do
+        describe '#key_dates' do
+          it 'should extract the date with the keyDate attribute' do
+            @mods_rec.from_str("<mods #{@ns_decl}><originInfo><dateCreated>other date</dateCreated><dateCreated keyDate='yes'>key date</dateCreated></originInfo></mods>")
+            expect(@mods_rec.origin_info.as_object.first.key_dates.first.text).to eq 'key date'
+          end
+        end
+      end
+
       context "<xxxDate> child elements" do
         it "should recognize each element" do
           Mods::ORIGIN_INFO_DATE_ELEMENTS.each { |elname|

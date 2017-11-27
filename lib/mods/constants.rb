@@ -1,11 +1,11 @@
 module Mods
   # the version of MODS supported by this gem
   MODS_VERSION = '3.4'
-  
+
   MODS_NS_V3 = "http://www.loc.gov/mods/v3"
   MODS_NS = MODS_NS_V3
   MODS_XSD = "http://www.loc.gov/standards/mods/mods.xsd"
-  
+
   DOC_URL = "http://www.loc.gov/standards/mods/"
 
   # top level elements that cannot have subelement children
@@ -40,7 +40,7 @@ module Mods
   # enumerated attribute values
   TITLE_INFO_TYPES = ['abbreviated', 'translated', 'alternative', 'uniform']
   RELATED_ITEM_TYPES = [
-    'preceding', 'succeeding', 'original', 'host', 'constituent', 'series', 
+    'preceding', 'succeeding', 'original', 'host', 'constituent', 'series',
     'otherVersion', 'otherFormat', 'isReferencedBy', 'references', 'reviewOf'
     ]
 
@@ -51,10 +51,7 @@ module Mods
   'still image',
   'moving image',
   'three dimensional object',
-  'software', 
+  'software',
   'multimedia',
   'mixed material']
-  
-  ORIGIN_INFO_DATE_ELEMENTS = ['dateIssued', 'dateCreated', 'dateCaptured', 'dateValid', 'dateModified', 'copyrightDate', 'dateOther']
-
 end
