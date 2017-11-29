@@ -23,27 +23,19 @@ module Mods
       # when 'temper'
       #   Mods::Date::TemperFormat.new(xml)
       else
-        if xml.text =~ /\d{1,2}\/\d{1,2}\/\d{4}/
-          Mods::Date::MMDDYYYYFormat.new(xml)
-        elsif xml.text =~ /\d{1,2}\/\d{1,2}\/\d{2}/
-          Mods::Date::MMDDYYFormat.new(xml)
-        elsif xml.text =~ /[[:punct:]]*-?\d{4}[[:punct:]]*/
-          Mods::Date::EmbeddedYearFormat.new(xml)
-        elsif xml.text =~ /-?\d{3,4}/
-          Mods::Date::EmbeddedYearFormat.new(xml)
-        elsif xml.text =~ /(cent. )?[xvi]/
-          Mods::Date::RomanNumeralCenturyFormat.new(xml)
-        elsif xml.text =~ /^[MDCLXVI]+/
-          Mods::Date::RomanNumeralYearFormat.new(xml)
-        elsif xml.text =~ /\d\d--/
-          Mods::Date::MysteryCenturyFormat.new(xml)
-        elsif xml.text =~ /\d\dth C(entury)?/i
-          Mods::Date::CenturyFormat.new(xml)
-        else
-          Mods::Date.new(xml)
-        end
+        date_class = [
+          MMDDYYYYFormat,
+          MMDDYYFormat,
+          EmbeddedYearFormat,
+          RomanNumeralCenturyFormat,
+          RomanNumeralYearFormat,
+          MysteryCenturyFormat,
+          CenturyFormat
+        ].select { |klass| klass.supports? xml.text }.first
+
+        (date_class || Mods::Date).new(xml)
       end
-    rescue => e
+    rescue
       Mods::Date.new(xml)
     end
 
@@ -95,18 +87,28 @@ module Mods
       end
     end
 
+    class ExtractorDateFormat < Date
+      def self.supports?(text)
+        text.match self::REGEX
+      end
+    end
+
     # Full text extractor for MM/DD/YYYY-formatted dates
-    class MMDDYYYYFormat < Date
+    class MMDDYYYYFormat < ExtractorDateFormat
+      REGEX = /(?<month>\d{1,2})\/(?<day>\d{1,2})\/(?<year>\d{4})/
+
       def self.cleanup(text)
-        matches = text.match(/(?<month>\d{1,2})\/(?<day>\d{1,2})\/(?<year>\d{4})/)
+        matches = text.match(self::REGEX)
         "#{matches[:year].rjust(2, "0")}-#{matches[:month].rjust(2, "0")}-#{matches[:day].rjust(2, "0")}"
       end
     end
 
     # Full text extractor for MM/DD/YY-formatted dates
-    class MMDDYYFormat < Date
+    class MMDDYYFormat < ExtractorDateFormat
+      REGEX = /(?<month>\d{1,2})\/(?<day>\d{1,2})\/(?<year>\d{2})/
+
       def self.cleanup(text)
-        matches = text.match(/(?<month>\d{1,2})\/(?<day>\d{1,2})\/(?<year>\d{2})/)
+        matches = text.match(self::REGEX)
         year = munge_to_yyyy(matches[:year])
         "#{year}-#{matches[:month].rjust(2, "0")}-#{matches[:day].rjust(2, "0")}"
       end
@@ -121,9 +123,11 @@ module Mods
     end
 
     # Full-text extractor for dates encoded as Roman numerals
-    class RomanNumeralYearFormat < Date
+    class RomanNumeralYearFormat < ExtractorDateFormat
+      REGEX = /^(?<year>[MCDLXVI]+)/
+
       def self.cleanup(text)
-        matches = text.match(/(?<year>[MCDLXVI]+)/)
+        matches = text.match(REGEX)
         roman_to_int(matches[:year].upcase).to_s
       end
 
@@ -143,8 +147,10 @@ module Mods
 
     # Full-text extractor for centuries encoded as Roman numerals
     class RomanNumeralCenturyFormat < RomanNumeralYearFormat
+      REGEX = /(cent. )?(?<century>[xvi]+)/
+
       def self.cleanup(text)
-        matches = text.match(/(cent. )?(?<century>[xvi]+)/)
+        matches = text.match(REGEX)
         munge_to_yyyy(matches[:century])
       end
 
@@ -157,25 +163,30 @@ module Mods
 
     # Full-text extractor for a flavor of century encoding present in Stanford data
     # of unknown origin.
-    class MysteryCenturyFormat < Date
+    class MysteryCenturyFormat < ExtractorDateFormat
+      REGEX = /(?<century>\d{2})--/
       def self.cleanup(text)
-        matches = text.match(/(?<century>\d{2})--/)
+        matches = text.match(REGEX)
         "#{matches[:century]}XX"
       end
     end
 
     # Full-text extractor for dates given as centuries
-    class CenturyFormat < Date
+    class CenturyFormat < ExtractorDateFormat
+      REGEX = /(?<century>\d{2})th C(entury)?/i
+
       def self.cleanup(text)
-        matches = text.match(/(?<century>\d{2})th C(entury)?/i)
+        matches = text.match(REGEX)
         "#{matches[:century].to_i - 1}XX"
       end
     end
 
     # Full-text extractor that tries hard to pick any year present in the data
-    class EmbeddedYearFormat < Date
+    class EmbeddedYearFormat < ExtractorDateFormat
+      REGEX = /(?<prefix>-)?(?<year>\d{3,4})/
+
       def self.cleanup(text)
-        matches = text.match(/(?<prefix>-)?(?<year>\d{3,4})/)
+        matches = text.match(REGEX)
         "#{matches[:prefix]}#{matches[:year].rjust(4, "0")}"
       end
     end
