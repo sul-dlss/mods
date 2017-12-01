@@ -345,6 +345,25 @@ module Mods
       qualifier == 'questionable'
     end
 
+    def precision
+      if date_range.is_a? EDTF::Century
+        :century
+      elsif date_range.is_a? EDTF::Decade
+        :decade
+      else
+        case date.precision
+        when :month
+          date.unspecified.unspecified?(:month) ? :year : :month
+        when :day
+          d = date.unspecified.unspecified?(:day) ? :month : :day
+          d = date.unspecified.unspecified?(:month) ? :year : d
+          d
+        else
+          date.precision
+        end
+      end
+    end
+
     private
 
     def days_in_month(month, year)

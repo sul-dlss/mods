@@ -90,6 +90,28 @@ RSpec.describe Mods::Date do
     end
   end
 
+  describe '#precision' do
+    {
+      '1905' => :year,
+      '190u' => :decade,
+      '19uu' => :century,
+      '1900-uu' => :year,
+      '1900-uu-uu' => :year,
+      '1900-uu-15' => :year,
+      '1900-06' => :month,
+      '1900-06-uu' => :month,
+      '1900-06-15' => :day,
+    }.each do |data, expected|
+      describe "with #{data}" do
+        let(:date_element) { "<dateCreated encoding=\"edtf\">#{data}</dateCreated>" }
+
+        it "has the range #{expected}" do
+          expect(date.precision).to eq expected
+        end
+      end
+    end
+  end
+
   describe '#point' do
     let(:date_element) { "<dateCreated point='fictional'>1856</dateCreated>" }
 
