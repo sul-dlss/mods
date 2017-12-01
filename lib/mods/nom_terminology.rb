@@ -285,6 +285,7 @@ module Mods
         # ORIGIN_INFO --------------------------------------------------------------------------
         t.origin_info :path => '/m:mods/m:originInfo'
         t._origin_info :path => '//m:originInfo' do |n|
+          n.as_object :path => '.', :accessor => lambda { |a| Mods::OriginInfo.new(a) }
           # attributes
           n.displayLabel :path => '@displayLabel', :accessor => lambda { |a| a.text }
           Mods::LANG_ATTRIBS.each { |attr_name|
@@ -300,8 +301,10 @@ module Mods
             end
           end
           n.publisher :path => 'm:publisher'
-          Mods::ORIGIN_INFO_DATE_ELEMENTS.each { |date_el|
+          Mods::OriginInfo::DATE_ELEMENTS.each { |date_el|
             n.send date_el, :path => "m:#{date_el}" do |d|
+              d.as_object :path => '.', :accessor => lambda { |a| Mods::Date.from_element(a) }
+
               Mods::DATE_ATTRIBS.each { |attr_name|
                 d.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
               }
@@ -912,7 +915,7 @@ module Mods
             end
           end
           n.publisher :path => 'publisher'
-          Mods::ORIGIN_INFO_DATE_ELEMENTS.each { |date_el|
+          Mods::OriginInfo::DATE_ELEMENTS.each { |date_el|
             n.send date_el, :path => "#{date_el}" do |d|
               Mods::DATE_ATTRIBS.each { |attr_name|
                 d.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
@@ -1241,4 +1244,3 @@ module Mods
 
   end # Record class
 end # Mods module
-

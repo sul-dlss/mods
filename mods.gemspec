@@ -15,10 +15,11 @@ Gem::Specification.new do |gem|
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^spec/})
   gem.require_paths = ["lib"]
-  
+
   gem.add_dependency 'nokogiri'
   gem.add_dependency 'nom-xml', '~> 0.6.0'
   gem.add_dependency 'iso-639'
+  gem.add_dependency 'edtf'
 
   # Runtime dependencies
   # gem.add_runtime_dependency 'nokogiri'

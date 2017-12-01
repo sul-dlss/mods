@@ -21,3 +21,4 @@ tmp
 tmtags
 .idea/*
 to_delete
+.byebug_history
