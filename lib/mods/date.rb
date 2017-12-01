@@ -389,9 +389,10 @@ module Mods
         date_range.to_a.first
       else
         d = date.dup
-        d = d.change(month: 1, day: 1) if date.unspecified.unspecified?(:year) || date.precision == :year
-        d = d.change(month: 1) if date.unspecified.unspecified?(:month) || date.precision == :year
-        d = d.change(day: 1) if date.unspecified.unspecified?(:day) || date.precision == :month
+        d = d.change(month: 1, day: 1) if date.precision == :year
+        d = d.change(day: 1) if date.precision == :month
+        d = d.change(month: 1) if date.unspecified.unspecified? :month
+        d = d.change(day: 1) if date.unspecified.unspecified? :day
         d
       end
     end
@@ -410,9 +411,10 @@ module Mods
         date_range.to_a.last.change(month: 12, day: 31)
       else
         d = date.dup
-        d = d.change(month: 12, day: 31) if date.unspecified.unspecified?(:year) || date.precision == :year
-        d = d.change(month: 12) if date.unspecified.unspecified?(:month) || date.precision == :year
-        d = d.change(day: days_in_month(date.month, date.year)) if date.unspecified.unspecified?(:day) || date.precision == :month
+        d = d.change(month: 12, day: 31) if date.precision == :year
+        d = d.change(day: days_in_month(date.month, date.year)) if date.precision == :month
+        d = d.change(month: 12) if date.unspecified.unspecified? :month
+        d = d.change(day: days_in_month(date.month, date.year)) if date.unspecified.unspecified? :day
         d
       end
     end
