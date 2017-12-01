@@ -26,7 +26,12 @@ module Mods
         date_class = [
           MMDDYYYYFormat,
           MMDDYYFormat,
+          YearRangeFormat,
+          DecadeAsYearDashFormat,
+          EmbeddedBCYearFormat,
           EmbeddedYearFormat,
+          EmbeddedThreeDigitYearFormat,
+          EmbeddedYearWithBracketsFormat,
           RomanNumeralCenturyFormat,
           RomanNumeralYearFormat,
           MysteryCenturyFormat,
@@ -61,11 +66,11 @@ module Mods
 
     # MARC-formatted date parser, similar to EDTF, but with special support for
     # MARC-specific encodings
-    class MarcFormat < EdtfFormat
+    class MarcFormat < Date
       def self.cleanup(text)
         return nil if text == "9999" || text == "uuuu"
 
-        text.gsub(/^[\[]+/, '').gsub(/[\.\]]+$/, '')
+        Date.cleanup(text)
       end
 
       private
@@ -181,13 +186,64 @@ module Mods
       end
     end
 
+    # Full-text extractor for data formatted as YYYY-YYYY
+    class YearRangeFormat < ExtractorDateFormat
+      REGEX = /(?<start>\d{3,4})-(?<end>\d{3,4})/
+
+      def self.cleanup(text)
+        matches = text.match(REGEX)
+        "#{matches[:start].rjust(4, "0")}/#{matches[:end].rjust(4, "0")}"
+      end
+    end
+
+    # Full-text extractor for data formatted as YYY-
+    class DecadeAsYearDashFormat < ExtractorDateFormat
+      REGEX = /(?<year>\d{3})-[^\d]/
+
+      def self.cleanup(text)
+        matches = text.match(REGEX)
+        "#{matches[:year]}X"
+      end
+    end
+
+    # Full-text extractor that tries hard to pick any year present in the data
+    class EmbeddedBCYearFormat < ExtractorDateFormat
+      REGEX = /(?<year>\d{3,4})\s?B\.?C\.?/i
+
+      def self.cleanup(text)
+        matches = text.match(REGEX)
+        "-#{(matches[:year].to_i - 1).to_s.rjust(4, "0")}"
+      end
+    end
+
     # Full-text extractor that tries hard to pick any year present in the data
     class EmbeddedYearFormat < ExtractorDateFormat
-      REGEX = /(?<prefix>-)?(?<year>\d{3,4})/
+      REGEX = /(?<prefix>-)?(?<year>\d{4})/
 
       def self.cleanup(text)
         matches = text.match(REGEX)
         "#{matches[:prefix]}#{matches[:year].rjust(4, "0")}"
+      end
+    end
+
+    # Full-text extractor that tries hard to pick any year present in the data
+    class EmbeddedThreeDigitYearFormat < ExtractorDateFormat
+      REGEX = /(?<prefix>-)?(?<year>\d{3})/
+
+      def self.cleanup(text)
+        matches = text.match(REGEX)
+        "#{matches[:prefix]}#{matches[:year].rjust(4, "0")}"
+      end
+    end
+
+    # Full-text extractor that tries hard to pick any year present in the data
+    class EmbeddedYearWithBracketsFormat < ExtractorDateFormat
+      # [YYY]Y Y[YYY] [YY]YY Y[YY]Y YY[YY] YYY[Y] YY[Y]Y Y[Y]YY [Y]YYY
+      REGEX = /(?<prefix>-)?(?<year>[\d\[\]]{6})/
+
+      def self.cleanup(text)
+        matches = text.match(REGEX)
+        "#{matches[:prefix]}#{matches[:year].gsub('[', '').gsub(']', '')}"
       end
     end
 
@@ -207,7 +263,10 @@ module Mods
     # @param [String] text
     # @return [String]
     def self.cleanup(text)
-      text.gsub(/^[\[]+/, '').gsub(/[\.\]]+$/, '')
+      sanitized = text.gsub(/^[\[]+/, '').gsub(/[\.\]]+$/, '')
+      sanitized = text.rjust(4, "0") if text =~ /^\d{3}$/
+
+      sanitized
     end
 
     def initialize(xml)
