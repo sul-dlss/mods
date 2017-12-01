@@ -72,6 +72,24 @@ RSpec.describe Mods::Date do
     end
   end
 
+  describe '#key?' do
+    context 'with keyDate=yes' do
+      let(:date_element) { "<dateCreated keyDate='yes'>1856</dateCreated>" }
+
+      it 'returns true' do
+        expect(date.key?).to eq true
+      end
+    end
+
+    context 'with a keyDate set to anything else' do
+      let(:date_element) { "<dateCreated keyDate='fictional'>1856</dateCreated>" }
+
+      it 'returns false' do
+        expect(date.key?).to eq false
+      end
+    end
+  end
+
   describe '#point' do
     let(:date_element) { "<dateCreated point='fictional'>1856</dateCreated>" }
 

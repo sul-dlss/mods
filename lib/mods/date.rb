@@ -266,6 +266,14 @@ module Mods
     end
 
     ##
+    # Is the date marked as a keyDate?
+    #
+    # @return [Boolean]
+    def key?
+      xml.attr(:keyDate) == 'yes'
+    end
+
+    ##
     # Was an encoding provided?
     #
     # @return [Boolean]
