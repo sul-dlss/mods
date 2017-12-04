@@ -247,7 +247,8 @@ RSpec.describe Mods::Date do
     {
       '1234' => Date.parse('1234-01-01')..Date.parse('1234-12-31'),
       '9999' => nil,
-      '1uuu' => Date.parse('1000-01-01')..Date.parse('1999-12-31')
+      '1uuu' => Date.parse('1000-01-01')..Date.parse('1999-12-31'),
+      '||||' => nil
     }.each do |data, expected|
       describe "with #{data}" do
         let(:date_element) { "<dateCreated encoding=\"marc\">#{data}</dateCreated>" }
@@ -284,7 +285,8 @@ RSpec.describe Mods::Date do
       '5/2/2017' => Date.parse('2017-05-02')..Date.parse('2017-05-02'),
       '12/1/2017' => Date.parse('2017-12-01')..Date.parse('2017-12-01'),
       '12/1/17' => Date.parse('2017-12-01')..Date.parse('2017-12-01'),
-      '12/1/25' => Date.parse('1925-12-01')..Date.parse('1925-12-01')
+      '12/1/25' => Date.parse('1925-12-01')..Date.parse('1925-12-01'),
+      '6/18/938' => Date.parse('0938-06-18')..Date.parse('0938-06-18')
     }.each do |data, expected|
       describe "with #{data}" do
         let(:date_element) { "<dateCreated>#{data}</dateCreated>" }
@@ -311,10 +313,21 @@ RSpec.describe Mods::Date do
       '[19--?]-' => Date.parse('1900-01-01')..Date.parse('1999-12-31'),
       '19th Century' => Date.parse('1800-01-01')..Date.parse('1899-12-31'),
       '19th c.' => Date.parse('1800-01-01')..Date.parse('1899-12-31'),
+      'mid to 2nd half of 13th century' => Date.parse('1200-01-01')..Date.parse('1299-12-31'),
       '167-?]' => Date.parse('1670-01-01')..Date.parse('1679-12-31'),
+      '189-?' => Date.parse('1890-01-01')..Date.parse('1899-12-31'),
+      '193-' => Date.parse('1930-01-01')..Date.parse('1939-12-31'),
+      '196_' => Date.parse('1960-01-01')..Date.parse('1969-12-31'),
+      '196x' => Date.parse('1960-01-01')..Date.parse('1969-12-31'),
+      '186?' => Date.parse('1860-01-01')..Date.parse('1869-12-31'),
+      '1700?' => Date.parse('1700-01-01')..Date.parse('1700-12-31'),
       '[1670-1684]' => Date.parse('1670-01-01')..Date.parse('1684-12-31'),
       '[18]74' => Date.parse('1874-01-01')..Date.parse('1874-12-31'),
-      '250 B.C.' => Date.parse('-0249-01-01')..Date.parse('-249-12-31')
+      '250 B.C.' => Date.parse('-0249-01-01')..Date.parse('-249-12-31'),
+      'Anno M.DC.LXXXI.' => Date.parse('1681-01-01')..Date.parse('1681-12-31'),
+      '624[1863 or 1864]' => Date.parse('1863-01-01')..Date.parse('1863-12-31'),
+      'chez Villeneuve' => nil,
+      '‏4264681 או 368' => nil
     }.each do |data, expected|
       describe "with #{data}" do
         let(:date_element) { "<dateCreated>#{data}</dateCreated>" }
