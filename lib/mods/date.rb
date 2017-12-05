@@ -23,14 +23,21 @@ module Mods
       # when 'temper'
       #   Mods::Date::TemperFormat.new(xml)
       else
-        date_class = [
+        date_class = Mods::Date if xml.text =~ /\p{Hebrew}/
+        date_class ||= [
           MMDDYYYYFormat,
           MMDDYYFormat,
+          YearRangeFormat,
+          DecadeAsYearDashFormat,
+          EmbeddedBCYearFormat,
           EmbeddedYearFormat,
+          EmbeddedThreeDigitYearFormat,
+          EmbeddedYearWithBracketsFormat,
+          MysteryCenturyFormat,
+          CenturyFormat,
           RomanNumeralCenturyFormat,
           RomanNumeralYearFormat,
-          MysteryCenturyFormat,
-          CenturyFormat
+          OneOrTwoDigitYearFormat
         ].select { |klass| klass.supports? xml.text }.first
 
         (date_class || Mods::Date).new(xml)
@@ -42,7 +49,7 @@ module Mods
     # Strict ISO8601-encoded date parser
     class Iso8601Format < Date
       def self.parse_date(text)
-        @date = ::Date.parse(cleanup(text))
+        @date = ::Date.parse(normalize_to_edtf(text))
       end
     end
 
@@ -54,18 +61,18 @@ module Mods
     class EdtfFormat < Date
       attr_reader :date
 
-      def self.cleanup(text)
+      def self.normalize_to_edtf(text)
         text
       end
     end
 
     # MARC-formatted date parser, similar to EDTF, but with special support for
     # MARC-specific encodings
-    class MarcFormat < EdtfFormat
-      def self.cleanup(text)
-        return nil if text == "9999" || text == "uuuu"
+    class MarcFormat < Date
+      def self.normalize_to_edtf(text)
+        return nil if text == "9999" || text == "uuuu" || text == '||||'
 
-        text.gsub(/^[\[]+/, '').gsub(/[\.\]]+$/, '')
+        super
       end
 
       private
@@ -93,13 +100,13 @@ module Mods
       end
     end
 
-    # Full text extractor for MM/DD/YYYY-formatted dates
+    # Full text extractor for MM/DD/YYYY and MM/DD/YYY-formatted dates
     class MMDDYYYYFormat < ExtractorDateFormat
-      REGEX = /(?<month>\d{1,2})\/(?<day>\d{1,2})\/(?<year>\d{4})/
+      REGEX = /(?<month>\d{1,2})\/(?<day>\d{1,2})\/(?<year>\d{3,4})/
 
-      def self.cleanup(text)
+      def self.normalize_to_edtf(text)
         matches = text.match(self::REGEX)
-        "#{matches[:year].rjust(2, "0")}-#{matches[:month].rjust(2, "0")}-#{matches[:day].rjust(2, "0")}"
+        "#{matches[:year].rjust(4, "0")}-#{matches[:month].rjust(2, "0")}-#{matches[:day].rjust(2, "0")}"
       end
     end
 
@@ -107,7 +114,7 @@ module Mods
     class MMDDYYFormat < ExtractorDateFormat
       REGEX = /(?<month>\d{1,2})\/(?<day>\d{1,2})\/(?<year>\d{2})/
 
-      def self.cleanup(text)
+      def self.normalize_to_edtf(text)
         matches = text.match(self::REGEX)
         year = munge_to_yyyy(matches[:year])
         "#{year}-#{matches[:month].rjust(2, "0")}-#{matches[:day].rjust(2, "0")}"
@@ -124,15 +131,15 @@ module Mods
 
     # Full-text extractor for dates encoded as Roman numerals
     class RomanNumeralYearFormat < ExtractorDateFormat
-      REGEX = /^(?<year>[MCDLXVI]+)/
+      REGEX = /(?<![A-Za-z\.])(?<year>[MCDLXVI\.]+)(?![A-Za-z])/
 
-      def self.cleanup(text)
+      def self.normalize_to_edtf(text)
         matches = text.match(REGEX)
         roman_to_int(matches[:year].upcase).to_s
       end
 
       def self.roman_to_int(value)
-        value = value.dup
+        value = value.tr('.', '')
         map = { "M"=>1000, "CM"=>900, "D"=>500, "CD"=>400, "C"=>100, "XC"=>90, "L"=>50, "XL"=>40, "X"=>10, "IX"=>9, "V"=>5, "IV"=>4, "I"=>1 }
         result = 0
         map.each do |k,v|
@@ -145,11 +152,12 @@ module Mods
       end
     end
 
-    # Full-text extractor for centuries encoded as Roman numerals
+    # Full-text extractor for centuries encoded as Roman numerals; sometimes centuries
+    # are given as e.g. xvith, hence the funny negative look-ahead assertion
     class RomanNumeralCenturyFormat < RomanNumeralYearFormat
-      REGEX = /(cent. )?(?<century>[xvi]+)/
+      REGEX = /(?<![a-z])(?<century>[xvi]+)(?![a-su-z])/
 
-      def self.cleanup(text)
+      def self.normalize_to_edtf(text)
         matches = text.match(REGEX)
         munge_to_yyyy(matches[:century])
       end
@@ -165,7 +173,7 @@ module Mods
     # of unknown origin.
     class MysteryCenturyFormat < ExtractorDateFormat
       REGEX = /(?<century>\d{2})--/
-      def self.cleanup(text)
+      def self.normalize_to_edtf(text)
         matches = text.match(REGEX)
         "#{matches[:century]}XX"
       end
@@ -175,19 +183,80 @@ module Mods
     class CenturyFormat < ExtractorDateFormat
       REGEX = /(?<century>\d{2})th C(entury)?/i
 
-      def self.cleanup(text)
+      def self.normalize_to_edtf(text)
         matches = text.match(REGEX)
         "#{matches[:century].to_i - 1}XX"
       end
     end
 
+    # Full-text extractor for data formatted as YYYY-YYYY or YYY-YYY
+    class YearRangeFormat < ExtractorDateFormat
+      REGEX = /(?<start>\d{3,4})-(?<end>\d{3,4})/
+
+      def self.normalize_to_edtf(text)
+        matches = text.match(REGEX)
+        "#{matches[:start].rjust(4, "0")}/#{matches[:end].rjust(4, "0")}"
+      end
+    end
+
+    # Full-text extractor for data formatted as YYY-
+    class DecadeAsYearDashFormat < ExtractorDateFormat
+      REGEX = /(?<!\d)(?<year>\d{3})[-_x?](?!\d)/
+
+      def self.normalize_to_edtf(text)
+        matches = text.match(REGEX)
+        "#{matches[:year]}X"
+      end
+    end
+
+    # Full-text extractor that tries hard to pick any year present in the data
+    class EmbeddedBCYearFormat < ExtractorDateFormat
+      REGEX = /(?<year>\d{3,4})\s?B\.?C\.?/i
+
+      def self.normalize_to_edtf(text)
+        matches = text.match(REGEX)
+        "-#{(matches[:year].to_i - 1).to_s.rjust(4, "0")}"
+      end
+    end
+
     # Full-text extractor that tries hard to pick any year present in the data
     class EmbeddedYearFormat < ExtractorDateFormat
-      REGEX = /(?<prefix>-)?(?<year>\d{3,4})/
+      REGEX = /(?<prefix>-)?(?<!\d)(?<year>\d{4})(?!\d)/
 
-      def self.cleanup(text)
+      def self.normalize_to_edtf(text)
         matches = text.match(REGEX)
         "#{matches[:prefix]}#{matches[:year].rjust(4, "0")}"
+      end
+    end
+
+    # Full-text extractor that tries hard to pick any year present in the data
+    class EmbeddedThreeDigitYearFormat < ExtractorDateFormat
+      REGEX = /(?<prefix>-)?(?<!\d)(?<year>\d{3})(?!\d)(?!\d)/
+
+      def self.normalize_to_edtf(text)
+        matches = text.match(REGEX)
+        "#{matches[:prefix]}#{matches[:year].rjust(4, "0")}"
+      end
+    end
+
+    # Full-text extractor that tries hard to pick any year present in the data
+    class OneOrTwoDigitYearFormat < ExtractorDateFormat
+      REGEX = /^(?<prefix>-)?(?<year>\d{1,2})$/
+
+      def self.normalize_to_edtf(text)
+        matches = text.match(REGEX)
+        "#{matches[:prefix]}#{matches[:year].rjust(4, "0")}"
+      end
+    end
+
+    # Full-text extractor that tries hard to pick any year present in the data
+    class EmbeddedYearWithBracketsFormat < ExtractorDateFormat
+      # [YYY]Y Y[YYY] [YY]YY Y[YY]Y YY[YY] YYY[Y] YY[Y]Y Y[Y]YY [Y]YYY
+      REGEX = /(?<prefix>-)?(?<year>[\d\[\]]{6})(?!\d)/
+
+      def self.normalize_to_edtf(text)
+        matches = text.match(REGEX)
+        "#{matches[:prefix]}#{matches[:year].gsub('[', '').gsub(']', '')}"
       end
     end
 
@@ -199,20 +268,24 @@ module Mods
     # @param [String] text
     # @return [Date]
     def self.parse_date(text)
-      ::Date.edtf(cleanup(text))
+      return nil if text == '0000-00-00'
+      ::Date.edtf(normalize_to_edtf(text))
     end
 
     ##
     # Apply any encoding-specific munging or text extraction logic
     # @param [String] text
     # @return [String]
-    def self.cleanup(text)
-      text.gsub(/^[\[]+/, '').gsub(/[\.\]]+$/, '')
+    def self.normalize_to_edtf(text)
+      sanitized = text.gsub(/^[\[]+/, '').gsub(/[\.\]]+$/, '')
+      sanitized = text.rjust(4, "0") if text =~ /^\d{3}$/
+
+      sanitized
     end
 
     def initialize(xml)
       @xml = xml
-      @date = self.class.parse_date(xml.text)
+      @date = self.class.parse_date(xml.text.strip)
     end
 
     ##
@@ -263,6 +336,14 @@ module Mods
     # @return [String]
     def encoding
       xml.attr(:encoding)
+    end
+
+    ##
+    # Is the date marked as a keyDate?
+    #
+    # @return [Boolean]
+    def key?
+      xml.attr(:keyDate) == 'yes'
     end
 
     ##
@@ -337,6 +418,25 @@ module Mods
       qualifier == 'questionable'
     end
 
+    def precision
+      if date_range.is_a? EDTF::Century
+        :century
+      elsif date_range.is_a? EDTF::Decade
+        :decade
+      else
+        case date.precision
+        when :month
+          date.unspecified.unspecified?(:month) ? :year : :month
+        when :day
+          d = date.unspecified.unspecified?(:day) ? :month : :day
+          d = date.unspecified.unspecified?(:month) ? :year : d
+          d
+        else
+          date.precision
+        end
+      end
+    end
+
     private
 
     def days_in_month(month, year)
@@ -356,15 +456,18 @@ module Mods
       return nil if date.nil?
 
       case date_range
+      when EDTF::Unknown
+        nil
       when EDTF::Epoch, EDTF::Interval
         date_range.min
       when EDTF::Set
         date_range.to_a.first
       else
         d = date.dup
-        d = d.change(month: 1, day: 1) if date.unspecified.unspecified?(:year) || date.precision == :year
-        d = d.change(month: 1) if date.unspecified.unspecified?(:month) || date.precision == :year
-        d = d.change(day: 1) if date.unspecified.unspecified?(:day) || date.precision == :month
+        d = d.change(month: 1, day: 1) if date.precision == :year
+        d = d.change(day: 1) if date.precision == :month
+        d = d.change(month: 1) if date.unspecified.unspecified? :month
+        d = d.change(day: 1) if date.unspecified.unspecified? :day
         d
       end
     end
@@ -376,16 +479,20 @@ module Mods
     # @return [::Date]
     def latest_date
       return nil if date.nil?
+
       case date_range
+      when EDTF::Unknown
+        nil
       when EDTF::Epoch, EDTF::Interval
         date_range.max
       when EDTF::Set
         date_range.to_a.last.change(month: 12, day: 31)
       else
         d = date.dup
-        d = d.change(month: 12, day: 31) if date.unspecified.unspecified?(:year) || date.precision == :year
-        d = d.change(month: 12) if date.unspecified.unspecified?(:month) || date.precision == :year
-        d = d.change(day: days_in_month(date.month, date.year)) if date.unspecified.unspecified?(:day) || date.precision == :month
+        d = d.change(month: 12, day: 31) if date.precision == :year
+        d = d.change(day: days_in_month(date.month, date.year)) if date.precision == :month
+        d = d.change(month: 12) if date.unspecified.unspecified? :month
+        d = d.change(day: days_in_month(date.month, date.year)) if date.unspecified.unspecified? :day
         d
       end
     end
