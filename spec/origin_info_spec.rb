@@ -249,6 +249,11 @@ describe "Mods <originInfo> Element" do
             @mods_rec.from_str("<mods #{@ns_decl}><originInfo><dateCreated>other date</dateCreated><dateCreated keyDate='yes'>key date</dateCreated></originInfo></mods>")
             expect(@mods_rec.origin_info.as_object.first.key_dates.first.text).to eq 'key date'
           end
+          it 'should extract a date range when the keyDate attribute is on the start of the range' do
+            @mods_rec.from_str("<mods #{@ns_decl}><originInfo><dateCreated point='end'>other date</dateCreated><dateCreated keyDate='yes' point='start'>key date</dateCreated></originInfo></mods>")
+            expect(@mods_rec.origin_info.as_object.first.key_dates.first.text).to eq 'key date'
+            expect(@mods_rec.origin_info.as_object.first.key_dates.last.text).to eq 'other date'
+          end
         end
       end
 

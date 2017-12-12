@@ -13,7 +13,9 @@ module Mods
     end
 
     def key_dates
-      dates.select { |x| x.keyDate == 'yes' }
+      d = dates.select { |x| x.keyDate == 'yes' }
+
+      d += dates.select { |x| x.point == 'end' && d.any? { |date| date.name == x.name && date.point == 'start' } }
     end
   end
 end
