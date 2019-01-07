@@ -3,10 +3,7 @@ module Mods
   # from:  http://www.loc.gov/standards/mods/v3/mods-userguide-generalapp.html
 
   # Nokogiri 1.6.6 introduced lang as a built-in attribute
-  LANG_ATTRIBS = (Nokogiri::VERSION < "1.6.6") ?
-      ['script', 'transliteration', 'lang'] :
-      ['script', 'transliteration']
-
+  LANG_ATTRIBS = ['script', 'transliteration']
   LINKING_ATTRIBS = ['xlink', 'ID']
 
   DATE_ATTRIBS = ['encoding', 'point', 'keyDate', 'qualifier']
