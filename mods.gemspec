@@ -16,7 +16,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^spec/})
   gem.require_paths = ["lib"]
 
-  gem.add_dependency 'nokogiri'
+  gem.add_dependency 'nokogiri', '>= 1.6.6'
   gem.add_dependency 'nom-xml', '~> 1.0'
   gem.add_dependency 'iso-639'
   gem.add_dependency 'edtf'
