@@ -19,7 +19,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'nokogiri', '>= 1.6.6'
   gem.add_dependency 'nom-xml', '~> 1.0'
   gem.add_dependency 'iso-639'
-  gem.add_dependency 'edtf'
+  gem.add_dependency 'edtf', '~> 3.0'
 
   # Runtime dependencies
   # gem.add_runtime_dependency 'nokogiri'
