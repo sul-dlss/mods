@@ -1,9 +1,10 @@
 language: ruby
 script: rake rspec
 rvm:
+  - 2.6.3
   - 2.5.3
   - 2.4.3
-  - jruby-9.2.0.0
+  - jruby-9.2.8.0
 env:
   global:
     - CC_TEST_REPORTER_ID=5c7c917c5d19e953ecd168c67fe630c0ecfee96ad0e28a4e95de81e1a2d55ea9

@@ -1,7 +1,6 @@
 # Mods
 
 [<img src="https://secure.travis-ci.org/sul-dlss/mods.png?branch=master" alt="Build Status"/>](http://travis-ci.org/sul-dlss/mods) [![Code Climate Test Coverage](https://codeclimate.com/github/sul-dlss/mods/badges/coverage.svg)](https://codeclimate.com/github/sul-dlss/mods/coverage) [<img
-src="https://gemnasium.com/sul-dlss/mods.png" alt="Dependency Status"/>](https://gemnasium.com/sul-dlss/mods) [<img
 src="https://badge.fury.io/rb/mods.svg" alt="Gem Version"/>](http://badge.fury.io/rb/mods)
 
 A Gem to parse MODS (Metadata Object Description Schema) records.  More information about MODS can be found at
