@@ -33,7 +33,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "yard"
   # tests
   gem.add_development_dependency 'rspec', '~> 3.0'
-  gem.add_development_dependency 'simplecov'
+  gem.add_development_dependency 'simplecov', '~> 0.17.0' # CodeClimate cannot use SimpleCov >= 0.18.0 for generating test coverage
   # gem.add_development_dependency 'ruby-debug19'
   gem.add_development_dependency 'equivalent-xml'
 end
