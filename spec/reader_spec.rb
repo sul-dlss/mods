@@ -48,7 +48,6 @@ describe "Mods::Reader" do
   context "namespace awareness" do
     it "should care about namespace by default" do
       r = Mods::Reader.new
-      expect(r.namespace_aware).to be_truthy
       expect(@doc_from_str_default_ns.root.namespace.href).to eq(Mods::MODS_NS)
       expect(@doc_from_str_default_ns.xpath('/m:mods/m:note', @ns_hash).text).to eq("ns")
       expect(@doc_from_str_default_ns.xpath('/mods/note').size).to eq(0)
@@ -60,20 +59,6 @@ describe "Mods::Reader" do
       expect(@doc_from_str_wrong_ns.root.namespace.href).to eq("wrong")
       expect(@doc_from_str_wrong_ns.xpath('/m:mods/m:note', @ns_hash).size).to eq(0)
       expect(@doc_from_str_wrong_ns.xpath('/mods/note').size).to eq(0)
-    end
-
-    it "should be allowed not to care about namespaces" do
-      r = Mods::Reader.new(false)
-      expect(r.namespace_aware).to be_falsey
-      my_from_str_ns = r.from_str(@example_ns_str)
-      expect(my_from_str_ns.xpath('/m:mods/m:note', @ns_hash).size).to eq(0)
-      expect(my_from_str_ns.xpath('/mods/note').text).to eq("ns")
-      my_from_str_no_ns = r.from_str(@example_no_ns_str)
-      expect(my_from_str_no_ns.xpath('/m:mods/m:note', @ns_hash).size).to eq(0)
-      expect(my_from_str_no_ns.xpath('/mods/note').text).to eq("no ns")
-      my_from_str_wrong_ns = r.from_str(@example_wrong_ns_str)
-      expect(my_from_str_wrong_ns.xpath('/m:mods/m:note', @ns_hash).size).to eq(0)
-      expect(my_from_str_wrong_ns.xpath('/mods/note').text).to eq("wrong ns")
     end
   end
 
@@ -93,19 +78,6 @@ describe "Mods::Reader" do
                   </mods:mods>'
       reader = Mods::Reader.new.from_str(utf_mods)
       expect(reader.encoding).to eql("UTF-8")
-    end
-    it "should remove xsi:schemaLocation attribute from mods element if removing namespaces" do
-      str = '<ns3:mods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns3="http://www.loc.gov/mods/v3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-2.xsd">
-        <ns3:note>be very frightened</ns3:note></ns3:mods>'
-      ng_xml = Nokogiri::XML(str)
-      # Nokogiri treats namespaced attributes differently in jruby than in ruby
-      expect(ng_xml.root.has_attribute?('schemaLocation') || ng_xml.root.has_attribute?('xsi:schemaLocation')).to be_truthy
-      r = Mods::Reader.new
-      r.namespace_aware = false
-      r.from_nk_node(ng_xml)
-      # the below are different depending on jruby or ruby ... oy
-      expect(r.mods_ng_xml.root.attributes.keys).not_to include('schemaLocation')
-      expect(r.mods_ng_xml.root.attributes.keys).not_to include('xsi:schemaLocation')
     end
   end
 
@@ -141,14 +113,6 @@ describe "Mods::Reader" do
     end
     it "should care about namespace by default" do
       expect(@mods_ng_doc.xpath('/m:mods/m:titleInfo/m:title', @ns_hash).text).to eq("boo")
-    end
-    it "should be able not to care about namespaces" do
-      @r.namespace_aware = false
-      mods_ng_doc = @r.from_nk_node(@mods_node)
-      expect(mods_ng_doc).to be_kind_of(Nokogiri::XML::Document)
-      expect(mods_ng_doc.xpath('/m:mods/m:titleInfo/m:title', @ns_hash).size).to eq(0)
-      expect(mods_ng_doc.xpath('/mods/titleInfo/title').text).to eq("boo")
-      @r.namespace_aware = true
     end
   end # context from_nk_node
 

@@ -28,10 +28,6 @@ describe "Mods::Record" do
       mods_ng_doc = Mods::Record.new.from_str(@example_no_ns_str)
       expect(mods_ng_doc.note.size).to eq(0)
     end
-    it "should be allowed not to care about namespaces" do
-      mods_ng_doc = Mods::Record.new.from_str(@example_no_ns_str, false)
-      expect(mods_ng_doc.note.map { |e| e.text }).to eq(['no ns'])
-    end
   end
 
   # Be able to create a new Mods::Record from a url
@@ -106,10 +102,6 @@ describe "Mods::Record" do
     it "terminology should not work with Record object defaults when mods node has NO namespaces" do
       mods_ng_doc = Mods::Record.new.from_nk_node(@mods_node_no_ns)
       expect(mods_ng_doc.title_info.title.size).to eq(0)
-    end
-    it "should be allowed not to care about namespaces" do
-      mods_ng_doc = Mods::Record.new.from_nk_node(@mods_node_no_ns, false)
-      expect(mods_ng_doc.title_info.title.map { |e| e.text }).to eq(["What? No namespaces?"])
     end
   end # context from_nk_node
 
