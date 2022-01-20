@@ -28,7 +28,7 @@ module Mods
     #   foo = Mods::Reader.new.from_url('http://purl.stanford.edu/bb340tm8592.mods')
     def from_url(url, encoding = nil, options = Nokogiri::XML::ParseOptions::DEFAULT_XML)
       require 'open-uri'
-      @mods_ng_xml = Nokogiri::XML(open(url).read)
+      @mods_ng_xml = Nokogiri::XML(URI.open(url).read)
       normalize_mods
     end
 
