@@ -143,7 +143,7 @@ module Mods
 
         # NAME ------------------------------------------------------------------------------------
         t.plain_name  :path => '/m:mods/m:name'
-        t._plain_name :path => '//m:name' do |n|
+        t._plain_name :path => '(//m:name|//m:alternativeName)' do |n|
           Mods::Name::ATTRIBUTES.each { |attr_name|
             if attr_name != 'type'
               n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
@@ -160,6 +160,7 @@ module Mods
           n.termsOfAddress :path => 'm:namePart[@type="termsOfAddress"]'
           n.date           :path => 'm:namePart[@type="date"]'
 
+          n.alternative_name :path => 'm:alternativeName'
           n.displayForm :path => 'm:displayForm'
           n.affiliation :path => 'm:affiliation'
           n.description_el :path => 'm:description' # description is used by Nokogiri
@@ -759,7 +760,7 @@ module Mods
 
         # NAME ------------------------------------------------------------------------------------
         t.plain_name :path => '/mods/name'
-        t._plain_name :path => '//name' do |n|
+        t._plain_name :path => '(//name|//alternativeName)' do |n|
           Mods::Name::ATTRIBUTES.each { |attr_name|
             if attr_name != 'type'
               n.send attr_name, :path => "@#{attr_name}", :accessor => lambda { |a| a.text }
@@ -776,6 +777,7 @@ module Mods
           n.termsOfAddress :path => 'namePart[@type="termsOfAddress"]'
           n.date           :path => 'namePart[@type="date"]'
 
+          n.alternative_name :path => 'alternativeName'
           n.displayForm    :path => 'displayForm'
           n.affiliation    :path => 'affiliation'
           n.description_el :path => 'description' # description is used by Nokogiri
