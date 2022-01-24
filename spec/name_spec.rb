@@ -161,6 +161,24 @@ describe "Mods <name> Element" do
 
     end # context WITH namespaces (plain_name)
 
+    describe 'alternative name' do
+      let(:xml) do
+        @mods_rec.from_str(<<-XML)
+          <mods #{@ns_decl}>
+            <name>
+               <namePart>Claudia Alta Johnson</namePart>
+               <alternativeName altType="nickname">
+                  <namePart>Lady Bird Johnson</namePart>
+                </alternativeName>
+            </name>
+          </mods>
+        XML
+      end
+
+      it 'has an accessor to get from the name to the alternative name' do
+        expect(xml.plain_name.first.alternative_name.namePart.map(&:text)).to eq ['Lady Bird Johnson']
+      end
+    end
   end # plain name
 
   it "should be able to translate the marc relator code into text" do

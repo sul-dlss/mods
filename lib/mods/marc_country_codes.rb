@@ -1,8 +1,8 @@
-# encoding: UTF-8
-
 # Represents the Marc Country Codes mapped to names, from http://www.loc.gov/marc/countries/countries_code.html 2013-01-03
-#key - Marc Country code
-#value - Marc Country term
+# key - Marc Country code
+# value - Marc Country term
+# frozen_string_literal: true
+
 MARC_COUNTRY = {
   'aa' => "Albania",
   'abc' => "Alberta",
@@ -11,7 +11,6 @@ MARC_COUNTRY = {
   'ae' => "Algeria",
   'af' => "Afghanistan",
   'ag' => "Argentina",
-  #'ai' => "Anguilla", # discontinued
   'ai' => "Armenia (Republic)",
   'air' => "Armenian S.S.R.", # discontinued
   'aj' => "Azerbaijan",
@@ -40,7 +39,7 @@ MARC_COUNTRY = {
   'bi' => "British Indian Ocean Territory",
   'bl' => "Brazil",
   'bm' => "Bermuda Islands",
-  'bn' => "Bosnia and Hercegovina",
+  'bn' => "Bosnia and Herzegovina",
   'bo' => "Bolivia",
   'bp' => "Solomon Islands",
   'br' => "Burma",
@@ -74,7 +73,7 @@ MARC_COUNTRY = {
   'cs' => "Czechoslovakia", # discontinued
   'ctu' => "Connecticut",
   'cu' => "Cuba",
-  'cv' => "Cape Verde",
+  'cv' => "Cabo Verde",
   'cw' => "Cook Islands",
   'cx' => "Central African Republic",
   'cy' => "Cyprus",
@@ -109,6 +108,7 @@ MARC_COUNTRY = {
   'gb' => "Kiribati",
   'gd' => "Grenada",
   'ge' => "Germany (East)", # discontinued
+  'gg' => "Guernsey",
   'gh' => "Ghana",
   'gi' => "Gibraltar",
   'gl' => "Greenland",
@@ -137,6 +137,7 @@ MARC_COUNTRY = {
   'ie' => "Ireland",
   'ii' => "India",
   'ilu' => "Illinois",
+  'im' => "Isle of Man",
   'inu' => "Indiana",
   'io' => "Indonesia",
   'iq' => "Iraq",
@@ -148,6 +149,7 @@ MARC_COUNTRY = {
   'iw' => "Israel-Jordan Demilitarized Zones", # discontinued
   'iy' => "Iraq-Saudi Arabia Neutral Zone",
   'ja' => "Japan",
+  'je' => "Jersey",
   'ji' => "Johnston Atoll",
   'jm' => "Jamaica",
   'jn' => "Jan Mayen", # discontinued
@@ -284,7 +286,7 @@ MARC_COUNTRY = {
   'snc' => "Saskatchewan",
   'so' => "Somalia",
   'sp' => "Spain",
-  'sq' => "Swaziland",
+  'sq' => "Eswatini",
   'sr' => "Surinam",
   'ss' => "Western Sahara",
   'st' => "Saint-Martin",
@@ -365,7 +367,7 @@ MARC_COUNTRY = {
   'xk' => "Saint Lucia",
   'xl' => "Saint Pierre and Miquelon",
   'xm' => "Saint Vincent and the Grenadines",
-  'xn' => "Macedonia",
+  'xn' => "North Macedonia",
   'xna' => "New South Wales",
   'xo' => "Slovakia",
   'xoa' => "Northern Territory",
@@ -384,4 +386,4 @@ MARC_COUNTRY = {
   'ys' => "Yemen (People's Democratic Republic)", # discontinued
   'yu' => "Serbia and Montenegro", # discontinued
   'za' => "Zambia"
-}
+}.freeze
