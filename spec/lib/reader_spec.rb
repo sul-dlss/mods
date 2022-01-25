@@ -33,7 +33,7 @@ describe "Mods::Reader" do
 
   context "from_file" do
     before(:all) do
-      @fixture_dir = File.join(File.dirname(__FILE__), 'fixture_data')
+      @fixture_dir = File.join(File.dirname(__FILE__), '../fixture_data')
       @fixture_mods_file = File.join(@fixture_dir, 'shpc1.mods.xml')
       @from_file = Mods::Reader.new.from_file(@fixture_mods_file)
     end
