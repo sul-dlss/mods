@@ -6,10 +6,6 @@ describe "Mods <relatedItem> Element" do
     @ns_decl = "xmlns='#{Mods::MODS_NS}'"
   end
 
-  it "should associate the right pieces with the right <relatedItem> elements" do
-    skip "to be implemented (Mods::RelatedItem object)"
-  end
-
   context "basic <related_item> terminology pieces" do
 
     context "WITH namespaces" do

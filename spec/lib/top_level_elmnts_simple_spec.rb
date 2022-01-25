@@ -6,18 +6,6 @@ describe "Mods Top Level Elements that do not have Child Elements" do
     @mods_rec = Mods::Record.new
   end
 
-  it "should deal with camelcase vs. ruby underscore convention" do
-    skip "need to implement ruby style version of (element/attribute) method names"
-  end
-
-  it "should get the text contents of any single complex top level element instance with no child elements" do
-    skip "to be implemented"
-    Mods::TOP_LEVEL_ELEMENTS_COMPLEX.each { |elname|
-      @mods_rec.from_str("<mods><#{elname}>hi</#{elname}></mods>", false)
-      expect(@mods_rec.send(elname.to_sym).map { |e| e.text }).to eq(["hi"])
-    }
-  end
-
   context "parsing with namespaces" do
 
     before(:all) do

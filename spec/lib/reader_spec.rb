@@ -33,7 +33,7 @@ describe "Mods::Reader" do
 
   context "from_file" do
     before(:all) do
-      @fixture_dir = File.join(File.dirname(__FILE__), 'fixture_data')
+      @fixture_dir = File.join(File.dirname(__FILE__), '../fixture_data')
       @fixture_mods_file = File.join(@fixture_dir, 'shpc1.mods.xml')
       @from_file = Mods::Reader.new.from_file(@fixture_mods_file)
     end
@@ -60,10 +60,6 @@ describe "Mods::Reader" do
       expect(@doc_from_str_wrong_ns.xpath('/m:mods/m:note', @ns_hash).size).to eq(0)
       expect(@doc_from_str_wrong_ns.xpath('/mods/note').size).to eq(0)
     end
-  end
-
-  it "should do something useful when it gets unparseable XML" do
-    skip "need to implement error handling for bad xml"
   end
 
   context "normalizing mods" do

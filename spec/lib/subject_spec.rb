@@ -8,22 +8,6 @@ describe "Mods <subject> Element" do
     @ns_decl = "xmlns='#{Mods::MODS_NS}'"
   end
 
-  it "should do something intelligent with duplicate values" do
-    skip "to be implemented"
-  end
-
-  it "should do some date parsing of temporal element based on encoding" do
-    skip "to be implemented"
-  end
-
-  it "authority designation on the <subject> element should trickle down to child elements" do
-    skip "to be implemented"
-  end
-
-  it "should subject personal name dates should be cleaned up???" do
-    skip "to be implemented"
-  end
-
   context "subterms for <name> child elements of <subject> element" do
     before(:all) do
       @both_types_sub = @mods_rec.from_str("<mods #{@ns_decl}><subject>
@@ -101,12 +85,6 @@ describe "Mods <subject> Element" do
     end
     it "should be able to identify dates associated with a name" do
       expect(@mult_pers_name_sub.personal_name.date.map { |e| e.text }).to include("1818-1878")
-    end
-    it "should do the appropriate thing with the role for the value of a name" do
-      skip "name objects to be implemented"
-    end
-    it "should do the appropriate thing with the date for the value of a name" do
-      skip "name objects to be implemented"
     end
   end
 
@@ -269,11 +247,6 @@ describe "Mods <subject> Element" do
             @mods_rec.from_str("<mods #{@ns_decl}><subject><geographicCode authority='#{a}'>f------</geographicCode></subject></mods>")
             expect(@mods_rec.subject.geographicCode.authority).to eq([a])
           }
-        end
-        it "should not recognize unsanctioned authorities?" do
-          @mods_rec.from_str("<mods #{@ns_decl}><subject><geographicCode authority='fake'>f------</geographicCode></subject></mods>")
-          skip "to be implemented"
-          expect { @mods_rec.subject.geographicCode.authority }.to raise_error(/no idea/)
         end
         context "translated_value convenience method" do
           it "should be the translation of the code if it is a marcgac code" do

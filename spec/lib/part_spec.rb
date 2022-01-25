@@ -6,10 +6,6 @@ describe "Mods <part> Element" do
     @ns_decl = "xmlns='#{Mods::MODS_NS}'"
   end
 
-  it "should normalize dates" do
-    skip "to be implemented"
-  end
-
   context "basic <part> terminology pieces" do
 
     context "WITH namespaces" do

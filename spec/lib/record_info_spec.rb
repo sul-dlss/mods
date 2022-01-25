@@ -6,14 +6,6 @@ describe "Mods <recordInfo> Element" do
     @ns_decl = "xmlns='#{Mods::MODS_NS}'"
   end
 
-  it "should translate language codes" do
-    skip "to be implemented"
-  end
-
-  it "should normalize dates" do
-    skip "to be implemented"
-  end
-
   context "basic <record_info> terminology pieces" do
 
     context "WITH namespaces" do
@@ -55,13 +47,6 @@ describe "Mods <recordInfo> Element" do
       end
       it "should have as many members as there are <recordInfo> elements in the xml" do
         [@rec_info, @rec_info2, @bnf, @rlin].each { |ri| expect(ri.size).to eq(1) }
-      end
-      it "should recognize language attributes on <recordInfo> element" do
-        skip "problem with xml:lang"
-        Mods::LANG_ATTRIBS.each { |a|
-          @mods_rec.from_str("<mods #{@ns_decl}><recordInfo #{a}='val'><recordOrigin>nowhere</recordOrigin></recordInfo></mods>")
-          expect(@mods_rec.record_info.send(a.to_sym)).to eq(['val'])
-        }
       end
       it "should recognize displayLabel attribute on <recordInfo> element" do
         @mods_rec.from_str("<mods #{@ns_decl}><recordInfo displayLabel='val'><recordOrigin>nowhere</recordOrigin></recordInfo></mods>")
@@ -200,12 +185,6 @@ describe "Mods <recordInfo> Element" do
           expect(@mods_rec.record_info.languageOfCataloging.authority).to eq(['iso639-2b'])
         end
 
-        # from http://www.loc.gov/standards/mods/userguide/recordinfo.html#languageofcataloging
-        # objectPart attribute defined for consistency with <language> . Unlikely to be used with <languageOfCataloging>
-        it "objectType should get attribute value" do
-          skip "<languageOfCataloging objectType=''> to be implemented ... maybe ..."
-        end
-
         context "<languageTerm> child element" do
           it "text should get element value" do
             expect(@rec_info2.languageOfCataloging.languageTerm.map { |n| n.text }).to eq(['eng'])
@@ -221,12 +200,6 @@ describe "Mods <recordInfo> Element" do
             expect(@rec_info2.languageOfCataloging.languageTerm.type_at).to eq(['code'])
           end
         end # <languageTerm>
-
-        context "<scriptTerm> child element" do
-          it "should do something" do
-            skip "<recordInfo><languageOfCataloging><scriptTerm> to be implemented"
-          end
-        end
       end # <languageOfCataloging>
 
       context "<descriptionStandard> child element" do

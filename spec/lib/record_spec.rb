@@ -46,7 +46,7 @@ describe "Mods::Record" do
   # Be able to create a new Mods::Record from a file
   context "from_file" do
     before(:all) do
-      @fixture_dir = File.join(File.dirname(__FILE__), 'fixture_data')
+      @fixture_dir = File.join(File.dirname(__FILE__), '../fixture_data')
       @mods_doc = Mods::Record.new.from_file(File.join(@fixture_dir, 'shpc1.mods.xml'))
     end
     it "should return a mods record" do
@@ -316,33 +316,6 @@ describe "Mods::Record" do
         expect(@mods_rec.corporate_names).to include("display form")
       end
     end # corporate_names
-
-    context "languages" do
-      before(:all) do
-        @simple         = "<mods #{@def_ns_decl}><language>Greek</language></mods>"
-        @iso639_2b_code = "<mods #{@def_ns_decl}><language><languageTerm authority='iso639-2b' type='code'>fre</languageTerm></language></mods>"
-        @iso639_2b_text = "<mods #{@def_ns_decl}><language><languageTerm authority='iso639-2b' type='text'>English</languageTerm></language></mods>"
-        @mult_codes     = "<mods #{@def_ns_decl}><language><languageTerm authority='iso639-2b' type='code'>per ara, dut</languageTerm></language></mods>"
-      end
-      it "should translate iso639-2b codes to English" do
-        @mods_rec.from_str(@iso639_2b_code)
-        expect(@mods_rec.languages).to eq(["French"])
-      end
-      it "should pass thru language values that are already text (not code)" do
-        @mods_rec.from_str(@iso639_2b_text)
-        expect(@mods_rec.languages).to eq(["English"])
-      end
-      it "should keep values that are not inside <languageTerm> elements" do
-        @mods_rec.from_str(@simple)
-        expect(@mods_rec.languages).to eq(["Greek"])
-      end
-      it "should create a separate value for each language in a comma, space, or | separated list " do
-        @mods_rec.from_str(@mult_codes)
-        expect(@mods_rec.languages).to include("Arabic")
-        expect(@mods_rec.languages).to include("Persian")
-        expect(@mods_rec.languages).to include("Dutch; Flemish")
-      end
-    end
   end # convenience methods for tricky bits of terminology
 
 end
