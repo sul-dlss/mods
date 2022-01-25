@@ -1,62 +1,86 @@
 require 'spec_helper'
 
-describe "Mods <language> Element" do
-  before(:all) do
-    @mods_rec = Mods::Record.new
+RSpec.describe 'Mods <language> Element' do
+  let(:mods_record) do
+    lambda do |xml|
+      Mods::Record.new.from_str(<<-XML)
+        <mods xmlns='#{Mods::MODS_NS}'>
+          #{xml}
+        </mods>
+      XML
+    end
   end
 
-  context "basic <language> terminology pieces" do
-    before(:all) do
-      @ns_decl = "xmlns='#{Mods::MODS_NS}'"
-      @iso639_2b_code = "<mods #{@ns_decl}><language><languageTerm authority='iso639-2b' type='code'>fre</languageTerm></language></mods>"
-      @iso639_2b_code_ln = @mods_rec.from_str(@iso639_2b_code).language
-      mult_code_terms = "<mods #{@ns_decl}><language><languageTerm authority='iso639-2b' type='code'>spa</languageTerm><languageTerm authority='iso639-2b' type='code'>dut</languageTerm></language></mods>"
-      @mult_code_terms = @mods_rec.from_str(mult_code_terms).language
-      mult_text_terms = "<mods #{@ns_decl}><language><languageTerm authority='iso639-2b' type='text'>Chinese</languageTerm><languageTerm authority='iso639-2b' type='text'>Spanish</languageTerm></language></mods>"
-      @mult_text_terms = @mods_rec.from_str(mult_text_terms).language
-      @ex_array = [@iso639_2b_code_ln, @mult_code_terms, @mult_text_terms]
-    end
-    it "should be a NodeSet" do
-      @ex_array.each { |t| expect(t).to be_an_instance_of(Nokogiri::XML::NodeSet) }
-    end
-    it "should have as many members as there are <language> elements in the xml" do
-      @ex_array.each { |t| expect(t.size).to eq(1) }
+  let(:iso639_2b_code_ln) do
+    mods_record.call("<language><languageTerm authority='iso639-2b' type='code'>fre</languageTerm></language>")
+  end
+
+  let(:mult_terms) do
+    mods_record.call(<<-XML)
+      <language>
+        <languageTerm authority='iso639-2b' type='code'>spa</languageTerm>
+        <languageTerm authority='iso639-2b' type='text'>Spanish</languageTerm>
+        <languageTerm authority='iso639-2b' type='code'>dut</languageTerm>
+        <languageTerm authority='iso639-2b' type='text'>Dutch</languageTerm>
+      </language>
+    XML
+  end
+
+  let(:mult_codes) do
+    mods_record.call(<<-XML)
+      <language>
+        <languageTerm authority='iso639-2b' type='code'>per ara, dut</languageTerm>
+      </language>
+    XML
+  end
+
+  describe '#languages' do
+    it 'translates iso639-2b codes to English' do
+      expect(iso639_2b_code_ln.languages).to eq(['French'])
+      expect(mult_terms.languages).to include 'Spanish; Castilian', 'Dutch; Flemish'
     end
 
-    context "<languageTerm> child element" do
-      it "should understand languageTerm.type_at attribute" do
-        expect(@iso639_2b_code_ln.languageTerm.type_at).to eq(["code"])
+    it 'passes thru language values that are already text (not code)' do
+      expect(mult_terms.languages).to include 'Spanish', 'Dutch'
+    end
+
+    it 'preserves values that are not inside <languageTerm> elements' do
+      expect(mods_record.call('<language>Greek</language>').languages).to eq(['Greek'])
+    end
+
+    it 'creates a separate value for each language in a comma, space, or | separated list' do
+      expect(mult_codes.languages).to include 'Arabic', 'Persian', 'Dutch; Flemish'
+    end
+  end
+
+  describe '#language' do
+    describe '#languageTerm' do
+      it 'has attribute accessors' do
+        expect(iso639_2b_code_ln.language.languageTerm).to have_attributes(
+          type_at: ['code'],
+          authority: ['iso639-2b'],
+          text: 'fre',
+          size: 1
+        )
       end
-      it "should understand languageTerm.authority attribute" do
-        expect(@iso639_2b_code_ln.languageTerm.authority).to eq(["iso639-2b"])
-      end
-      it "should understand languageTerm value" do
-        expect(@iso639_2b_code_ln.languageTerm.text).to eq("fre")
-        expect(@iso639_2b_code_ln.languageTerm.size).to eq(1)
-      end
 
-      it "should recognize all authority attributes" do
-        Mods::AUTHORITY_ATTRIBS.each { |a|
-          @mods_rec.from_str("<mods #{@ns_decl}><language><languageTerm #{a}='attr_val'>zzz</languageTerm></language></mods>")
-          expect(@mods_rec.language.languageTerm.send(a.to_sym)).to eq(['attr_val'])
-        }
+      it 'recognizes other authority attributes' do
+        language = mods_record.call("<language><languageTerm authorityURI='http://example.com' valueURI='http://example.com/zzz'>zzz</languageTerm></language>").language
+        expect(language.languageTerm).to have_attributes(authorityURI: ['http://example.com'], valueURI: ['http://example.com/zzz'])
       end
-    end # <languageTerm>
-
-    it "should get one language.code_term for each languageTerm element with a type attribute of 'code'" do
-      expect(@iso639_2b_code_ln.code_term.size).to eq(1)
-      expect(@iso639_2b_code_ln.code_term.text).to eq("fre")
-      expect(@mult_code_terms.code_term.size).to eq(2)
-      expect(@mult_code_terms.code_term.first.text).to include("spa")
-      expect(@mult_code_terms.code_term[1].text).to eq("dut")
     end
-    it "should get one language.text_term for each languageTerm element with a type attribute of 'text'" do
-      expect(@mult_text_terms.text_term.size).to eq(2)
-      expect(@mult_text_terms.text_term.first.text).to include("Chinese")
-      expect(@mult_text_terms.text_term[1].text).to eq("Spanish")
+
+    describe '#code_term' do
+      it "gets one language.code_term for each languageTerm element with a type attribute of 'code'" do
+        expect(iso639_2b_code_ln.language.code_term.map(&:text)).to eq ['fre']
+        expect(mult_terms.language.code_term.map(&:text)).to eq %w[spa dut]
+      end
     end
-  end # basic <language> terminology pieces
 
-  # note that Mods::Record.languages tests are in record_spec
-
+    describe '#text_term' do
+      it "gets one language.text_term for each languageTerm element with a type attribute of 'text'" do
+        expect(mult_terms.language.text_term.map(&:text)).to eq %w[Spanish Dutch]
+      end
+    end
+  end
 end
