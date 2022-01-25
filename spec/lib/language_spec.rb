@@ -1,22 +1,12 @@
 require 'spec_helper'
 
 RSpec.describe 'Mods <language> Element' do
-  let(:mods_record) do
-    lambda do |xml|
-      Mods::Record.new.from_str(<<-XML)
-        <mods xmlns='#{Mods::MODS_NS}'>
-          #{xml}
-        </mods>
-      XML
-    end
-  end
-
   let(:iso639_2b_code_ln) do
-    mods_record.call("<language><languageTerm authority='iso639-2b' type='code'>fre</languageTerm></language>")
+    mods_record("<language><languageTerm authority='iso639-2b' type='code'>fre</languageTerm></language>")
   end
 
   let(:mult_terms) do
-    mods_record.call(<<-XML)
+    mods_record(<<-XML)
       <language>
         <languageTerm authority='iso639-2b' type='code'>spa</languageTerm>
         <languageTerm authority='iso639-2b' type='text'>Spanish</languageTerm>
@@ -27,7 +17,7 @@ RSpec.describe 'Mods <language> Element' do
   end
 
   let(:mult_codes) do
-    mods_record.call(<<-XML)
+    mods_record(<<-XML)
       <language>
         <languageTerm authority='iso639-2b' type='code'>per ara, dut</languageTerm>
       </language>
@@ -45,7 +35,7 @@ RSpec.describe 'Mods <language> Element' do
     end
 
     it 'preserves values that are not inside <languageTerm> elements' do
-      expect(mods_record.call('<language>Greek</language>').languages).to eq(['Greek'])
+      expect(mods_record('<language>Greek</language>').languages).to eq(['Greek'])
     end
 
     it 'creates a separate value for each language in a comma, space, or | separated list' do
@@ -65,7 +55,7 @@ RSpec.describe 'Mods <language> Element' do
       end
 
       it 'recognizes other authority attributes' do
-        language = mods_record.call("<language><languageTerm authorityURI='http://example.com' valueURI='http://example.com/zzz'>zzz</languageTerm></language>").language
+        language = mods_record("<language><languageTerm authorityURI='http://example.com' valueURI='http://example.com/zzz'>zzz</languageTerm></language>").language
         expect(language.languageTerm).to have_attributes(authorityURI: ['http://example.com'], valueURI: ['http://example.com/zzz'])
       end
     end
