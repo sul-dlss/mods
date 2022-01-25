@@ -25,13 +25,10 @@ module Mods
     # @param ns_aware true if the XML parsing should be strict about using namespaces.  Default is true
     # @param str - a string containing mods xml
     # @return Mods::Record
-    def from_str(str, ns_aware = true)
-      @mods_ng_xml = Mods::Reader.new(ns_aware).from_str(str)
-      if ns_aware
-        set_terminology_ns(@mods_ng_xml)
-      else
-        set_terminology_no_ns(@mods_ng_xml)
-      end
+    def from_str(str)
+      @mods_ng_xml = Mods::Reader.new.from_str(str)
+      set_terminology_ns(@mods_ng_xml)
+
       return self
     end
 
@@ -42,13 +39,9 @@ module Mods
     # @return Mods::Record
     # @example
     #   foo = Mods::Record.new.from_url('http://purl.stanford.edu/bb340tm8592.mods')
-    def from_url(url, ns_aware = true)
-      @mods_ng_xml = Mods::Reader.new(ns_aware).from_url(url)
-      if ns_aware
-        set_terminology_ns(@mods_ng_xml)
-      else
-        set_terminology_no_ns(@mods_ng_xml)
-      end
+    def from_url(url)
+      @mods_ng_xml = Mods::Reader.new.from_url(url)
+      set_terminology_ns(@mods_ng_xml)
       return self
     end
 
@@ -59,13 +52,9 @@ module Mods
     # @return Mods::Record
     # @example
     #   foo = Mods::Record.new.from_file('/path/to/file/bb340tm8592.mods')
-    def from_file(url, ns_aware = true)
-      @mods_ng_xml = Mods::Reader.new(ns_aware).from_file(url)
-      if ns_aware
-        set_terminology_ns(@mods_ng_xml)
-      else
-        set_terminology_no_ns(@mods_ng_xml)
-      end
+    def from_file(url)
+      @mods_ng_xml = Mods::Reader.new.from_file(url)
+      set_terminology_ns(@mods_ng_xml)
       return self
     end
 
@@ -73,13 +62,9 @@ module Mods
     # @param node (Nokogiri::XML::Node) - Nokogiri::XML::Node that is the top level element of a mods record
     # @param ns_aware true if the XML parsing should be strict about using namespaces.  Default is true
     # @return Mods::Record
-    def from_nk_node(node, ns_aware = true)
-      @mods_ng_xml = Mods::Reader.new(ns_aware).from_nk_node(node)
-      if ns_aware
-        set_terminology_ns(@mods_ng_xml)
-      else
-        set_terminology_no_ns(@mods_ng_xml)
-      end
+    def from_nk_node(node)
+      @mods_ng_xml = Mods::Reader.new.from_nk_node(node)
+      set_terminology_ns(@mods_ng_xml)
       return self
     end
 
