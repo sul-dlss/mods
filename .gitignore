@@ -22,3 +22,4 @@ tmtags
 .idea/*
 to_delete
 .byebug_history
+/spec/examples.txt
