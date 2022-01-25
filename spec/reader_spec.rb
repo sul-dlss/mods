@@ -62,10 +62,6 @@ describe "Mods::Reader" do
     end
   end
 
-  it "should do something useful when it gets unparseable XML" do
-    skip "need to implement error handling for bad xml"
-  end
-
   context "normalizing mods" do
     it "should not lose UTF-8 encoding" do
       utf_mods = '<?xml version="1.0" encoding="UTF-8"?>

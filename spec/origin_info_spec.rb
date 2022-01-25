@@ -154,52 +154,6 @@ describe "Mods <originInfo> Element" do
 
   end
 
-  context "parsing date values" do
-    it "should cope with slop" do
-      skip "to be implemented"
-    end
-    it "should know something about various date encodings: w3cdtf, iso8601, marc, edtf, temper" do
-      skip "to be implemented"
-    end
-    it "should know the only valid values for point attribute are 'start' and 'end'" do
-      skip "to be implemented"
-    end
-    it "should know the only valid value for keyDate attribute is 'yes" do
-      skip "to be implemented"
-    end
-    it "should know the only valid values for qualifier attribute: approximate, inferred, questionable" do
-      skip "to be implemented"
-    end
-  end
-
-  context "parsing issuance" do
-    it "should know the only valid values are: continuing, monographic, single unit, multipart monograph, serial, integrating resource" do
-      skip "to be implemented"
-    end
-  end
-
-  context "parsing publisher" do
-    it "should ignore s.n. value (from MARC)" do
-      skip "to be implemented"
-    end
-    it "should leave square brackets alone, except for s.n." do
-      skip "to be implemented"
-    end
-  end
-
-  context "parsing placeTerm" do
-    it "should be able to translate marccountry codes" do
-      skip "to be implemented"
-    end
-    it "should ignore s.l. value (from MARC)" do
-      skip "to be implemented"
-    end
-    it "should be forgiving of square brackets (from MARC), matched or unmatched" do
-      skip "to be implemented"
-    end
-  end
-
-
   context "basic <originInfo> terminology pieces" do
 
     context "WITH namespaces" do
