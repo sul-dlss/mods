@@ -7,6 +7,7 @@ require 'bundler'
 require 'rspec/core/rake_task'
 require 'yard'
 require 'yard/rake/yardoc_task'
+require 'rubocop/rake_task'
 
 begin
   Bundler.setup(:default, :development)
@@ -18,13 +19,18 @@ end
 
 task :default => :ci  
 
-desc "run continuous integration suite (tests, coverage, docs)" 
-task :ci => [:rspec, :doc]
+desc "run continuous integration suite (lint, tests, coverage, docs)" 
+task :ci => [:rubocop, :rspec, :doc]
 
 task :spec => :rspec
 
 RSpec::Core::RakeTask.new(:rspec) do |spec|
   spec.rspec_opts = ["-c", "-f progress", "--tty", "-r ./spec/spec_helper.rb"]
+end
+
+RuboCop::RakeTask.new(:rubocop) do |task|
+  task.requires << 'rubocop-rspec'
+  task.options = ['--fail-level', 'error']
 end
 
 # Use yard to build docs
@@ -43,4 +49,3 @@ rescue LoadError
     abort "Please install the YARD gem to generate rdoc."
   end
 end  
-
