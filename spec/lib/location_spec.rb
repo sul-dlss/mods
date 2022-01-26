@@ -36,9 +36,9 @@ describe "Mods <location> Element" do
     expect(record.location.shelfLocator.map { |n| n.text }).to eq(["DAG no. 1410"])
   end
 
-  context "url child element" do
+  context 'with multiple urls' do
     let(:mult_flavor_loc_urls) do
-      mods_record(<<-XML)
+      mods_record(<<-XML).location.url
         <location>
           <url access='preview'>http://preview.org</url>
           <url access='object in context'>http://context.org</url>
@@ -47,45 +47,53 @@ describe "Mods <location> Element" do
       XML
     end
 
-    it "should have access to text value of element" do
-      urls = mult_flavor_loc_urls.location.url.map { |e| e.text }
-      expect(urls).to eq ["http://preview.org", "http://context.org", "http://object.org"]
-    end
-
-    context "attributes" do
-      let(:url_attribs) do
-        mods_record(<<-XML)
-          <location>
-            <url displayLabel='Digital collection of 46 images available online' usage='primary display'>http://searchworks.stanford.edu/?f%5Bcollection%5D%5B%5D=The+Reid+W.+Dennis+Collection+of+California+Lithographs&amp;view=gallery</url>
-          </location>
-        XML
-      end
-      it "should recognize displayLabel attribute" do
-        expect(url_attribs.location.url.displayLabel).to eq(["Digital collection of 46 images available online"])
+    describe '#url' do
+      it 'has access to text value of element' do
+        expect(mult_flavor_loc_urls.map(&:text)).to eq ["http://preview.org", "http://context.org", "http://object.org"]
       end
 
-      it "should recognize access attribute" do
-        vals = mult_flavor_loc_urls.location.url.access
-        expect(vals).to eq ['preview', 'object in context', 'raw object']
-      end
-
-      it "should recognize usage attribute" do
-        expect(url_attribs.location.url.usage).to eq(["primary display"])
-      end
-
-      it "should recognize note attribute" do
-        record = mods_record("<location><url note='something'>http://somewhere.org</url></location>")
-        expect(record.location.url.note).to eq(["something"])
-      end
-
-      it "should recognize dateLastAccessed attribute" do
-        record = mods_record("<location><url dateLastAccessed='something'>http://somewhere.org</url></location>")
-        expect(record.location.url.dateLastAccessed).to eq(["something"])
+      describe '#access' do
+        it 'provides access to the access attributes' do
+          expect(mult_flavor_loc_urls.access).to eq ['preview', 'object in context', 'raw object']
+        end
       end
     end
+  end
 
-    it "should have array with empty string for single empty url element" do
-      expect(mods_record('<location><url /></location>').location.url.map { |n| n.text }).to eq([""])
+  context 'url child element' do
+    let(:url_attribs) do
+      mods_record(<<-XML).location.url
+        <location>
+          <url
+            displayLabel='Digital collection of 46 images available online'
+            usage='primary display'
+            note='something'
+            dateLastAccessed='2021-12-21'>
+            http://searchworks.stanford.edu/?f%5Bcollection%5D%5B%5D=The+Reid+W.+Dennis+Collection+of+California+Lithographs&amp;view=gallery
+          </url>
+        </location>
+      XML
+    end
+
+    it 'has the right attributes' do
+      expect(url_attribs).to have_attributes(
+        displayLabel: ['Digital collection of 46 images available online'],
+        usage: ['primary display'],
+        note: ['something'],
+        dateLastAccessed: ['2021-12-21']
+      )
+    end
+  end
+
+  context 'with an empty url element' do
+    let(:empty_url) do
+      mods_record(<<-XML).location.url
+        <location><url /></location>
+      XML
+    end
+
+    it 'is an empty string for single empty url element' do
+      expect(empty_url.text).to be_empty
     end
   end
 
