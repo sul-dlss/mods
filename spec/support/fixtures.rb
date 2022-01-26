@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Fixtures
   def mods_record(xml)
     Mods::Record.new.from_str(<<-XML)

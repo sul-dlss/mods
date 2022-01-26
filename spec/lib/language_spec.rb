@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe 'Mods <language> Element' do
@@ -63,7 +65,7 @@ RSpec.describe 'Mods <language> Element' do
     describe '#language' do
       describe '#code_term' do
         it 'gets the languageTerms with type="code"' do
-          expect(record.language.code_term.map(&:text)).to eq ['spa', 'dut']
+          expect(record.language.code_term.map(&:text)).to eq %w[spa dut]
         end
       end
 
@@ -105,7 +107,7 @@ RSpec.describe 'Mods <language> Element' do
     end
   end
 
-  context 'wih a record with some authority attributes' do
+  context 'with a record with some authority attributes' do
     subject(:record) do
       mods_record(<<-XML)
         <language><languageTerm authorityURI='http://example.com' valueURI='http://example.com/zzz'>zzz</languageTerm></language>

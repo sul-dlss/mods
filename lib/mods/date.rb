@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require 'edtf'
 
 module Mods
   class Date
-    attr_reader :xml
+    attr_reader :xml, :date
 
     ##
     # Ugly date factory that tries to pick an appropriate parser for the
@@ -42,7 +44,7 @@ module Mods
 
         (date_class || Mods::Date).new(xml)
       end
-    rescue
+    rescue StandardError
       Mods::Date.new(xml)
     end
 
@@ -70,7 +72,7 @@ module Mods
     # MARC-specific encodings
     class MarcFormat < Date
       def self.normalize_to_edtf(text)
-        return nil if text == "9999" || text == "uuuu" || text == '||||'
+        return nil if ['9999', 'uuuu', '||||'].include?(text)
 
         super
       end
@@ -102,22 +104,22 @@ module Mods
 
     # Full text extractor for MM/DD/YYYY and MM/DD/YYY-formatted dates
     class MMDDYYYYFormat < ExtractorDateFormat
-      REGEX = /(?<month>\d{1,2})\/(?<day>\d{1,2})\/(?<year>\d{3,4})/
+      REGEX = %r{(?<month>\d{1,2})/(?<day>\d{1,2})/(?<year>\d{3,4})}
 
       def self.normalize_to_edtf(text)
         matches = text.match(self::REGEX)
-        "#{matches[:year].rjust(4, "0")}-#{matches[:month].rjust(2, "0")}-#{matches[:day].rjust(2, "0")}"
+        "#{matches[:year].rjust(4, '0')}-#{matches[:month].rjust(2, '0')}-#{matches[:day].rjust(2, '0')}"
       end
     end
 
     # Full text extractor for MM/DD/YY-formatted dates
     class MMDDYYFormat < ExtractorDateFormat
-      REGEX = /(?<month>\d{1,2})\/(?<day>\d{1,2})\/(?<year>\d{2})/
+      REGEX = %r{(?<month>\d{1,2})/(?<day>\d{1,2})/(?<year>\d{2})}
 
       def self.normalize_to_edtf(text)
         matches = text.match(self::REGEX)
         year = munge_to_yyyy(matches[:year])
-        "#{year}-#{matches[:month].rjust(2, "0")}-#{matches[:day].rjust(2, "0")}"
+        "#{year}-#{matches[:month].rjust(2, '0')}-#{matches[:day].rjust(2, '0')}"
       end
 
       def self.munge_to_yyyy(text)
@@ -131,7 +133,7 @@ module Mods
 
     # Full-text extractor for dates encoded as Roman numerals
     class RomanNumeralYearFormat < ExtractorDateFormat
-      REGEX = /(?<![A-Za-z\.])(?<year>[MCDLXVI\.]+)(?![A-Za-z])/
+      REGEX = /(?<![A-Za-z\.])(?<year>[MCDLXVI.]+)(?![A-Za-z])/
 
       def self.normalize_to_edtf(text)
         matches = text.match(REGEX)
@@ -140,10 +142,11 @@ module Mods
 
       def self.roman_to_int(value)
         value = value.tr('.', '')
-        map = { "M"=>1000, "CM"=>900, "D"=>500, "CD"=>400, "C"=>100, "XC"=>90, "L"=>50, "XL"=>40, "X"=>10, "IX"=>9, "V"=>5, "IV"=>4, "I"=>1 }
+        map = { 'M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400, 'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40, 'X' => 10, 'IX' => 9,
+                'V' => 5, 'IV' => 4, 'I' => 1 }
         result = 0
-        map.each do |k,v|
-          while value.index(k) == 0
+        map.each do |k, v|
+          while value.index(k).zero?
             result += v
             value.slice! k
           end
@@ -164,10 +167,9 @@ module Mods
 
       def self.munge_to_yyyy(text)
         value = roman_to_int(text.upcase)
-        (value - 1).to_s.rjust(2, "0") + 'XX'
+        "#{(value - 1).to_s.rjust(2, '0')}XX"
       end
     end
-
 
     # Full-text extractor for a flavor of century encoding present in Stanford data
     # of unknown origin.
@@ -195,7 +197,7 @@ module Mods
 
       def self.normalize_to_edtf(text)
         matches = text.match(REGEX)
-        "#{matches[:start].rjust(4, "0")}/#{matches[:end].rjust(4, "0")}"
+        "#{matches[:start].rjust(4, '0')}/#{matches[:end].rjust(4, '0')}"
       end
     end
 
@@ -215,7 +217,7 @@ module Mods
 
       def self.normalize_to_edtf(text)
         matches = text.match(REGEX)
-        "-#{(matches[:year].to_i - 1).to_s.rjust(4, "0")}"
+        "-#{(matches[:year].to_i - 1).to_s.rjust(4, '0')}"
       end
     end
 
@@ -225,7 +227,7 @@ module Mods
 
       def self.normalize_to_edtf(text)
         matches = text.match(REGEX)
-        "#{matches[:prefix]}#{matches[:year].rjust(4, "0")}"
+        "#{matches[:prefix]}#{matches[:year].rjust(4, '0')}"
       end
     end
 
@@ -235,7 +237,7 @@ module Mods
 
       def self.normalize_to_edtf(text)
         matches = text.match(REGEX)
-        "#{matches[:prefix]}#{matches[:year].rjust(4, "0")}"
+        "#{matches[:prefix]}#{matches[:year].rjust(4, '0')}"
       end
     end
 
@@ -245,7 +247,7 @@ module Mods
 
       def self.normalize_to_edtf(text)
         matches = text.match(REGEX)
-        "#{matches[:prefix]}#{matches[:year].rjust(4, "0")}"
+        "#{matches[:prefix]}#{matches[:year].rjust(4, '0')}"
       end
     end
 
@@ -260,8 +262,6 @@ module Mods
       end
     end
 
-    attr_reader :date
-
     ##
     # Parse a string to a Date or EDTF::Date using rules appropriate to the
     # given encoding
@@ -269,6 +269,7 @@ module Mods
     # @return [Date]
     def self.parse_date(text)
       return nil if text == '0000-00-00'
+
       ::Date.edtf(normalize_to_edtf(text))
     end
 
@@ -277,8 +278,8 @@ module Mods
     # @param [String] text
     # @return [String]
     def self.normalize_to_edtf(text)
-      sanitized = text.gsub(/^[\[]+/, '').gsub(/[\.\]]+$/, '')
-      sanitized = text.rjust(4, "0") if text =~ /^\d{3}$/
+      sanitized = text.gsub(/^\[+/, '').gsub(/[.\]]+$/, '')
+      sanitized = text.rjust(4, '0') if text =~ /^\d{3}$/
 
       sanitized
     end
@@ -419,9 +420,10 @@ module Mods
     end
 
     def precision
-      if date_range.is_a? EDTF::Century
+      case date_range
+      when EDTF::Century
         :century
-      elsif date_range.is_a? EDTF::Decade
+      when EDTF::Decade
         :decade
       else
         case date.precision
@@ -429,8 +431,8 @@ module Mods
           date.unspecified.unspecified?(:month) ? :year : :month
         when :day
           d = date.unspecified.unspecified?(:day) ? :month : :day
-          d = date.unspecified.unspecified?(:month) ? :year : d
-          d
+          date.unspecified.unspecified?(:month) ? :year : d
+
         else
           date.precision
         end
@@ -499,10 +501,10 @@ module Mods
 
     def date_range
       @date_range ||= if text =~ /u/
-        ::Date.edtf(text.gsub('u', 'X')) || date
-      else
-        date
-      end
+                        ::Date.edtf(text.gsub('u', 'X')) || date
+                      else
+                        date
+                      end
     end
   end
 end

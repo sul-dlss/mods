@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
-describe "Mods <relatedItem> Element" do
+describe 'Mods <relatedItem> Element' do
   context 'with a bibliography' do
     subject(:related_item) do
       mods_record(<<-XML).related_item.first
@@ -21,8 +23,8 @@ describe "Mods <relatedItem> Element" do
         displayLabel: 'Bibliography',
         type_at: 'host',
         recordInfo: match_array([
-          have_attributes(recordIdentifier: match_array([have_attributes(source: 'Gallica ARK')]))
-        ]),
+                                  have_attributes(recordIdentifier: match_array([have_attributes(source: 'Gallica ARK')]))
+                                ]),
         typeOfResource: match_array([have_attributes(text: 'text')])
       )
     end
@@ -54,21 +56,23 @@ describe "Mods <relatedItem> Element" do
 
     it 'has the expected attributes' do
       expect(related_items).to match_array([
-        have_attributes(
-          displayLabel: [],
-          titleInfo: match_array([have_attributes(title: have_attributes(text: 'Complete atlas, or, Distinct view of the known world'))]),
-          personal_name: match_array([
-            have_attributes(type_at: 'personal', display_value: 'Bowen, Emanuel,', date: match_array(have_attributes(text: 'd. 1767')))
-          ])
-        ),
-        have_attributes(
-          displayLabel: 'From:',
-          type_at: 'host',
-          identifier: match_array([
-            have_attributes(type_at: 'local', text: '(AuCNL)1669726')
-          ])
-        )
-      ])
+                                             have_attributes(
+                                               displayLabel: [],
+                                               titleInfo: match_array([have_attributes(title: have_attributes(text: 'Complete atlas, or, Distinct view of the known world'))]),
+                                               personal_name: match_array([
+                                                                            have_attributes(type_at: 'personal', display_value: 'Bowen, Emanuel,',
+                                                                                            date: match_array(have_attributes(text: 'd. 1767')))
+                                                                          ])
+                                             ),
+                                             have_attributes(
+                                               displayLabel: 'From:',
+                                               type_at: 'host',
+                                               identifier: match_array([
+                                                                         have_attributes(type_at: 'local',
+                                                                                         text: '(AuCNL)1669726')
+                                                                       ])
+                                             )
+                                           ])
     end
   end
 
@@ -94,10 +98,10 @@ describe "Mods <relatedItem> Element" do
         titleInfo: match_array([have_attributes(title: have_attributes(text: 'Nuppineula.'))]),
         genre: have_attributes(text: 'article'),
         part: match_array([
-          have_attributes(id_at: 'DIVL15', type_at: 'paragraph', order: '1'),
-          have_attributes(id_at: 'DIVL17', type_at: 'paragraph', order: '2'),
-          have_attributes(id_at: 'DIVL19', type_at: 'paragraph', order: '3')
-        ])
+                            have_attributes(id_at: 'DIVL15', type_at: 'paragraph', order: '1'),
+                            have_attributes(id_at: 'DIVL17', type_at: 'paragraph', order: '2'),
+                            have_attributes(id_at: 'DIVL19', type_at: 'paragraph', order: '3')
+                          ])
       )
     end
   end

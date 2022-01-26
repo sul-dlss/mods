@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
-RSpec.describe "Mods <recordInfo> Element" do
+RSpec.describe 'Mods <recordInfo> Element' do
   context 'with some basic record info' do
     subject(:record_info) do
       mods_record("<recordInfo>
@@ -13,17 +15,17 @@ RSpec.describe "Mods <recordInfo> Element" do
     it 'has the expected attributes' do
       expect(record_info.first).to have_attributes(
         recordContentSource: match_array(have_attributes(
-          authority: 'marcorg',
-          text: 'RQE'
-        )),
+                                           authority: 'marcorg',
+                                           text: 'RQE'
+                                         )),
         recordCreationDate: match_array(have_attributes(
-          encoding: 'marc',
-          text: '890517'
-        )),
+                                          encoding: 'marc',
+                                          text: '890517'
+                                        )),
         recordIdentifier: match_array(have_attributes(
-          source: 'SIRSI',
-          text: 'a9079953'
-        ))
+                                        source: 'SIRSI',
+                                        text: 'a9079953'
+                                      ))
       )
     end
   end
@@ -45,24 +47,24 @@ RSpec.describe "Mods <recordInfo> Element" do
       expect(record_info.first).to have_attributes(
         descriptionStandard: match_array(have_attributes(text: 'aacr2')),
         recordContentSource: match_array(have_attributes(
-          authority: 'marcorg',
-          text: 'AU@'
-        )),
+                                           authority: 'marcorg',
+                                           text: 'AU@'
+                                         )),
         recordCreationDate: match_array(have_attributes(
-          encoding: 'marc',
-          text: '050921'
-        )),
+                                          encoding: 'marc',
+                                          text: '050921'
+                                        )),
         recordIdentifier: match_array(have_attributes(
-          source: 'SIRSI',
-          text: 'a8837534'
-        )),
+                                        source: 'SIRSI',
+                                        text: 'a8837534'
+                                      )),
         languageOfCataloging: match_array(have_attributes(
-          languageTerm: match_array(have_attributes(
-            authority: 'iso639-2b',
-            type_at: 'code',
-            text: 'eng'
-          ))
-        ))
+                                            languageTerm: match_array(have_attributes(
+                                                                        authority: 'iso639-2b',
+                                                                        type_at: 'code',
+                                                                        text: 'eng'
+                                                                      ))
+                                          ))
       )
     end
   end
@@ -81,9 +83,9 @@ RSpec.describe "Mods <recordInfo> Element" do
     it 'has the expected attributes' do
       expect(record_info.first).to have_attributes(
         recordChangeDate: match_array(have_attributes(
-          encoding: 'iso8601',
-          text: '19991012150824.0'
-        ))
+                                        encoding: 'iso8601',
+                                        text: '19991012150824.0'
+                                      ))
       )
     end
   end
@@ -102,7 +104,7 @@ RSpec.describe "Mods <recordInfo> Element" do
 
   context 'with a recordOrigin' do
     subject(:record) do
-      mods_record("<recordInfo><recordOrigin>human prepared</recordOrigin></recordInfo></mods>")
+      mods_record('<recordInfo><recordOrigin>human prepared</recordOrigin></recordInfo></mods>')
     end
 
     it 'has the expected attributes' do

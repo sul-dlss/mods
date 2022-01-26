@@ -1,12 +1,15 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Mods::Date do
   subject(:date) { described_class.from_element(term) }
+
   let(:term) { Nokogiri::XML.fragment(date_element).first_element_child }
 
   describe '#to_a' do
     context 'with EDTF encoded sets' do
-      let(:date_element) { "<dateCreated encoding=\"edtf\">[1667,1668,1670..1672]</dateCreated>" }
+      let(:date_element) { '<dateCreated encoding="edtf">[1667,1668,1670..1672]</dateCreated>' }
 
       it 'returns the list of years' do
         expect(date.to_a.map(&:year)).to match_array [1667, 1668, 1670, 1671, 1672]
@@ -14,7 +17,7 @@ RSpec.describe Mods::Date do
     end
 
     context 'with EDTF encoded ranges' do
-      let(:date_element) { "<dateCreated encoding=\"edtf\">1856/1858</dateCreated>" }
+      let(:date_element) { '<dateCreated encoding="edtf">1856/1858</dateCreated>' }
 
       it 'returns the list of years' do
         expect(date.to_a.map(&:year)).to match_array [1856, 1857, 1858]
@@ -22,7 +25,7 @@ RSpec.describe Mods::Date do
     end
 
     context 'with random one-off years' do
-      let(:date_element) { "<dateCreated>1856</dateCreated>" }
+      let(:date_element) { '<dateCreated>1856</dateCreated>' }
 
       it 'returns the year in an array' do
         expect(date.to_a.map(&:year)).to match_array [1856]
@@ -31,7 +34,7 @@ RSpec.describe Mods::Date do
   end
 
   describe '#text' do
-    let(:date_element) { "<dateCreated>1856</dateCreated>" }
+    let(:date_element) { '<dateCreated>1856</dateCreated>' }
 
     it 'returns the MODS text' do
       expect(date.text).to eq '1856'
@@ -64,7 +67,7 @@ RSpec.describe Mods::Date do
     end
 
     context 'without an encoding' do
-      let(:date_element) { "<dateCreated>1856</dateCreated>" }
+      let(:date_element) { '<dateCreated>1856</dateCreated>' }
 
       it 'returns false' do
         expect(date.encoding?).to eq false
@@ -100,7 +103,7 @@ RSpec.describe Mods::Date do
       '1900-uu-15' => :year,
       '1900-06' => :month,
       '1900-06-uu' => :month,
-      '1900-06-15' => :day,
+      '1900-06-15' => :day
     }.each do |data, expected|
       describe "with #{data}" do
         let(:date_element) { "<dateCreated encoding=\"edtf\">#{data}</dateCreated>" }
@@ -130,7 +133,7 @@ RSpec.describe Mods::Date do
     end
 
     context 'without a point' do
-      let(:date_element) { "<dateCreated>1856</dateCreated>" }
+      let(:date_element) { '<dateCreated>1856</dateCreated>' }
 
       it 'returns false' do
         expect(date.single?).to eq true
@@ -208,7 +211,7 @@ RSpec.describe Mods::Date do
       '1900-uu' => Date.parse('1900-01-01')..Date.parse('1900-12-31'),
       '1900-uu-uu' => Date.parse('1900-01-01')..Date.parse('1900-12-31'),
       '1900-uu-15' => Date.parse('1900-01-15')..Date.parse('1900-12-15'),
-      '1900-06-uu' => Date.parse('1900-06-01')..Date.parse('1900-06-30'),
+      '1900-06-uu' => Date.parse('1900-06-01')..Date.parse('1900-06-30')
     }.each do |data, expected|
       describe "with #{data}" do
         let(:date_element) { "<dateCreated encoding=\"edtf\">#{data}</dateCreated>" }
@@ -341,7 +344,7 @@ RSpec.describe Mods::Date do
   end
 
   describe 'garbage data' do
-    let(:date_element) { "<dateCreated>n.d.</dateCreated>" }
+    let(:date_element) { '<dateCreated>n.d.</dateCreated>' }
 
     it 'handles it gracefully' do
       expect(date.as_range).to be_nil
@@ -349,7 +352,7 @@ RSpec.describe Mods::Date do
       expect(date.text).to eq 'n.d.'
     end
 
-    context 'for dates with encodings declared, but invalid data' do
+    context 'with dates with encodings declared, but invalid data' do
       let(:date_element) { "<dateCreated encoding='iso8601'>n.d.</dateCreated>" }
 
       it 'handles it gracefully' do

@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 module Mods
   class OriginInfo
-    DATE_ELEMENTS = ['dateIssued', 'dateCreated', 'dateCaptured', 'dateValid', 'dateModified', 'copyrightDate', 'dateOther']
+    DATE_ELEMENTS = %w[dateIssued dateCreated dateCaptured dateValid dateModified copyrightDate
+                       dateOther].freeze
 
     attr_reader :xml
 

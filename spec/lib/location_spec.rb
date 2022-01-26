@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
-RSpec.describe "Mods <location> Element" do
+RSpec.describe 'Mods <location> Element' do
   context 'with a record with a physical location' do
     subject(:record) do
-      mods_record("<location><physicalLocation>here</physicalLocation></location>")
+      mods_record('<location><physicalLocation>here</physicalLocation></location>')
     end
 
-    it "should have access to text value of element" do
-      expect(record.location.physicalLocation.text).to eq("here")
+    it 'has access to text value of element' do
+      expect(record.location.physicalLocation.text).to eq('here')
     end
   end
 
@@ -16,12 +18,12 @@ RSpec.describe "Mods <location> Element" do
       mods_record("<location><physicalLocation authority='marcorg'>MnRM</physicalLocation></location>")
     end
 
-    it "should have access to text value of element" do
-      expect(record.location.physicalLocation.map { |n| n.text }).to eq(["MnRM"])
+    it 'has access to text value of element' do
+      expect(record.location.physicalLocation.map(&:text)).to eq(['MnRM'])
     end
 
-    it "should recognize authority attribute" do
-      expect(record.location.physicalLocation.authority).to eq(["marcorg"])
+    it 'recognizes authority attribute' do
+      expect(record.location.physicalLocation.authority).to eq(['marcorg'])
     end
   end
 
@@ -30,8 +32,8 @@ RSpec.describe "Mods <location> Element" do
       mods_record("<location><physicalLocation displayLabel='Correspondence'>some address</physicalLocation></location>")
     end
 
-    it "should recognize displayLabel attribute" do
-      expect(record.location.physicalLocation.displayLabel).to eq(["Correspondence"])
+    it 'recognizes displayLabel attribute' do
+      expect(record.location.physicalLocation.displayLabel).to eq(['Correspondence'])
     end
   end
 
@@ -45,8 +47,8 @@ RSpec.describe "Mods <location> Element" do
       XML
     end
 
-    it "has a shelfLocator child element" do
-      expect(record.location.shelfLocator.map { |n| n.text }).to eq(["DAG no. 1410"])
+    it 'has a shelfLocator child element' do
+      expect(record.location.shelfLocator.map(&:text)).to eq(['DAG no. 1410'])
     end
   end
 
@@ -88,7 +90,7 @@ RSpec.describe "Mods <location> Element" do
 
     describe '#url' do
       it 'has access to text value of element' do
-        expect(mult_flavor_loc_urls.map(&:text)).to eq ["http://preview.org", "http://context.org", "http://object.org"]
+        expect(mult_flavor_loc_urls.map(&:text)).to eq ['http://preview.org', 'http://context.org', 'http://object.org']
       end
 
       describe '#access' do
@@ -127,7 +129,7 @@ RSpec.describe "Mods <location> Element" do
       XML
     end
 
-    it "has aholdingSimple child element" do
+    it 'has aholdingSimple child element' do
       expect(record.location.holdingSimple.copyInformation.first).to have_attributes(
         sub_location: have_attributes(text: 'Patient reading room'),
         shelf_locator: have_attributes(text: 'QH511.A1J68'),
@@ -135,7 +137,6 @@ RSpec.describe "Mods <location> Element" do
       )
     end
   end
-
 
   context 'with a record with holdingComplex data' do
     subject(:record) do
@@ -168,8 +169,9 @@ RSpec.describe "Mods <location> Element" do
       XML
     end
 
-    it "has a holdingComplex child element" do
-      expect(record.location.holdingExternal.xpath('//h:holding/h:physicalLocation', h: 'info:ofi/fmt:xml:xsd:iso20775').map(&:text)).to eq ['Menlo Park Public Library']
+    it 'has a holdingComplex child element' do
+      expect(record.location.holdingExternal.xpath('//h:holding/h:physicalLocation',
+                                                   h: 'info:ofi/fmt:xml:xsd:iso20775').map(&:text)).to eq ['Menlo Park Public Library']
     end
   end
 end

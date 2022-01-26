@@ -1,10 +1,10 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 require 'spec_helper'
 
-describe "Mods::Reader" do
+describe 'Mods::Reader' do
   before(:all) do
-    @ns_hash = {'m' => Mods::MODS_NS}
+    @ns_hash = { 'm' => Mods::MODS_NS }
     # url is for a namespaced document
     @example_url = 'http://www.loc.gov/standards/mods/v3/mods99042030_linkedDataAdded.xml'
     @example_default_ns_str = '<mods xmlns="http://www.loc.gov/mods/v3"><note>default ns</note></mods>'
@@ -18,52 +18,54 @@ describe "Mods::Reader" do
     @from_url = Mods::Reader.new.from_url(@example_url)
   end
 
-  it "from_str should turn an xml string into a Nokogiri::XML::Document object" do
+  it 'from_str should turn an xml string into a Nokogiri::XML::Document object' do
     expect(@doc_from_str_default_ns).to be_instance_of(Nokogiri::XML::Document)
-    expect(@doc_from_str_ns        ).to be_instance_of(Nokogiri::XML::Document)
-    expect(@doc_from_str_no_ns     ).to be_instance_of(Nokogiri::XML::Document)
-    expect(@doc_from_str_wrong_ns  ).to be_instance_of(Nokogiri::XML::Document)
+    expect(@doc_from_str_ns).to be_instance_of(Nokogiri::XML::Document)
+    expect(@doc_from_str_no_ns).to be_instance_of(Nokogiri::XML::Document)
+    expect(@doc_from_str_wrong_ns).to be_instance_of(Nokogiri::XML::Document)
   end
 
-  context "from_url" do
-    it "from_url should turn the contents at the url into a Nokogiri::XML::Document object" do
+  context 'with from_url' do
+    it 'turns the contents at the url into a Nokogiri::XML::Document object' do
       expect(@from_url).to be_instance_of(Nokogiri::XML::Document)
     end
   end
 
-  context "from_file" do
+  context 'with from_file' do
     before(:all) do
       @fixture_dir = File.join(File.dirname(__FILE__), '../fixture_data')
       @fixture_mods_file = File.join(@fixture_dir, 'shpc1.mods.xml')
       @from_file = Mods::Reader.new.from_file(@fixture_mods_file)
     end
-    it "should turn the contents of a file into a Nokogiri::XML::Document object" do
+
+    it 'turns the contents of a file into a Nokogiri::XML::Document object' do
       expect(@from_file).to be_instance_of(Nokogiri::XML::Document)
     end
-    it "should give a meaningful error if passed a bad file" do
-      expect(lambda{Mods::Record.new.from_file('/fake/file')}).to raise_error
+
+    it 'gives a meaningful error if passed a bad file' do
+      expect(-> { Mods::Record.new.from_file('/fake/file') }).to raise_error
     end
   end
 
-  context "namespace awareness" do
-    it "should care about namespace by default" do
+  context 'with namespace awareness' do
+    it 'cares about namespace by default' do
       r = Mods::Reader.new
       expect(@doc_from_str_default_ns.root.namespace.href).to eq(Mods::MODS_NS)
-      expect(@doc_from_str_default_ns.xpath('/m:mods/m:note', @ns_hash).text).to eq("ns")
+      expect(@doc_from_str_default_ns.xpath('/m:mods/m:note', @ns_hash).text).to eq('ns')
       expect(@doc_from_str_default_ns.xpath('/mods/note').size).to eq(0)
       expect(@doc_from_str_ns.root.namespace.href).to eq(Mods::MODS_NS)
-      expect(@doc_from_str_ns.xpath('/m:mods/m:note', @ns_hash).text).to eq("ns")
+      expect(@doc_from_str_ns.xpath('/m:mods/m:note', @ns_hash).text).to eq('ns')
       expect(@doc_from_str_ns.xpath('/mods/note').size).to eq(0)
       expect(@doc_from_str_no_ns.xpath('/m:mods/m:note', @ns_hash).size).to eq(0)
-      expect(@doc_from_str_no_ns.xpath('/mods/note').text).to eq("no ns")
-      expect(@doc_from_str_wrong_ns.root.namespace.href).to eq("wrong")
+      expect(@doc_from_str_no_ns.xpath('/mods/note').text).to eq('no ns')
+      expect(@doc_from_str_wrong_ns.root.namespace.href).to eq('wrong')
       expect(@doc_from_str_wrong_ns.xpath('/m:mods/m:note', @ns_hash).size).to eq(0)
       expect(@doc_from_str_wrong_ns.xpath('/mods/note').size).to eq(0)
     end
   end
 
-  context "normalizing mods" do
-    it "should not lose UTF-8 encoding" do
+  context 'when normalizing mods' do
+    it 'does not lose UTF-8 encoding' do
       utf_mods = '<?xml version="1.0" encoding="UTF-8"?>
                   <mods:mods xmlns:mods="http://www.loc.gov/mods/v3"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3"
@@ -73,11 +75,11 @@ describe "Mods::Reader" do
                     </mods:name>
                   </mods:mods>'
       reader = Mods::Reader.new.from_str(utf_mods)
-      expect(reader.encoding).to eql("UTF-8")
+      expect(reader.encoding).to eql('UTF-8')
     end
   end
 
-  context "from_nk_node" do
+  context 'when from_nk_node' do
     before(:all) do
       oai_resp = '<?xml version="1.0" encoding="UTF-8"?>
       <OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/">
@@ -104,12 +106,13 @@ describe "Mods::Reader" do
       @r = Mods::Reader.new
       @mods_ng_doc = @r.from_nk_node(@mods_node)
     end
-    it "should turn the Nokogiri::XML::Node into a Nokogiri::XML::Document object" do
+
+    it 'turns the Nokogiri::XML::Node into a Nokogiri::XML::Document object' do
       expect(@mods_ng_doc).to be_kind_of(Nokogiri::XML::Document)
     end
-    it "should care about namespace by default" do
-      expect(@mods_ng_doc.xpath('/m:mods/m:titleInfo/m:title', @ns_hash).text).to eq("boo")
-    end
-  end # context from_nk_node
 
+    it 'cares about namespace by default' do
+      expect(@mods_ng_doc.xpath('/m:mods/m:titleInfo/m:title', @ns_hash).text).to eq('boo')
+    end
+  end
 end

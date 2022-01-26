@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
-RSpec.describe "Mods <name> Element" do
+RSpec.describe 'Mods <name> Element' do
   context 'with a record with a provided language' do
     subject(:record) do
       mods_record(<<-XML)
@@ -8,11 +10,13 @@ RSpec.describe "Mods <name> Element" do
       XML
     end
 
-    it "has the expected attributes" do
+    it 'has the expected attributes' do
       expect(record.personal_name.namePart).to match_array([
-        have_attributes(text: 'Jean', lang: 'fr-FR', type_at: 'given'),
-        have_attributes(text: 'John', lang: 'en-US', type_at: 'given'),
-      ])
+                                                             have_attributes(text: 'Jean', lang: 'fr-FR',
+                                                                             type_at: 'given'),
+                                                             have_attributes(text: 'John', lang: 'en-US',
+                                                                             type_at: 'given')
+                                                           ])
     end
   end
 
@@ -42,8 +46,8 @@ RSpec.describe "Mods <name> Element" do
       expect(record.plain_name.first).to have_attributes(
         type_at: 'personal',
         namePart: match_array([
-          have_attributes(text: 'Crusty')
-        ]),
+                                have_attributes(text: 'Crusty')
+                              ]),
         role: have_attributes(
           roleTerm: have_attributes(
             text: 'creator',
@@ -76,9 +80,9 @@ RSpec.describe "Mods <name> Element" do
         type_at: 'personal',
         display_value: 'Huston, John',
         namePart: match_array([
-          have_attributes(text: 'John', type_at: 'given'),
-          have_attributes(text: 'Huston', type_at: 'family'),
-        ]),
+                                have_attributes(text: 'John', type_at: 'given'),
+                                have_attributes(text: 'Huston', type_at: 'family')
+                              ]),
         role: have_attributes(
           roleTerm: have_attributes(
             text: 'drt',
@@ -110,11 +114,11 @@ RSpec.describe "Mods <name> Element" do
       expect(record.plain_name.first).to have_attributes(
         namePart: have_attributes(text: 'Claudia Alta Johnson'),
         alternative_name: match_array([
-          have_attributes(
-            altType: 'nickname',
-            namePart: have_attributes(text: 'Lady Bird Johnson')
-          )
-        ])
+                                        have_attributes(
+                                          altType: 'nickname',
+                                          namePart: have_attributes(text: 'Lady Bird Johnson')
+                                        )
+                                      ])
       )
     end
   end
@@ -130,16 +134,16 @@ RSpec.describe "Mods <name> Element" do
     describe '#personal_name' do
       it 'selects the name with the type "personal"' do
         expect(record.personal_name).to match_array([
-          have_attributes(text: 'Crusty')
-        ])
+                                                      have_attributes(text: 'Crusty')
+                                                    ])
       end
     end
 
     describe '#corporate_name' do
       it 'selects the name with the type "corporate"' do
         expect(record.corporate_name).to match_array([
-          have_attributes(text: 'ABC Corp')
-        ])
+                                                       have_attributes(text: 'ABC Corp')
+                                                     ])
       end
     end
   end
@@ -181,7 +185,7 @@ RSpec.describe "Mods <name> Element" do
     end
 
     it 'returns both values' do
-      expect(record.plain_name.role.value).to eq ['CreatorFake', 'Performer']
+      expect(record.plain_name.role.value).to eq %w[CreatorFake Performer]
     end
 
     it 'can return the code' do
@@ -296,7 +300,7 @@ RSpec.describe "Mods <name> Element" do
 
     describe '#display_value_w_date' do
       it 'includes the dates' do
-       expect(record.personal_name.first.display_value_w_date).to eq 'John Paul II, Pope, 1920-2005'
+        expect(record.personal_name.first.display_value_w_date).to eq 'John Paul II, Pope, 1920-2005'
       end
     end
   end
@@ -357,10 +361,13 @@ RSpec.describe "Mods <name> Element" do
 
     it 'has the expected attributes' do
       expect(record.plain_name).to match_array([
-        have_attributes(role: have_attributes(value: ['Director'], code: ['drt'], authority: ['marcrelator'], size: 1)),
-        have_attributes(role: have_attributes(value: ['CreatorFake', 'Actor'], code: ['cre'], authority: ['marcrelator', 'marcrelator'], size: 2)),
-        have_attributes(role: have_attributes(value: ['Actor'], code: ['cre'], authority: ['marcrelator'], size: 1)),
-      ])
+                                                 have_attributes(role: have_attributes(value: ['Director'],
+                                                                                       code: ['drt'], authority: ['marcrelator'], size: 1)),
+                                                 have_attributes(role: have_attributes(value: %w[CreatorFake Actor], code: ['cre'],
+                                                                                       authority: %w[marcrelator marcrelator], size: 2)),
+                                                 have_attributes(role: have_attributes(value: ['Actor'], code: ['cre'],
+                                                                                       authority: ['marcrelator'], size: 1))
+                                               ])
     end
   end
 end

@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
-RSpec.describe "Mods <part> Element" do
+RSpec.describe 'Mods <part> Element' do
   context 'with a basicpart' do
     subject(:part) do
       mods_record("<part>
@@ -17,21 +19,22 @@ RSpec.describe "Mods <part> Element" do
     it 'has the expected attributes' do
       expect(part.first).to have_attributes(
         detail: match_array([
-          have_attributes(
-            title: match_array([have_attributes(text: 'Wayfarers (Poem)')]),
-            number: [],
-          )
-        ]),
+                              have_attributes(
+                                title: match_array([have_attributes(text: 'Wayfarers (Poem)')]),
+                                number: []
+                              )
+                            ]),
         extent: match_array([
-          have_attributes(
-            unit: 'pages',
-            start: have_attributes(text: '97'),
-            end: have_attributes(text: '98'),
-          )
-        ])
+                              have_attributes(
+                                unit: 'pages',
+                                start: have_attributes(text: '97'),
+                                end: have_attributes(text: '98')
+                              )
+                            ])
       )
     end
   end
+
   context 'with a part with a detail number' do
     subject(:part) do
       mods_record("<part>
@@ -47,20 +50,21 @@ RSpec.describe "Mods <part> Element" do
     it 'has the expected attributes' do
       expect(part.first).to have_attributes(
         detail: match_array([
-          have_attributes(
-            type_at: 'page number',
-            number: match_array([have_attributes(text: '3')])
-          )
-        ]),
+                              have_attributes(
+                                type_at: 'page number',
+                                number: match_array([have_attributes(text: '3')])
+                              )
+                            ]),
         extent: match_array([
-          have_attributes(
-            unit: 'pages',
-            start: have_attributes(text: '3')
-          )
-        ])
+                              have_attributes(
+                                unit: 'pages',
+                                start: have_attributes(text: '3')
+                              )
+                            ])
       )
     end
   end
+
   context 'with a part with a number and caption' do
     subject(:part) do
       mods_record("<part>
@@ -74,12 +78,12 @@ RSpec.describe "Mods <part> Element" do
     it 'has the expected attributes' do
       expect(part.first).to have_attributes(
         detail: match_array([
-          have_attributes(
-            type_at: 'issue',
-            number: match_array([have_attributes(text: '1')]),
-            caption: match_array([have_attributes(text: 'no.')])
-          )
-        ])
+                              have_attributes(
+                                type_at: 'issue',
+                                number: match_array([have_attributes(text: '1')]),
+                                caption: match_array([have_attributes(text: 'no.')])
+                              )
+                            ])
       )
     end
   end
@@ -110,7 +114,7 @@ RSpec.describe "Mods <part> Element" do
   end
 
   context 'with a total element' do
-    subject(:part) { mods_record("<part><extent><total>anything</total></extent></part>").part }
+    subject(:part) { mods_record('<part><extent><total>anything</total></extent></part>').part }
 
     it 'has the expected attributes' do
       expect(part.first).to have_attributes(
@@ -120,7 +124,7 @@ RSpec.describe "Mods <part> Element" do
   end
 
   context 'with a list element' do
-    subject(:part) { mods_record("<part><extent><list>anything</list></extent></part>").part }
+    subject(:part) { mods_record('<part><extent><list>anything</list></extent></part>').part }
 
     it 'has the expected attributes' do
       expect(part.first).to have_attributes(
@@ -129,7 +133,7 @@ RSpec.describe "Mods <part> Element" do
     end
   end
 
-  context "<date> child element" do
+  context 'with <date> child element' do
     subject(:date) do
       mods_record("<part><date encoding='w3cdtf'>1999</date></part>").part.date
     end
@@ -148,13 +152,13 @@ RSpec.describe "Mods <part> Element" do
     end
   end
 
-  context "<text> child element as .text_el term" do
+  context 'with <text> child element as .text_el term' do
     subject(:part) do
       mods_record("<part><text type='bar' displayLabel='foo'>1999</text></part>").part
     end
 
     describe '#text_el' do
-      it "has the expected attributes" do
+      it 'has the expected attributes' do
         expect(part.first.text_el).to have_attributes(text: '1999', displayLabel: ['foo'], type_at: ['bar'])
       end
     end

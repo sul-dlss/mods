@@ -1,8 +1,8 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 # Represents the Marc Geographic Area Codes mapped to names, from http://www.loc.gov/marc/geoareas/gacs_code.html 2013-01-03
-#key - Marc Geographic Area code
-#value - Marc Geographic Area term
+# key - Marc Geographic Area code
+# value - Marc Geographic Area term
 MARC_GEOGRAPHIC_AREA = {
   'a' => 'Asia',
   'a-af' => 'Afghanistan',
@@ -188,9 +188,9 @@ MARC_GEOGRAPHIC_AREA = {
   'e-uk-wl' => 'Wales',
   'e-un' => 'Ukraine',
   'e-ur' => 'Russia. Russian Empire. Soviet Union. Former Soviet Republics',
-  #'e-ur' => 'Central Region, RSFSR', # discontinued
-  #'e-ur' => 'Soviet Central Asia', # discontinued
-  #'e-ur' => 'Volgo-Viatskii Region, RSFSR', # discontinued
+  # 'e-ur' => 'Central Region, RSFSR', # discontinued
+  # 'e-ur' => 'Soviet Central Asia', # discontinued
+  # 'e-ur' => 'Volgo-Viatskii Region, RSFSR', # discontinued
   'e-ur-ai' => 'Armenia (Republic)', # discontinued
   'e-ur-aj' => 'Azerbaijan', # discontinued
   'e-ur-bw' => 'Belarus', # discontinued
@@ -588,5 +588,5 @@ MARC_GEOGRAPHIC_AREA = {
   'zsa' => 'Saturn',
   'zsu' => 'Sun',
   'zur' => 'Uranus',
-  'zve' => 'Venus',
-}
+  'zve' => 'Venus'
+}.freeze

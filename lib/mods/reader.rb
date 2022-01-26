@@ -1,10 +1,9 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Mods
   class Reader
     # @param ns_aware true if the XML parsing should be strict about using namespaces.  Default is true
-    def initialize
-    end
+    def initialize; end
 
     # @param str - a string containing mods xml
     # @return Nokogiri::XML::Document
@@ -17,7 +16,7 @@ module Mods
     # @return Nokogiri::XML::Document
     # @example
     #   foo = Mods::Reader.new.from_url('http://purl.stanford.edu/bb340tm8592.mods')
-    def from_url(url, encoding = nil, options = Nokogiri::XML::ParseOptions::DEFAULT_XML)
+    def from_url(url, _encoding = nil, _options = Nokogiri::XML::ParseOptions::DEFAULT_XML)
       require 'open-uri'
       Nokogiri::XML(URI.open(url).read)
     end
@@ -27,7 +26,7 @@ module Mods
     # @return Nokogiri::XML::Document
     # @example
     #   foo = Mods::Reader.new.from_file('/path/to/mods/file.xml')
-    def from_file(filename, encoding = nil, options = Nokogiri::XML::ParseOptions::DEFAULT_XML)
+    def from_file(filename, _encoding = nil, _options = Nokogiri::XML::ParseOptions::DEFAULT_XML)
       File.open(filename) do |file|
         Nokogiri::XML(file)
       end
