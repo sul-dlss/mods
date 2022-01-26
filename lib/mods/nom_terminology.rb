@@ -339,7 +339,7 @@ module Mods
           # attributes
           with_attributes(n, %w[ID displayLabel type])
           # elements
-          n.abstract        :path => 'abstract'
+          n.abstract        :path => 'm:abstract'
           n.accessCondition :path => 'm:accessCondition'
           n.classification  :path => 'm:classification'
           n.extension       :path => 'm:extension'
