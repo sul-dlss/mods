@@ -123,7 +123,7 @@ describe "Mods <location> Element" do
       <location>
         <physicalLocation>Menlo Park Public Library</physicalLocation>
         <holdingExternal>
-          <holding xmlns:iso20775='info:ofi/fmt:xml:xsd:iso20775' xsi:schemaLocation='info:ofi/fmt:xml:xsd:iso20775 http://www.loc.gov/standards/iso20775/N130_ISOholdings_v6_1.xsd'>
+          <holding xmlns='info:ofi/fmt:xml:xsd:iso20775' xsi:schemaLocation='info:ofi/fmt:xml:xsd:iso20775 http://www.loc.gov/standards/iso20775/N130_ISOholdings_v6_1.xsd'>
             <institutionIdentifier>
               <value>JRF</value>
               <typeOrSource>
@@ -147,7 +147,6 @@ describe "Mods <location> Element" do
       </location>
     XML
 
-    expect(record.location.holdingExternal).to be_an_instance_of(Nokogiri::XML::NodeSet)
-    expect(record.location.holdingExternal.first).to be_an_instance_of(Nokogiri::XML::Element)
+    expect(record.location.holdingExternal.xpath('//h:holding/h:physicalLocation', h: 'info:ofi/fmt:xml:xsd:iso20775').map(&:text)).to eq ['Menlo Park Public Library']
   end
 end
