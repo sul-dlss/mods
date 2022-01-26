@@ -98,7 +98,30 @@ module Mods
           n.url :path => 'm:url' do |e|
             with_attributes(e, %w[dateLastAccessed displayLabel note access usage])
           end
-          n.holdingSimple   :path => 'm:holdingSimple'
+          n.holdingSimple :path => 'm:holdingSimple' do |h|
+            h.copyInformation path: 'm:copyInformation' do |c|
+              c.form path: 'm:form' do |f|
+                with_attributes(f, Mods::LANG_ATTRIBS | %w[type])
+              end
+              c.sub_location path: 'm:subLocation' do |s|
+                with_attributes(s, Mods::LANG_ATTRIBS)
+              end
+
+              c.shelf_locator path: 'm:shelfLocator' do |s|
+                with_attributes(s, Mods::LANG_ATTRIBS)
+              end
+              c.electronic_locator path: 'm:electronicLocator'
+              c.note path: 'm:note' do |note|
+                with_attributes(note, Mods::LANG_ATTRIBS | %w[displayLabel type])
+              end
+              c.enumeration_and_chronology path: 'm:enumerationAndChronology' do |e|
+                with_attributes(e, Mods::LANG_ATTRIBS | %w[unitType])
+              end
+              c.item_identifier path: 'm:itemIdentifier' do |i|
+                with_attributes(i, %w[type])
+              end
+            end
+          end
           n.holdingExternal :path => 'm:holdingExternal'
         end # t.location
 

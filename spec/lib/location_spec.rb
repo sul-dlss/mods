@@ -103,7 +103,7 @@ describe "Mods <location> Element" do
         <physicalLocation authority='marcorg'>MnRM</physicalLocation>
         <holdingSimple>
           <copyInformation>
-            <sublocation>Patient reading room</sublocation>
+            <subLocation>Patient reading room</subLocation>
             <shelfLocator>QH511.A1J68</shelfLocator>
             <enumerationAndChronology unitType='1'> v.1-v.8 1970-1976</enumerationAndChronology>
           </copyInformation>
@@ -111,8 +111,11 @@ describe "Mods <location> Element" do
       </location>
     XML
 
-    expect(record.location.holdingSimple).to be_an_instance_of(Nokogiri::XML::NodeSet)
-    expect(record.location.holdingSimple.first).to be_an_instance_of(Nokogiri::XML::Element)
+    expect(record.location.holdingSimple.copyInformation.first).to have_attributes(
+      sub_location: have_attributes(text: 'Patient reading room'),
+      shelf_locator: have_attributes(text: 'QH511.A1J68'),
+      enumeration_and_chronology: have_attributes(text: ' v.1-v.8 1970-1976', unitType: ['1'])
+    )
   end
 
   it "holdingComplex child element" do
