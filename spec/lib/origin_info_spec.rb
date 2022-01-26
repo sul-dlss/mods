@@ -2,44 +2,50 @@
 require 'spec_helper'
 
 describe "Mods <originInfo> Element" do
-  context "<place> child element" do
-    let(:place_term_plain_mult) do
-      mods_record(<<-XML).origin_info.place.placeTerm
-        <originInfo>
-          <place><placeTerm>France</placeTerm></place>
-          <place><placeTerm>Italy</placeTerm></place>
-        </originInfo>
-      XML
+  describe "#place" do
+    describe "#place_term" do
+      context 'with a single value' do
+        let(:terms) do
+          mods_record(<<-XML).origin_info.place.placeTerm
+            <originInfo><place><placeTerm authority='marccountry' type='code'>fr</placeTerm></place></originInfo>
+          XML
+        end
+
+        it 'has the expected attributes' do
+          expect(terms.first).to have_attributes(
+            authority: 'marccountry',
+            type_at: 'code',
+            text: 'fr'
+          )
+        end
+      end
+
+      context 'with a multi-valued place' do
+        let(:terms) do
+          mods_record(<<-XML).origin_info.place.placeTerm
+            <originInfo>
+              <place><placeTerm>France</placeTerm></place>
+              <place><placeTerm>Italy</placeTerm></place>
+            </originInfo>
+          XML
+        end
+
+        it 'has elements for each place' do
+          expect(terms.map(&:text)).to eq ['France', 'Italy']
+        end
+      end
     end
+  end
 
-    let(:place_term_code) do
-      mods_record(<<-XML).origin_info.place.placeTerm
-        <originInfo><place><placeTerm authority='marccountry' type='code'>fr</placeTerm></place></originInfo>
-      XML
-    end
-
-    context "<placeTerm> child element" do
-      it "should get element values" do
-        expect(place_term_plain_mult.map(&:text)).to eq ['France', 'Italy']
-      end
-      it "should get authority attribute" do
-        expect(place_term_code.authority).to eq(["marccountry"])
-      end
-      it "should get type(_at) attribute" do
-        expect(place_term_code.type_at).to eq(["code"])
-      end
-    end # placeTerm
-  end # place
-
-  context "<publisher> child element" do
-    subject(:origin_info) do
-      mods_record(<<-XML).origin_info
+  describe "#publisher" do
+    subject(:publishers) do
+      mods_record(<<-XML).origin_info.publisher
         <originInfo><publisher>Olney</publisher></origin_info>
       XML
     end
 
     it "should get element values" do
-      expect(origin_info.publisher.map(&:text)).to eq(["Olney"])
+      expect(publishers.map(&:text)).to eq(["Olney"])
     end
   end
 
