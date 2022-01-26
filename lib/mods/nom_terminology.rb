@@ -92,13 +92,36 @@ module Mods
           with_attributes(n, Mods::LANG_ATTRIBS | %w[displayLabel])
           # child elements
           n.physicalLocation :path => 'm:physicalLocation' do |e|
-            with_attributes(e, Mods::AUTHORITY_ATTRIBS | %w[displayLabel])
+            with_attributes(e, Mods::AUTHORITY_ATTRIBS | %w[displayLabel type])
           end
           n.shelfLocator :path => 'm:shelfLocator'
           n.url :path => 'm:url' do |e|
             with_attributes(e, %w[dateLastAccessed displayLabel note access usage])
           end
-          n.holdingSimple   :path => 'm:holdingSimple'
+          n.holdingSimple :path => 'm:holdingSimple' do |h|
+            h.copyInformation path: 'm:copyInformation' do |c|
+              c.form path: 'm:form' do |f|
+                with_attributes(f, Mods::LANG_ATTRIBS | %w[type])
+              end
+              c.sub_location path: 'm:subLocation' do |s|
+                with_attributes(s, Mods::LANG_ATTRIBS)
+              end
+
+              c.shelf_locator path: 'm:shelfLocator' do |s|
+                with_attributes(s, Mods::LANG_ATTRIBS)
+              end
+              c.electronic_locator path: 'm:electronicLocator'
+              c.note path: 'm:note' do |note|
+                with_attributes(note, Mods::LANG_ATTRIBS | %w[displayLabel type])
+              end
+              c.enumeration_and_chronology path: 'm:enumerationAndChronology' do |e|
+                with_attributes(e, Mods::LANG_ATTRIBS | %w[unitType])
+              end
+              c.item_identifier path: 'm:itemIdentifier' do |i|
+                with_attributes(i, %w[type])
+              end
+            end
+          end
           n.holdingExternal :path => 'm:holdingExternal'
         end # t.location
 
@@ -115,48 +138,41 @@ module Mods
           n.termsOfAddress :path => 'm:namePart[@type="termsOfAddress"]'
           n.date           :path => 'm:namePart[@type="date"]'
 
-          n.alternative_name :path => 'm:alternativeName'
+          n.alternative_name :path => 'm:alternativeName' do |alt|
+            with_attributes(alt, %w[altType])
+          end
           n.displayForm :path => 'm:displayForm'
           n.affiliation :path => 'm:affiliation'
           n.description_el :path => 'm:description' # description is used by Nokogiri
           n.role :path => 'm:role' do |r|
             r.roleTerm :path => 'm:roleTerm' do |rt|
               with_attributes(rt, Mods::AUTHORITY_ATTRIBS | %w[type])
+
+              rt.value path: '.', accessor: (lambda do |roleTerm|
+                text = roleTerm.text.strip
+
+                if roleTerm.type_at == 'code' && roleTerm.authority == 'marcrelator'
+                  MARC_RELATOR.fetch(text, text)
+                else
+                  text
+                end
+              end)
             end
+
             # role convenience method
             r.authority :path => '.', :accessor => lambda { |role_node|
-              a = nil
-              role_node.roleTerm.each { |role_t|
-                # role_t.authority will be [] if it is missing from an earlier roleTerm
-                if role_t.authority && (!a || a.size == 0)
-                  a = role_t.authority
-                end
-              }
-              a
+              role_node.roleTerm.authority.first
             }
+
             # role convenience method
             r.code :path => '.', :accessor => lambda { |role_node|
-              c = nil
-              role_node.roleTerm.each { |role_t|
-                if role_t.type_at == 'code'
-                  c ||= role_t.text
-                end
-              }
-              c
+              role_node.roleTerm.select { |role_t| role_t.type_at == 'code' }.first&.text
             }
+
             # role convenience method
             r.value :path => '.', :accessor => lambda { |role_node|
-              val = nil
-              role_node.roleTerm.each { |role_t|
-                if role_t.type_at == 'text'
-                  val ||= role_t.text
-                end
-              }
-              # FIXME:  this is broken if there are multiple role codes and some of them are not marcrelator
-              if !val && role_node.code && role_node.authority.first =~ /marcrelator/
-                val = MARC_RELATOR[role_node.code.first]
-              end
-              val
+              val = role_node.roleTerm.select { |role_t| role_t.type_at == 'text' }.first&.text
+              val || role_node.roleTerm.select { |role_t| role_t.type_at == 'code' && role_t.authority.match?(/marcrelator/) }.first&.value
             }
           end # role node
 

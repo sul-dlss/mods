@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mods xmlns="http://www.loc.gov/mods/v3">
+  <titleInfo authority="Corpus Christi College">
+    <title>Cambridge, Corpus Christi College, MS 367: Miscellaneous Compilation including Old English Material and Historical and Philosophical Works</title>
+  </titleInfo>
+  <titleInfo authority="James Catalog" type="alternative">
+    <title>Chronica. Anglo-Saxon fragments, etc.</title>
+  </titleInfo>
+  <typeOfResource manuscript="yes">mixed material</typeOfResource>
+  <originInfo>
+    <dateCreated encoding="w3cdtf" keyDate="yes" point="start" qualifier="approximate">1400</dateCreated>
+    <dateCreated encoding="w3cdtf" keyDate="yes" point="end" qualifier="approximate">1499</dateCreated>
+  </originInfo>
+  <originInfo>
+    <dateCreated encoding="w3cdtf" keyDate="yes" point="start" qualifier="approximate">1300</dateCreated>
+    <dateCreated encoding="w3cdtf" keyDate="yes" point="end" qualifier="approximate">1399</dateCreated>
+  </originInfo>
+  <originInfo>
+    <dateCreated encoding="w3cdtf" keyDate="yes" point="start" qualifier="approximate">1000</dateCreated>
+    <dateCreated encoding="w3cdtf" keyDate="yes" point="end" qualifier="approximate">1099</dateCreated>
+  </originInfo>
+  <originInfo>
+    <dateCreated encoding="w3cdtf" keyDate="yes" point="start" qualifier="approximate">1000</dateCreated>
+    <dateCreated encoding="w3cdtf" keyDate="yes" point="end" qualifier="approximate">1099</dateCreated>
+  </originInfo>
+  <abstract displayLabel="Summary" type="summary">CCCC MS 367 consists of five small volumes bound together, probably because Parker wished to protect a number of small items by placing them between covers. The first contains two chronicles, copied in the fifteenth century, an epitome of the Polychronicon by Ranulf Higden OSB (d. 1364), and a chronicle attributed to Thomas Harpsfield. The second consists of a number of fragments of Old English material, copied in the second half of the eleventh or the early twelfth century, and probably to be associated with Worcester: they contain the De temporibus anni by Ælfric of Eynsham OSB (d. 1010), and some homiletic fragments, now out of order. The third volume is a thirteenth- or fourteenth-century copy of Robert Kilwardby OP (d. 1279), De natura relationis. The fourth is a thirteenth-century copy of the Apocalypsis Goliae, a satirical Latin poem sometimes associated with Walter Map (c. 1140-1210), but best considered anonymous. The fifth contains an eleventh-century copy of the Vita breuior of St Kenelm, with a short booklist which has been associated with Worcester, and an Old English account of a vision had by Earl Leofric.</abstract>
+  <tableOfContents displayLabel="Contents">Polychronicon (epitome and continuation to 1429) -- Gesta regum ad Henricum VI -- De temporibus anni (incomplete) -- Fragments of Old English homilies -- De natura relationis -- Apocalypsis Goliae -- Vita breuior Sancti Kenelmi (incomplete) -- Old English Visio Leofrici</tableOfContents>
+  <note displayLabel="M.R. James Date" type="date">xv, xi-xii, xiv, xi</note>
+  <language>
+    <languageTerm authority="iso639-2b" type="code">lat</languageTerm>
+  </language>
+  <language>
+    <languageTerm authority="iso639-2b" type="code">ang</languageTerm>
+  </language>
+  <physicalDescription>
+    <note displayLabel="Material" type="material">Paper and vellum</note>
+    <extent>ff. 53 + 52</extent>
+    <note displayLabel="Layout" type="layout">five volumes</note>
+    <note displayLabel="Height (mm)" type="dimensions">220</note>
+    <note displayLabel="Width (mm)" type="dimensions">145</note>
+    <note displayLabel="Collation" type="collation">Paper: 1(10) 2(10) 3(12) (wants 10-12) 4(14) 5(10). Vellum: a(2) b(2) c(2) d(4) e(2) (2 canc.) f(6) (6 canc.) 8(14) (10 canc.)? A(12). B (three). I(8) (wants 1, 7, 8) II(2) (+1).</note>
+    <note displayLabel="Writing" type="handNote">in a smallish hand of cent. xi-xii</note>
+    <note displayLabel="Foliation" type="foliation">ff. i-ii + 1-105 + iii-iv</note>
+    <note displayLabel="Provenance" type="provenance">Part of the volume seems to be certainly from Worcester.</note>
+    <note displayLabel="Research" type="research">The Anglo-Saxon portions were not described by Wanley and have escaped the notice of subsequent students.</note>
+  </physicalDescription>
+  <identifier displayLabel="TJames">342</identifier>
+  <identifier displayLabel="Stanley">19. 9</identifier>
+  <location>
+    <physicalLocation type="repository">UK, Cambridge, Corpus Christi College, Parker Library</physicalLocation>
+    <shelfLocator>MS 367</shelfLocator>
+  </location>
+  <relatedItem displayLabel="Downloadable James Catalogue Record" type="isReferencedBy">
+    <titleInfo>
+      <title>https://stacks.stanford.edu/file/druid:vz744tc9861/MS_367.pdf</title>
+    </titleInfo>
+  </relatedItem>
+  <relatedItem displayLabel="Superseded Interim Catalogue Record" type="isReferencedBy">
+    <titleInfo>
+      <title>https://stacks.stanford.edu/file/druid:pw577ky6421/367.pdf</title>
+    </titleInfo>
+  </relatedItem>
+  <relatedItem type="constituent">
+    <name type="personal">
+      <namePart>Ranulf Higden OSB</namePart>
+      <role>
+        <roleTerm authority="marcrelator" type="text" valueURI="http://id.loc.gov/vocabulary/relators/aut">author</roleTerm>
+      </role>
+    </name>
+    <titleInfo>
+      <title>Ranulf Higden OSB, Polychronicon (epitome and continuation to 1429)</title>
+      <partNumber>1r-29v</partNumber>
+    </titleInfo>
+    <titleInfo displayLabel="Nasmith" type="alternative">
+      <title>Epitome chronicae Cicestrensis, sed extractum e Polychronico, usque ad annum Christi 1429</title>
+      <partNumber>1r-29v</partNumber>
+    </titleInfo>
+    <note displayLabel="Incipit" type="incipit">(1r) Ieronimus ad eugenium in epistola 43a dicit quod decime leguntur primum date ab abraham</note>
+    <note>Dates are marked in the margin</note>
+    <note>Ends with the coronation of Henry VI at St Denis</note>
+    <note displayLabel="Explicit" type="explicit">(29v) videlicet nono die mensis decembris ano etatis sue 10o</note>
+  </relatedItem>
+  <relatedItem type="constituent">
+    <name type="personal">
+      <namePart>Thomas Harsfield</namePart>
+      <role>
+        <roleTerm authority="marcrelator" type="text" valueURI="http://id.loc.gov/vocabulary/relators/aut">author</roleTerm>
+      </role>
+    </name>
+    <titleInfo>
+      <title>Thomas Harsfield, Gesta regum ad Henricum VI</title>
+      <partNumber>30r-53r</partNumber>
+    </titleInfo>
+    <titleInfo displayLabel="Nasmith" type="alternative">
+      <title>Breviarium historiae Angliae ad annum quartum Henrici IV. viz. 1402</title>
+      <partNumber>30r-53r</partNumber>
+    </titleInfo>
+    <titleInfo displayLabel="James" type="alternative">
+      <title>Breuiarium</title>
+      <partNumber>30r-53r</partNumber>
+    </titleInfo>
+    <note>Another hand</note>
+    <note>begins with 19 lines</note>
+    <note displayLabel="Incipit" type="incipit">(30r) IAlbion est terra constans in finibus orbisQuam dedit albina grecorum filia regis...</note>
+    <note>(30r) IISuccedunt Reges ab eodem pace fruentesUsque dies nostres ut pandunt scripta legentesNomina scriptorum (tu) [iam] suscipe care RoberteEx libris quorum labor hic monstratur aperteGalifridus gesta Britonum scripsit sapienterAnglorum facta conscripsit Beda patenterWillelmus quondam monachus MalmisberiensisTryuet Martinushenricus huntidonensisPetrus pictauis dat cistrensis monachusque</note>
+    <note displayLabel="Incipit" type="incipit">(30r) Et quia confrater carissime non solum audiendo sacre scripture verbis aurem sedulus auditor accomodatur (!) tenetur</note>
+    <note>(See P. de Yckham)</note>
+    <note>Ends with verses (14) on the Battle of Shrewsbury</note>
+    <note>(52v) de isto bello quidam versificator sic infert versus</note>
+    <note>(52v) In magdalene saturni vespere pleneHenrico IIIIto sunt hec anno sibi iiijto... Nomina cunctorum nescio monstrare virorumNescio plus quorum Christus miseretur eorum</note>
+    <note displayLabel="Explicit" type="explicit">(53r) Tempore huius regis Owynus quidam Wallensis erigens se in principem Wallie toto vite sue tempore cum Wallensibus rebellauit</note>
+    <note displayLabel="Rubric" type="rubric">(53r) Explicit</note>
+    <note>(53r) Lower part of leaf cut off. f. 53v blank</note>
+  </relatedItem>
+  <relatedItem type="constituent">
+    <name type="personal">
+      <namePart>Ælfric OSB</namePart>
+      <role>
+        <roleTerm authority="marcrelator" type="text" valueURI="http://id.loc.gov/vocabulary/relators/aut">author</roleTerm>
+      </role>
+    </name>
+    <titleInfo>
+      <title>Ælfric OSB, De temporibus anni (incomplete)</title>
+      <partNumber>54r-55v</partNumber>
+    </titleInfo>
+    <titleInfo displayLabel="Nasmith" type="alternative">
+      <title>De die, mense, de XII signis, &amp;c. (Saxonice)</title>
+      <partNumber>54r-55v</partNumber>
+    </titleInfo>
+    <note displayLabel="Incipit" type="incipit">(54r) Þone forman dæg þyssere ƿorulde ƿe magon afindan þurh þes lenctenlices emnihtes dæg. Forþan ðe se emnihtes dæg is se feorða dæg þyssere ƿorulde gesceapennysse</note>
+    <note>Treats de luna, de ebdomada, de anno solis, de xii signis, de anno, de diuersis mensibus, de luna, communis annus, embolismus, IIIIor tempora</note>
+    <note>On f. 2v the writing is crowded towards the end. Ends</note>
+    <note displayLabel="Explicit" type="explicit">(55v) Eft on langiendum dagum he ofer geð þone suðran sunsted · 7 forþi he byð norþur geseƿen þonne seo sunne on ƿintra · sƿa þeah ne gæð heora</note>
+    <note>It continues on ff. 7r-10r</note>
+    <note displayLabel="Incipit" type="incipit">(60r) naðor ænne pricon ofer þam þe him geset is. ne dagas ne synd nu naþor lengran ne scyrtran þonne hi æt fruman ƿæron. en Egyptaland ne cymð næfre nan ƿinter</note>
+    <note>Ends f. 10r (on hail, snow, thunder, etc.)</note>
+    <note displayLabel="Explicit" type="explicit">(63r) se bið hlud for þære lyfte bradnysse. frecen ful for þæs fyres sceotugum. beo þeos gesetnyss þus her ge endod</note>
+    <note>f. 10v blank</note>
+    <note>This is Ælfric's extract from Beda de temporibus. Cockayne, Leechdoms III 238</note>
+  </relatedItem>
+  <relatedItem type="constituent">
+    <titleInfo>
+      <title>Fragments of Old English homilies</title>
+      <partNumber>56r-82v</partNumber>
+    </titleInfo>
+    <titleInfo displayLabel="Nasmith" type="alternative">
+      <title>Homeliae quaedam Saxonica, imperfectae</title>
+      <partNumber>56r-82v</partNumber>
+    </titleInfo>
+    <titleInfo displayLabel="James" type="alternative">
+      <title>Fragments of Homilies</title>
+      <partNumber>56r-82v</partNumber>
+    </titleInfo>
+    <note>a.</note>
+    <note>A good hand of cent. xii, 30 lines to a page</note>
+    <note>(56r) Homily on the Assumption</note>
+    <note>ff. 6r-6v should precede ff. 3r-3v (Thorpe II 436)</note>
+    <note displayLabel="Incipit" type="incipit">(59r) be þisse heofenlican cƿene upstige</note>
+    <note>f. 6v ends</note>
+    <note>(59v) þæt heo un asecgendlice mid criste up</note>
+    <note>(56r) ahafen on ecnysse rixige</note>
+    <note>Ends f. 5r. f. 23r has the beginning</note>
+    <note>b.</note>
+    <note displayLabel="Rubric" type="rubric">(58r) viii kalends Septembris. Passio Sancti Bartholomei apostoli</note>
+    <note displayLabel="Incipit" type="incipit">(58v) Ƿyrd ƿryteras secgað þæt þre leod scipas</note>
+    <note>(Thorpe II 454)</note>
+    <note>One page only</note>
+    <note displayLabel="Explicit" type="explicit">(58v) oþer deofol ƿæs geƿurðod þæs</note>
+    <note>(Thorpe II 454)</note>
+    <note>Continued after break on f. 24r</note>
+    <note>On the margin of f. 30r is a copy of a document (xiii)</note>
+    <note>(56r) Omnibus ... Walt. de La Fort (?) ... Noueritis me dedisse ... Philipp. filio meo quatuor croppos ... in camp de Henton ... ao v. v. H. Liiio ... Test. Joh. Jokyn. Le FraunkeJoh. Wace ...Wace ...Le fraunke ...</note>
+    <note>c.</note>
+    <note displayLabel="Rubric" type="rubric">(64r) Sexta Idus Septembris. Nativitas Sancte Marie Virginis</note>
+    <note displayLabel="Incipit" type="incipit">(64r) Men þa leofestan ƿeorðiat ƿe nu on andƿeardnysse þa gebyr tide</note>
+    <note>(Wanley, p. 17, Bodl. NEF. 4. 12)</note>
+    <note>Ends imperfectly</note>
+    <note displayLabel="Explicit" type="explicit">(69v) He þa ioseph aros of þam slæpe. sƿy þe ge</note>
+    <note>Assmann, A.-S. Homilien etc. p. 117</note>
+    <note>d.</note>
+    <note>In a less good hand, 27 lines to a page</note>
+    <note>(70r) On the Lord's Prayer, continued on f. 29r</note>
+    <note displayLabel="Incipit" type="incipit">(70r) ure rice gif ƿe hit geearnian ƿyllan</note>
+    <note>(Thorpe I 264)</note>
+    <note>17v ends</note>
+    <note>(70v) Ðæt fifte gebed is. Et dimitte nobis debita nostra sicut et nos dimittimus (29r) debitoribus nostris</note>
+    <note>ends</note>
+    <note displayLabel="Explicit" type="explicit">(82v) Sƿa he oftor on þære fandunge</note>
+    <note>e.</note>
+    <note>f. 18r follows f. 27v. Homily on Dedication of St Michael's Church. Thorpe II 502 (fragments)</note>
+    <note>f.</note>
+    <note>f. 19r follows f. 28r. Homily on St Matthew. Thorpe II 468</note>
+    <note>g.</note>
+    <note>f. 20r-20v, the end of a Homily and beginning of another</note>
+    <note displayLabel="Rubric" type="rubric">(73r) Feria Secunda</note>
+    <note displayLabel="Incipit" type="incipit">(73r) Hit is sƿyðe ged(a)fenlic</note>
+    <note>Thorpe I 282. f. 26r continues this</note>
+    <note>h.</note>
+    <note>f. 21r-21v single leaf</note>
+    <note displayLabel="Incipit" type="incipit">(74r) fram þroƿunge to æriste. fra deðe to life</note>
+    <note>Ends</note>
+    <note displayLabel="Explicit" type="explicit">(74v) þa þa heo ƿearð a þys troð on cristes þroƿunge fram middæge oð non. stanas on</note>
+    <note>(Morris, Legends of the Holy Rood, p. 167)</note>
+    <note>i.</note>
+    <note displayLabel="Incipit" type="incipit">(75r) gafol oððe tol. æt heora gesiblingum oððe æt fræmdum. Petrus cƿæð æt fræmdum. Se hælend cƿæð, etc.</note>
+    <note>Ends</note>
+    <note displayLabel="Explicit" type="explicit">(75v) him for godes lufan big ƿiste fore sceaƿað. Ðon hæfð he sƿa miccle</note>
+    <note>(On Matt. xvii 24, the fish and tribute-money)</note>
+    <note>Apparently not found elsewhere: not known to Professor Napier</note>
+    <note>k.</note>
+    <note>(76r) see a. Homily on the Assumption</note>
+    <note>l.</note>
+    <note>(77r) see b. On St Bartholomew</note>
+    <note>m.</note>
+    <note>(78r) I append a copy of the fragment m.</note>
+    <note>(78r) fram gode · to þe cumen · ; Ic ƿes þine ƿlite · 7 þineƿynsumnesse · 7 þine spæc 7 þin haƿung · 7 þine gehyrnys · 7 þine glednesse; Ic ƿæs þin geþanc · 7þine fægernes · 7 þine lufu · 7 þin gestæþþignes7 þin ge treoƿnes · gif þu ænige treoƿa hæfdest; 7 icƿæs þin gamon · 7 þin gladung · 7 þin hleahtor · 7 þinemyrhþ. Eall þæt þu ƿære. eall ic ƿæs þis on þe 7siþ þan ic ana ƿæs of þe · eall þe lofode · þæt ic nusæde; 7 naht þu ƿære butan me · 7 þu me mid enigumgode ne ge þohtest. ne þinne drihten. þe me þesealde. Ladlice eardunge hæfde ic on þe · æghƿætþæs þe þu hogedest mid þinum flæsce æghƿæt meƿæs þæs earfodlic · on to ge þroƿianne Eall þæt þulufodest. eall þæt ic hatode nære ƿit næfre gletane tid on anum ƿillan. For þan þe þu hyrƿdestgodes bebodu · 7 his haligra lare; Eala eala hreoƿlice · 7 dreorlice. stent þonne þæt deade flesc asmórodne mæg þonne nan andƿyrde syllan. þam his gaste.7 sƿæst sƿiþe ladlicum sƿate · 7 him feallað of. | unfægere dropan · 7 bret on menige fealdumhiƿe. Hƿilum he bið sƿiðe ladlicum men gelice · þonneƿannaþ he 7 doxað · oþre hƿile he bið blac · 7 æm /heoƿe · 7 hƿilum coll sƿeart · 7 gelic þam seo saƿul. heoƿað on yfelan bleon sƿa same · sƿa se lichama ·7 bið gyt ƿyrsan heoƿes; 7 standað butu · sƿiþeforhte · 7 afærede · 7 bifiende on bidat domes; Ðonne clypað se deofol to þam déman · 7 cƿiþ to himþes ƿes min agen · fram hire geogoðe oð hireylde · heo hyrdon me georne 7 ælce dæg icheo lærde unriht to donne · 7 hi me simblelustlice hyrdon. And þonne þin lareoƿ com to hym 7hym ƿolde hyra saƿla hælo · tetan · þonne ƿæs icf. 25vsimle ær æt heom · 7 æft leng · 7 sƿette heom heora / unriht · la hƿi ne mot ic habban · þæt ic ær me sylfbegeat mid minum lyðrum ƿrencum · oft ic gedyde ·þæt he geƿorhte þussende synna ƿið ðe · 7 nanege betan nolde · Ðonne cƿæð þæs reðan ciningesstef · gang þu saƿel in þæt forlorene hus. þa gitæt somne syngodon. git eac æt somne sƿelton; Donne cƿið æft se dema to þam saƿlum. Disceditea me maledicti in ignem eternum qui preparatusest (a) diabolo. Geƿitaþ ge aƿirgydan on þæt ecefyr · þæt gegearƿode min fæder deofle 7 hisenglum. Ðonne hæfð se deofol geƿorht bogan7 stræla. 7 se boga biþ geƿoht of ofer mettum ·7 þa strela beoð sƿa manigra cynna sƿa sƿa mannes synna beoð. Sum stræl biþ geƿorht ofniþe sum of æfeste. sum of eþ belige · sumof hat heortnæsse · sum of stale · sum ofdrucennesse · sum of dyrnum geligere · sumof æƿ bryce · sum of sib legere sum of dƿolcræfte · sum of lyblacc · sum of gitsunge · sumof gifernesse · sum of reaflac · sum of scincræftesum of mord cƿale · sum of strudunge. Andsƿa manega stræla hæfd se deofol sƿa nis nanman þæt hy ealle atellan magon. And ælce dægþæs deofoles ƿilla bið þæt his strelena nan ·ne sy unafæstnod · gif he findan mæg hƿærhe hy on afæstnian mæge. 7 on hælle þadeofla scotigað mid þam strælum · 7 sƿa sa hehæfð ælce dæg his bogan to us gebendne7 ƿile us scotian mid þam strælum · þe ic ær / nemde; Ðonne is us micel þearf leofan menþæt ƿe habban þa scyldas þær ongean · þe /</note>
+    <note>n.</note>
+    <note>f. 26r follows 20v: see g.</note>
+    <note>o.</note>
+    <note>f. 27r-27v precedes 18r (on St Matthew and St Michael): see e., f.</note>
+    <note>p.</note>
+    <note>(81r) Exaltation of the Cross (fragments). Morris, Legends of the Holy Rood, E. E. T. S., pp. 105, 107. Also on 28v the beginning of the Homily on St Matthew. p. thus precedes f. 18r</note>
+    <note>q.</note>
+    <note>(82r) On the Lord's Prayer: see d.</note>
+  </relatedItem>
+  <relatedItem type="constituent">
+    <name type="personal">
+      <namePart>Robert Kilwardby OP</namePart>
+      <role>
+        <roleTerm authority="marcrelator" type="text" valueURI="http://id.loc.gov/vocabulary/relators/aut">author</roleTerm>
+      </role>
+    </name>
+    <titleInfo>
+      <title>Robert Kilwardby OP, De natura relationis</title>
+      <partNumber>83r-94v</partNumber>
+    </titleInfo>
+    <titleInfo displayLabel="Nasmith" type="alternative">
+      <title>Logica quaedam</title>
+      <partNumber>83r-94v</partNumber>
+    </titleInfo>
+    <note displayLabel="Rubric" type="rubric">(83r) Que sit res predicamenti relationis per se</note>
+    <note displayLabel="Incipit" type="incipit">(83r) De predicamento relationis querunt aliqui que sit res huius generis</note>
+    <note>Ends imperfectly in chapter 31</note>
+  </relatedItem>
+  <relatedItem type="constituent">
+    <titleInfo>
+      <title>Apocalypsis Goliae</title>
+      <partNumber>95r-97v</partNumber>
+    </titleInfo>
+    <titleInfo displayLabel="Nasmith" type="alternative">
+      <title>Versus quidam</title>
+      <partNumber>95r-97v</partNumber>
+    </titleInfo>
+    <titleInfo displayLabel="James" type="alternative">
+      <title>Apocalypsis Goliae</title>
+      <partNumber>95r-97v</partNumber>
+    </titleInfo>
+    <note>(Wright, Poems of W. Mapes, p. 1)</note>
+    <note displayLabel="Incipit" type="incipit">(95r) A tauro torrida lampade cinthii</note>
+    <note>Ending</note>
+    <note displayLabel="Explicit" type="explicit">(97v) Dux meus manibus me capit insitis</note>
+    <note>(l. 410)</note>
+  </relatedItem>
+  <relatedItem type="constituent">
+    <titleInfo>
+      <title>Vita breuior Sancti Kenelmi (incomplete)</title>
+      <partNumber>98r-101v</partNumber>
+    </titleInfo>
+    <titleInfo displayLabel="Nasmith" type="alternative">
+      <title>Historia (imperfecta) Kenelmi principis Merciorum</title>
+      <partNumber>98r-101v</partNumber>
+    </titleInfo>
+    <titleInfo displayLabel="James" type="alternative">
+      <title>Life of St Kenelm</title>
+      <partNumber>98r-101v</partNumber>
+    </titleInfo>
+    <note>(98r) beginning imperfectly in c. ii</note>
+    <note displayLabel="Incipit" type="incipit">(98r) forma. perfusus diuina dilectione et gratia deo et hominibus amabilis erat aetatula</note>
+    <note>(101r) The original hand ends in c. viii: diuinorum miracula beneficiorum commendant. A hand of cent. xii continues and, writing very close, ends on the same page. It begins: martirem suum quem et ab humana noticia abscidere nitebatur: and ends: occubuerit. ad laudem et gloriam dei patris omnipotentis qui uiuit et regnat per omnia secula seculorum. Amen</note>
+    <note>(101r) Under this is a scribble of a maze in pencil</note>
+    <note>The same Life (abridged in Acta Sanctorum July IV 380, and in Horstmann, Nova Legenda Angliae II 110) is in MS. Douce 368 and Bodley 285</note>
+    <note>(101v) On the verso a line and a half in a small hand giving a list of books. .i. Ðeo englissce passionale · 7 .ii. ·ii· englissce dialogas · 7 .iii. oddan boc · 7 .iiii. þe englisca martirlogium · / 7 .vi. · ii · englisce · salteras 7 · ii · pastorales · englisce · 7 þe englisca regol. / 7 barontus. (Printed in my Sources of Archbishop Parker's Collection and in Floyer and Hamilton's Catalogue of the MSS. at Worcester Cathedral, p. 166, note 3.) Barontus is the Vision of Barontus of Pistoia Acta Sanctorum Mart. 24</note>
+  </relatedItem>
+  <relatedItem type="constituent">
+    <titleInfo>
+      <title>Old English Visio Leofrici</title>
+      <partNumber>101v-105v</partNumber>
+    </titleInfo>
+    <titleInfo displayLabel="Nasmith" type="alternative">
+      <title>Homelia Saxonica sive passionale</title>
+      <partNumber>101v-105v</partNumber>
+    </titleInfo>
+    <note>In a hand similar to that of the booklist in item 7 but larger</note>
+    <note>(101v) Title in faint pencil</note>
+    <note displayLabel="Rubric" type="rubric">(101v) Uisio Leofrici</note>
+    <note displayLabel="Incipit" type="incipit">(101v) Her gesutelað ða gesihðe ðe Leofric eorl gesæh. him þuhte to soðan on healf slapendon lichaman na eallinga sƿylce on sƿefne ac gyt geƿisslicor þæt he sceolde nede ofer ane sƿiðe smale bricge · 7 seo ƿær sƿiþe lang</note>
+    <note>Ends</note>
+    <note displayLabel="Explicit" type="explicit">(103v) hit þa gesƿac þæra bletsunga þæt ƿæs neh þam þes godspel ƿæs gerædd. Feoƿertyne nihton ær his forð siðe he foresæde þonne dæg þe he sceolde cuman to cofantreo to his langan hame þær he on restet · 7 hit à eode eall sƿa he sæde. Requiescat in pace</note>
+    <note>This document, which had remained unnoticed, has been printed by Professor Napier in the Philological Journal, 1908</note>
+    <note>A note (xiii)</note>
+    <note displayLabel="Incipit" type="incipit">(103v) Vesperus est grandis interpolatio nubium inter nos et solem</note>
+    <note>(104r) In a hand like that of no. 8 with neumes. Sequence for Epiphany</note>
+    <note displayLabel="Incipit" type="incipit">(104r) Letabundus exultet fidelis chorus alleluiaRegem regum intacte profudit thorus res miranda</note>
+    <note displayLabel="Explicit" type="explicit">(104v) Sanctus namque spiritus ipsa nobis prebuit bene mentis naribus odoranda</note>
+    <note>Smaller hand</note>
+    <note>(104v) Ad ultimum laus est uincta. Psalat chorus alia. Amen dicant omnia</note>
+    <note>Another hand, xii</note>
+    <note displayLabel="Incipit" type="incipit">(105r) Hubertus (l. Herbertus) Abbas Westmon. 7 Edwius prior eiusdem loci. uenerabili priori Wigornie / Warino et domino Vhtredo cantori ceterisque fratribus ecclesie eiusdem. salutem in christo et perpet(uam) / pacem. Sciatis istum fratrem nostrum et monachum Benedictum ad nos uenisse et causa(s) / recessurus (!) sui de Maluernia sicut nobis uidetur rationabiliter ostendisse</note>
+    <note>Asks that he be well treated till the writer's coming</note>
+    <note>(105r) dixit nobis quoddam opus scilicet missale apud uos / incepisse et antequam ad Maluerniam rediret sua uoluntate perficeret</note>
+    <note>The monk in question has left Malvern and gone to Westminster</note>
+    <note>Ends</note>
+    <note displayLabel="Explicit" type="explicit">(105r) laudando creatorem qui ouem suam reduxit ad gregem. Vale</note>
+    <note>Herbertus was Abbot of Westminster from 1121 till shortly before 1140. Warinus prior of Worcester cir. 1130-40</note>
+    <note>Charm (xii?)</note>
+    <note displayLabel="Incipit" type="incipit">(105r) + In nomine p. et f. et s. sci amen + Ire + arex + Christe + rauex + filiax + / arafax + N. Medicina contra febres</note>
+    <note>On f. 52v in a neat small hand, beginning and margin cut: Constitutions affecting monks, etc.</note>
+    <note>The last begins</note>
+    <note displayLabel="Incipit" type="incipit">(105v) Monachis et canonicis regularibus tam uestimenta quam coopertoria interdicimus colorata</note>
+    <note displayLabel="Incipit" type="incipit">(105v) Viri religiosi quibus non est cura animarum commissa nullos ad penitentiam recipere audeant</note>
+    <note displayLabel="Incipit" type="incipit">(105v) Decimas uel in canonicas sanctiones ecclesiis ad quas pertinent precipimus cum integritate persolui</note>
+  </relatedItem>
+  <relatedItem type="host">
+    <titleInfo>
+      <title>Parker Manuscripts</title>
+    </titleInfo>
+    <location>
+      <url>https://purl.stanford.edu/dx969tv9730</url>
+    </location>
+    <typeOfResource collection="yes"/>
+  </relatedItem>
+  <accessCondition type="useAndReproduction">Images courtesy of The Parker Library, Corpus Christi College, Cambridge. Licensed under a Creative Commons Attribution-NonCommercial 4.0 International License. For higher resolution images suitable for scholarly or commercial publication, either in print or in an electronic format, please contact the Parker Library directly at parker-library@corpus.cam.ac.uk</accessCondition>
+  <accessCondition type="license">CC by-nc: Attribution Non-Commercial 3.0 Unported</accessCondition>
+</mods>
