@@ -1,3 +1,5 @@
+inherit_from: .rubocop_todo.yml
+
 require: rubocop-rspec
 
 AllCops:
@@ -6,3 +8,37 @@ AllCops:
     - 'spec/fixtures/**/*'
   TargetRubyVersion: 3.0
   NewCops: enable
+
+# Allow long test blocks with multiple expectations
+RSpec/MultipleExpectations:
+  Severity: warning
+
+RSpec/ExampleLength:
+  Severity: warning
+
+# Warn only for long lines
+Layout/LineLength:
+  Max: 120
+  Severity: warning
+
+# Warn only for complexity-related metrics
+Metrics/MethodLength:
+  Severity: warning
+
+Metrics/ClassLength:
+  Severity: warning
+
+Metrics/BlockLength:
+  Severity: warning
+
+Metrics/ModuleLength:
+  Severity: warning
+
+Metrics/PerceivedComplexity:
+  Severity: warning
+
+Metrics/CyclomaticComplexity:
+  Severity: warning
+
+Metrics/AbcSize:
+  Severity: warning
