@@ -92,7 +92,7 @@ module Mods
           with_attributes(n, Mods::LANG_ATTRIBS | %w[displayLabel])
           # child elements
           n.physicalLocation :path => 'm:physicalLocation' do |e|
-            with_attributes(e, Mods::AUTHORITY_ATTRIBS | %w[displayLabel])
+            with_attributes(e, Mods::AUTHORITY_ATTRIBS | %w[displayLabel type])
           end
           n.shelfLocator :path => 'm:shelfLocator'
           n.url :path => 'm:url' do |e|
