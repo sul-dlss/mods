@@ -1,0 +1,8 @@
+require: rubocop-rspec
+
+AllCops:
+  Exclude:
+    - 'mods.gemspec'
+    - 'spec/fixtures/**/*'
+  TargetRubyVersion: 3.0
+  NewCops: enable
