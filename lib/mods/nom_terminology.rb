@@ -148,7 +148,7 @@ module Mods
             r.roleTerm :path => 'm:roleTerm' do |rt|
               with_attributes(rt, Mods::AUTHORITY_ATTRIBS | %w[type])
 
-              rt.value path: '.', accessor: (lambda do |roleTerm|
+              rt.value path: '.', single: true, accessor: (lambda do |roleTerm|
                 text = roleTerm.text.strip
 
                 if roleTerm.type_at == 'code' && roleTerm.authority == 'marcrelator'

@@ -80,12 +80,14 @@ RSpec.describe "Mods <name> Element" do
           have_attributes(text: 'Huston', type_at: 'family'),
         ]),
         role: have_attributes(
-          roleTerm: have_attributes(
-            text: 'drt',
-            type_at: ['code'],
-            authority: ['marcrelator'],
-            value: ['Director']
-          ),
+          roleTerm: match_array([
+            have_attributes(
+              text: 'drt',
+              type_at: 'code',
+              authority: 'marcrelator',
+              value: 'Director'
+            )
+          ]),
           authority: ['marcrelator'],
           code: ['drt'],
           value: ['Director']
