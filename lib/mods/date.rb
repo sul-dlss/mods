@@ -23,7 +23,7 @@ module Mods
       # when 'temper'
       #   Mods::Date::TemperFormat.new(xml)
       else
-        date_class = Mods::Date if xml.text =~ /\p{Hebrew}/
+        date_class = UnparseableDate if xml.text =~ /\p{Hebrew}/ || xml.text =~ /^-/
         date_class ||= [
           MMDDYYYYFormat,
           MMDDYYFormat,
@@ -97,6 +97,12 @@ module Mods
     class ExtractorDateFormat < Date
       def self.supports?(text)
         text.match self::REGEX
+      end
+    end
+
+    class UnparseableDate < ExtractorDateFormat
+      def self.parse_date(text)
+        nil
       end
     end
 
