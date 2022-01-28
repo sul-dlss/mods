@@ -258,7 +258,7 @@ module Mods
           n.publisher :path => 'm:publisher'
           Mods::OriginInfo::DATE_ELEMENTS.each { |date_el|
             n.send date_el, :path => "m:#{date_el}" do |d|
-              d.as_object :path => '.', :accessor => lambda { |a| Mods::Date.from_element(a) }
+              d.as_object :path => '.', :single => true, :accessor => lambda { |a| Mods::Date.from_element(a) }
 
               with_attributes(d, Mods::DATE_ATTRIBS)
 
