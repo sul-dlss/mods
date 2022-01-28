@@ -62,6 +62,8 @@ module Mods
       attr_reader :date
 
       def self.normalize_to_edtf(text)
+        return '0000' if text.strip == '0'
+
         text
       end
     end
