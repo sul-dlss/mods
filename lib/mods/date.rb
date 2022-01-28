@@ -29,6 +29,7 @@ module Mods
           MMDDYYFormat,
           YearRangeFormat,
           DecadeAsYearDashFormat,
+          DecadeStringFormat,
           EmbeddedBCYearFormat,
           EmbeddedYearFormat,
           EmbeddedThreeDigitYearFormat,
@@ -210,6 +211,16 @@ module Mods
     # Full-text extractor for data formatted as YYY-
     class DecadeAsYearDashFormat < ExtractorDateFormat
       REGEX = /(?<!\d)(?<year>\d{3})[-_x?](?!\d)/
+
+      def self.normalize_to_edtf(text)
+        matches = text.match(REGEX)
+        "#{matches[:year]}X"
+      end
+    end
+
+    # Full-text extractor for data formatted as YYY0s
+    class DecadeStringFormat < ExtractorDateFormat
+      REGEX = /(?<!\d)(?<year>\d{3})0s(?!\d)/
 
       def self.normalize_to_edtf(text)
         matches = text.match(REGEX)
