@@ -303,7 +303,8 @@ RSpec.describe Mods::Date do
     {
       'Minguo 19 [1930]' => Date.parse('1930-01-01')..Date.parse('1930-12-31'),
       '1745 mag. 14' => Date.parse('1745-01-01')..Date.parse('1745-12-31'),
-      '-745' => Date.parse('-745-01-01')..Date.parse('-745-12-31'),
+      '-745' => '', # too ambiguious to even attempt.
+      '-1999' => '', # too ambiguious to even attempt.
       '[1923]' => Date.parse('1923-01-01')..Date.parse('1923-12-31'),
       '1532.' => Date.parse('1532-01-01')..Date.parse('1532-12-31'),
       '[ca 1834]' => Date.parse('1834-01-01')..Date.parse('1834-12-31'),

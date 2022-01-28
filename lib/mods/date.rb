@@ -221,42 +221,42 @@ module Mods
 
     # Full-text extractor that tries hard to pick any year present in the data
     class EmbeddedYearFormat < ExtractorDateFormat
-      REGEX = /(?<prefix>-)?(?<!\d)(?<year>\d{4})(?!\d)/
+      REGEX = /(?<!\d)(?<year>\d{4})(?!\d)/
 
       def self.normalize_to_edtf(text)
         matches = text.match(REGEX)
-        "#{matches[:prefix]}#{matches[:year].rjust(4, "0")}"
+        "#{matches[:year].rjust(4, "0")}"
       end
     end
 
     # Full-text extractor that tries hard to pick any year present in the data
     class EmbeddedThreeDigitYearFormat < ExtractorDateFormat
-      REGEX = /(?<prefix>-)?(?<!\d)(?<year>\d{3})(?!\d)(?!\d)/
+      REGEX = /(?<!\d)(?<year>\d{3})(?!\d)(?!\d)/
 
       def self.normalize_to_edtf(text)
         matches = text.match(REGEX)
-        "#{matches[:prefix]}#{matches[:year].rjust(4, "0")}"
+        "#{matches[:year].rjust(4, "0")}"
       end
     end
 
     # Full-text extractor that tries hard to pick any year present in the data
     class OneOrTwoDigitYearFormat < ExtractorDateFormat
-      REGEX = /^(?<prefix>-)?(?<year>\d{1,2})$/
+      REGEX = /^(?<year>\d{1,2})$/
 
       def self.normalize_to_edtf(text)
         matches = text.match(REGEX)
-        "#{matches[:prefix]}#{matches[:year].rjust(4, "0")}"
+        "#{matches[:year].rjust(4, "0")}"
       end
     end
 
     # Full-text extractor that tries hard to pick any year present in the data
     class EmbeddedYearWithBracketsFormat < ExtractorDateFormat
       # [YYY]Y Y[YYY] [YY]YY Y[YY]Y YY[YY] YYY[Y] YY[Y]Y Y[Y]YY [Y]YYY
-      REGEX = /(?<prefix>-)?(?<year>[\d\[\]]{6})(?!\d)/
+      REGEX = /(?<year>[\d\[\]]{6})(?!\d)/
 
       def self.normalize_to_edtf(text)
         matches = text.match(REGEX)
-        "#{matches[:prefix]}#{matches[:year].gsub('[', '').gsub(']', '')}"
+        "#{matches[:year].gsub('[', '').gsub(']', '')}"
       end
     end
 
