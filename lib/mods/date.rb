@@ -49,7 +49,7 @@ module Mods
     # Strict ISO8601-encoded date parser
     class Iso8601Format < Date
       def self.parse_date(text)
-        @date = ::Date.parse(normalize_to_edtf(text))
+        ::Date.parse(normalize_to_edtf(text))
       end
     end
 
