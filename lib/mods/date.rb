@@ -11,7 +11,7 @@ module Mods
     # @param [Nokogiri::XML::Element] xml A date-flavored MODS field from the XML
     # @return [Mods::Date]
     def self.from_element(xml)
-      case xml.attr(:encoding)
+      case xml.attr(:encoding)&.downcase
       when 'w3cdtf'
         Mods::Date::W3cdtfFormat.new(xml)
       when 'iso8601'
@@ -333,7 +333,7 @@ module Mods
     #
     # @return [String]
     def type
-      xml.attr(:type)
+      xml.attr(:type)&.downcase
     end
 
     ##
@@ -341,7 +341,7 @@ module Mods
     #
     # @return [String]
     def encoding
-      xml.attr(:encoding)
+      xml.attr(:encoding)&.downcase
     end
 
     ##
@@ -365,7 +365,7 @@ module Mods
     #
     # @return [String]
     def point
-      xml.attr(:point)
+      xml.attr(:point)&.downcase
     end
 
     ##
@@ -397,7 +397,7 @@ module Mods
     #
     # @return [String]
     def qualifier
-      xml.attr(:qualifier)
+      xml.attr(:qualifier)&.downcase
     end
 
     ##
