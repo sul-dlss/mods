@@ -427,6 +427,8 @@ module Mods
     end
 
     def precision
+      return :unknown unless date_range || date
+
       if date_range.is_a? EDTF::Century
         :century
       elsif date_range.is_a? EDTF::Decade
