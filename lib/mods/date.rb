@@ -217,7 +217,7 @@ module Mods
 
     # Full-text extractor for data formatted as YYY-
     class DecadeAsYearDashFormat < ExtractorDateFormat
-      REGEX = /(?<!\d)(?<year>\d{3})[-_x?](?!\d)/
+      REGEX = /(?<!\d)(?<year>\d{3})[-_xu?](?!\d)/
 
       def self.normalize_to_edtf(text)
         matches = text.match(REGEX)
