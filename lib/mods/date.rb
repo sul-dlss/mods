@@ -353,6 +353,8 @@ module Mods
     #
     # @return [String]
     def type
+      return if xml.attr(:type)&.empty?
+
       xml.attr(:type)&.downcase
     end
 
@@ -361,6 +363,8 @@ module Mods
     #
     # @return [String]
     def encoding
+      return if xml.attr(:encoding)&.empty?
+
       xml.attr(:encoding)&.downcase
     end
 
@@ -385,6 +389,8 @@ module Mods
     #
     # @return [String]
     def point
+      return if xml.attr(:point)&.empty?
+
       xml.attr(:point)&.downcase
     end
 
