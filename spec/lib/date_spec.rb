@@ -209,6 +209,9 @@ RSpec.describe Mods::Date do
       '1900-uu-uu' => Date.parse('1900-01-01')..Date.parse('1900-12-31'),
       '1900-uu-15' => Date.parse('1900-01-15')..Date.parse('1900-12-15'),
       '1900-06-uu' => Date.parse('1900-06-01')..Date.parse('1900-06-30'),
+      '-250' => Date.parse('-250-01-01')..Date.parse('-250-12-31'), # EDTF requires a 4 digit year, but what can you do.
+      '63' => Date.parse('0063-01-01')..Date.parse('0063-12-31'),
+      '125' => Date.parse('125-01-01')..Date.parse('125-12-31'),
     }.each do |data, expected|
       describe "with #{data}" do
         let(:date_element) { "<dateCreated encoding=\"edtf\">#{data}</dateCreated>" }

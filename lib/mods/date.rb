@@ -65,7 +65,14 @@ module Mods
       def self.normalize_to_edtf(text)
         return '0000' if text.strip == '0'
 
-        text
+        case text
+        when /^\d{1,3}$/
+          text.rjust(4, "0") if text =~ /^\d{1,3}$/
+        when /^-\d{1,3}$/
+          "-#{text.sub(/^-/, '').rjust(4, "0")}"
+        else
+          text
+        end
       end
     end
 
