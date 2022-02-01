@@ -56,6 +56,9 @@ module Mods
 
     # Less strict W3CDTF-encoded date parser
     class W3cdtfFormat < Date
+      def self.normalize_to_edtf(text)
+        super.gsub('-00', '')
+      end
     end
 
     # Strict EDTF parser

@@ -229,6 +229,7 @@ RSpec.describe Mods::Date do
     {
       '1753' => Date.parse('1753-01-01')..Date.parse('1753-12-31'),
       '-1753' => Date.parse('-1753-01-01')..Date.parse('-1753-12-31'),
+      '1992-00-00' => Date.parse('1992-01-01')..Date.parse('1992-12-31'),
       '1992-05-06' => Date.parse('1992-05-06')..Date.parse('1992-05-06'),
       '1992-04' => Date.parse('1992-04-01')..Date.parse('1992-04-30'),
       '2004-02' => Date.parse('2004-02-01')..Date.parse('2004-02-29'),
