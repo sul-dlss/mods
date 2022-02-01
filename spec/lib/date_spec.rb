@@ -209,6 +209,9 @@ RSpec.describe Mods::Date do
       '1900-uu-uu' => Date.parse('1900-01-01')..Date.parse('1900-12-31'),
       '1900-uu-15' => Date.parse('1900-01-15')..Date.parse('1900-12-15'),
       '1900-06-uu' => Date.parse('1900-06-01')..Date.parse('1900-06-30'),
+      '-250' => Date.parse('-250-01-01')..Date.parse('-250-12-31'), # EDTF requires a 4 digit year, but what can you do.
+      '63' => Date.parse('0063-01-01')..Date.parse('0063-12-31'),
+      '125' => Date.parse('125-01-01')..Date.parse('125-12-31'),
     }.each do |data, expected|
       describe "with #{data}" do
         let(:date_element) { "<dateCreated encoding=\"edtf\">#{data}</dateCreated>" }
@@ -303,7 +306,8 @@ RSpec.describe Mods::Date do
     {
       'Minguo 19 [1930]' => Date.parse('1930-01-01')..Date.parse('1930-12-31'),
       '1745 mag. 14' => Date.parse('1745-01-01')..Date.parse('1745-12-31'),
-      '-745' => Date.parse('-745-01-01')..Date.parse('-745-12-31'),
+      '-745' => '', # too ambiguious to even attempt.
+      '-1999' => '', # too ambiguious to even attempt.
       '[1923]' => Date.parse('1923-01-01')..Date.parse('1923-12-31'),
       '1532.' => Date.parse('1532-01-01')..Date.parse('1532-12-31'),
       '[ca 1834]' => Date.parse('1834-01-01')..Date.parse('1834-12-31'),
@@ -319,8 +323,11 @@ RSpec.describe Mods::Date do
       '193-' => Date.parse('1930-01-01')..Date.parse('1939-12-31'),
       '196_' => Date.parse('1960-01-01')..Date.parse('1969-12-31'),
       '196x' => Date.parse('1960-01-01')..Date.parse('1969-12-31'),
+      '196u' => Date.parse('1960-01-01')..Date.parse('1969-12-31'),
+      '1960s' => Date.parse('1960-01-01')..Date.parse('1969-12-31'),
       '186?' => Date.parse('1860-01-01')..Date.parse('1869-12-31'),
       '1700?' => Date.parse('1700-01-01')..Date.parse('1700-12-31'),
+      'early 1730s' => Date.parse('1730-01-01')..Date.parse('1739-12-31'),
       '[1670-1684]' => Date.parse('1670-01-01')..Date.parse('1684-12-31'),
       '[18]74' => Date.parse('1874-01-01')..Date.parse('1874-12-31'),
       '250 B.C.' => Date.parse('-0249-01-01')..Date.parse('-249-12-31'),

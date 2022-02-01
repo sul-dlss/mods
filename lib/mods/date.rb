@@ -11,7 +11,7 @@ module Mods
     # @param [Nokogiri::XML::Element] xml A date-flavored MODS field from the XML
     # @return [Mods::Date]
     def self.from_element(xml)
-      case xml.attr(:encoding)
+      case xml.attr(:encoding)&.downcase
       when 'w3cdtf'
         Mods::Date::W3cdtfFormat.new(xml)
       when 'iso8601'
@@ -23,12 +23,13 @@ module Mods
       # when 'temper'
       #   Mods::Date::TemperFormat.new(xml)
       else
-        date_class = Mods::Date if xml.text =~ /\p{Hebrew}/
+        date_class = UnparseableDate if xml.text =~ /\p{Hebrew}/ || xml.text =~ /^-/
         date_class ||= [
           MMDDYYYYFormat,
           MMDDYYFormat,
           YearRangeFormat,
           DecadeAsYearDashFormat,
+          DecadeStringFormat,
           EmbeddedBCYearFormat,
           EmbeddedYearFormat,
           EmbeddedThreeDigitYearFormat,
@@ -49,7 +50,7 @@ module Mods
     # Strict ISO8601-encoded date parser
     class Iso8601Format < Date
       def self.parse_date(text)
-        @date = ::Date.parse(normalize_to_edtf(text))
+        ::Date.parse(normalize_to_edtf(text))
       end
     end
 
@@ -62,7 +63,16 @@ module Mods
       attr_reader :date
 
       def self.normalize_to_edtf(text)
-        text
+        return '0000' if text.strip == '0'
+
+        case text
+        when /^\d{1,3}$/
+          text.rjust(4, "0") if text =~ /^\d{1,3}$/
+        when /^-\d{1,3}$/
+          "-#{text.sub(/^-/, '').rjust(4, "0")}"
+        else
+          text
+        end
       end
     end
 
@@ -97,6 +107,12 @@ module Mods
     class ExtractorDateFormat < Date
       def self.supports?(text)
         text.match self::REGEX
+      end
+    end
+
+    class UnparseableDate < ExtractorDateFormat
+      def self.parse_date(text)
+        nil
       end
     end
 
@@ -201,7 +217,17 @@ module Mods
 
     # Full-text extractor for data formatted as YYY-
     class DecadeAsYearDashFormat < ExtractorDateFormat
-      REGEX = /(?<!\d)(?<year>\d{3})[-_x?](?!\d)/
+      REGEX = /(?<!\d)(?<year>\d{3})[-_xu?](?!\d)/
+
+      def self.normalize_to_edtf(text)
+        matches = text.match(REGEX)
+        "#{matches[:year]}X"
+      end
+    end
+
+    # Full-text extractor for data formatted as YYY0s
+    class DecadeStringFormat < ExtractorDateFormat
+      REGEX = /(?<!\d)(?<year>\d{3})0s(?!\d)/
 
       def self.normalize_to_edtf(text)
         matches = text.match(REGEX)
@@ -221,42 +247,42 @@ module Mods
 
     # Full-text extractor that tries hard to pick any year present in the data
     class EmbeddedYearFormat < ExtractorDateFormat
-      REGEX = /(?<prefix>-)?(?<!\d)(?<year>\d{4})(?!\d)/
+      REGEX = /(?<!\d)(?<year>\d{4})(?!\d)/
 
       def self.normalize_to_edtf(text)
         matches = text.match(REGEX)
-        "#{matches[:prefix]}#{matches[:year].rjust(4, "0")}"
+        "#{matches[:year].rjust(4, "0")}"
       end
     end
 
     # Full-text extractor that tries hard to pick any year present in the data
     class EmbeddedThreeDigitYearFormat < ExtractorDateFormat
-      REGEX = /(?<prefix>-)?(?<!\d)(?<year>\d{3})(?!\d)(?!\d)/
+      REGEX = /(?<!\d)(?<year>\d{3})(?!\d)(?!\d)/
 
       def self.normalize_to_edtf(text)
         matches = text.match(REGEX)
-        "#{matches[:prefix]}#{matches[:year].rjust(4, "0")}"
+        "#{matches[:year].rjust(4, "0")}"
       end
     end
 
     # Full-text extractor that tries hard to pick any year present in the data
     class OneOrTwoDigitYearFormat < ExtractorDateFormat
-      REGEX = /^(?<prefix>-)?(?<year>\d{1,2})$/
+      REGEX = /^(?<year>\d{1,2})$/
 
       def self.normalize_to_edtf(text)
         matches = text.match(REGEX)
-        "#{matches[:prefix]}#{matches[:year].rjust(4, "0")}"
+        "#{matches[:year].rjust(4, "0")}"
       end
     end
 
     # Full-text extractor that tries hard to pick any year present in the data
     class EmbeddedYearWithBracketsFormat < ExtractorDateFormat
       # [YYY]Y Y[YYY] [YY]YY Y[YY]Y YY[YY] YYY[Y] YY[Y]Y Y[Y]YY [Y]YYY
-      REGEX = /(?<prefix>-)?(?<year>[\d\[\]]{6})(?!\d)/
+      REGEX = /(?<year>[\d\[\]]{6})(?!\d)/
 
       def self.normalize_to_edtf(text)
         matches = text.match(REGEX)
-        "#{matches[:prefix]}#{matches[:year].gsub('[', '').gsub(']', '')}"
+        "#{matches[:year].gsub('[', '').gsub(']', '')}"
       end
     end
 
@@ -327,7 +353,9 @@ module Mods
     #
     # @return [String]
     def type
-      xml.attr(:type)
+      return if xml.attr(:type)&.empty?
+
+      xml.attr(:type)&.downcase
     end
 
     ##
@@ -335,7 +363,9 @@ module Mods
     #
     # @return [String]
     def encoding
-      xml.attr(:encoding)
+      return if xml.attr(:encoding)&.empty?
+
+      xml.attr(:encoding)&.downcase
     end
 
     ##
@@ -359,7 +389,9 @@ module Mods
     #
     # @return [String]
     def point
-      xml.attr(:point)
+      return if xml.attr(:point)&.empty?
+
+      xml.attr(:point)&.downcase
     end
 
     ##
@@ -391,7 +423,7 @@ module Mods
     #
     # @return [String]
     def qualifier
-      xml.attr(:qualifier)
+      xml.attr(:qualifier)&.downcase
     end
 
     ##
@@ -419,6 +451,8 @@ module Mods
     end
 
     def precision
+      return :unknown unless date_range || date
+
       if date_range.is_a? EDTF::Century
         :century
       elsif date_range.is_a? EDTF::Decade
