@@ -460,6 +460,8 @@ module Mods
         :century
       elsif date_range.is_a? EDTF::Decade
         :decade
+      elsif date.is_a? EDTF::Interval
+        date_range.precision
       else
         case date.precision
         when :month

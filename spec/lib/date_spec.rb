@@ -101,6 +101,7 @@ RSpec.describe Mods::Date do
       '1900-06' => :month,
       '1900-06-uu' => :month,
       '1900-06-15' => :day,
+      '2014-01-01/2020-12-31' => :day
     }.each do |data, expected|
       describe "with #{data}" do
         let(:date_element) { "<dateCreated encoding=\"edtf\">#{data}</dateCreated>" }
