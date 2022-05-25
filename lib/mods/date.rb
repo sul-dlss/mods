@@ -460,6 +460,8 @@ module Mods
         :century
       elsif date_range.is_a? EDTF::Decade
         :decade
+      elsif date.is_a? EDTF::Season
+        :month
       elsif date.is_a? EDTF::Interval
         date_range.precision
       else
@@ -497,7 +499,7 @@ module Mods
       case date_range
       when EDTF::Unknown
         nil
-      when EDTF::Epoch, EDTF::Interval
+      when EDTF::Epoch, EDTF::Interval, EDTF::Season
         date_range.min
       when EDTF::Set
         date_range.to_a.first
@@ -522,7 +524,7 @@ module Mods
       case date_range
       when EDTF::Unknown
         nil
-      when EDTF::Epoch, EDTF::Interval
+      when EDTF::Epoch, EDTF::Interval, EDTF::Season
         date_range.max
       when EDTF::Set
         date_range.to_a.last.change(month: 12, day: 31)
