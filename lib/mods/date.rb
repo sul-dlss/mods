@@ -183,7 +183,7 @@ module Mods
 
       def self.munge_to_yyyy(text)
         value = roman_to_int(text.upcase)
-        (value - 1).to_s.rjust(2, "0") + 'XX'
+        (value - 1).to_s.rjust(2, "0") + 'xx'
       end
     end
 
@@ -194,7 +194,7 @@ module Mods
       REGEX = /(?<century>\d{2})--/
       def self.normalize_to_edtf(text)
         matches = text.match(REGEX)
-        "#{matches[:century]}XX"
+        "#{matches[:century]}xx"
       end
     end
 
@@ -204,7 +204,7 @@ module Mods
 
       def self.normalize_to_edtf(text)
         matches = text.match(REGEX)
-        "#{matches[:century].to_i - 1}XX"
+        "#{matches[:century].to_i - 1}xx"
       end
     end
 
@@ -224,7 +224,7 @@ module Mods
 
       def self.normalize_to_edtf(text)
         matches = text.match(REGEX)
-        "#{matches[:year]}X"
+        "#{matches[:year]}x"
       end
     end
 
@@ -234,7 +234,7 @@ module Mods
 
       def self.normalize_to_edtf(text)
         matches = text.match(REGEX)
-        "#{matches[:year]}X"
+        "#{matches[:year]}x"
       end
     end
 
@@ -540,7 +540,7 @@ module Mods
 
     def date_range
       @date_range ||= if text =~ /u/
-        ::Date.edtf(text.gsub('u', 'X')) || date
+        ::Date.edtf(text.gsub('u', 'x').gsub('X', 'x')) || date
       else
         date
       end
