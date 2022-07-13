@@ -202,9 +202,9 @@ RSpec.describe Mods::Date do
     {
       '1905' => Date.parse('1905-01-01')..Date.parse('1905-12-31'),
       '190u' => Date.parse('1900-01-01')..Date.parse('1909-12-31'),
-      '190X' => Date.parse('1900-01-01')..Date.parse('1909-12-31'),
+      '190x' => Date.parse('1900-01-01')..Date.parse('1909-12-31'),
       '19uu' => Date.parse('1900-01-01')..Date.parse('1999-12-31'),
-      '19XX' => Date.parse('1900-01-01')..Date.parse('1999-12-31'),
+      '19xx' => Date.parse('1900-01-01')..Date.parse('1999-12-31'),
       '1856/1876' => Date.parse('1856-01-01')..Date.parse('1876-12-31'),
       '[1667,1668,1670..1672]' => Date.parse('1667-01-01')..Date.parse('1672-12-31'),
       '1900-uu' => Date.parse('1900-01-01')..Date.parse('1900-12-31'),
