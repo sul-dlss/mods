@@ -197,6 +197,7 @@ RSpec.describe "Mods <name> Element" do
         <name>
           <namePart>Exciting Prints</namePart>
           <affiliation>whatever</affiliation>
+          <nameIdentifier typeURI="https://orcid.org" type="orcid">0000-0002-0666-0666</nameIdentifier>
           <description>anything</description>
           <role><roleTerm type='text'>some role</roleTerm></role>
         </name>
@@ -280,6 +281,26 @@ RSpec.describe "Mods <name> Element" do
     end
   end
 
+  context 'with a nameIdentifier' do
+    subject(:record) do
+      mods_record(<<-XML)
+        <name>
+          <name type="personal">Whoopie Goldberg</name>
+          <nameIdentifier typeURI="https://orcid.org" type="orcid">0000-0002-0666-0666</nameIdentifier>
+          <role><roleTerm type='text'>some role</roleTerm></role>
+        </name>
+      XML
+    end
+
+    it 'has the expected attributes for nameIdentifier' do
+      expect(record.plain_name.nameIdentifier.first).to have_attributes(
+        text: '0000-0002-0666-0666',
+        typeURI: 'https://orcid.org',
+        type_at: 'orcid'
+      )
+    end
+  end
+
   context 'without a family name and given name' do
     subject(:record) do
       mods_record("<name type='personal'>
@@ -349,6 +370,7 @@ RSpec.describe "Mods <name> Element" do
         </name>
         <name>
             <namePart>Daniel Craig</namePart>
+            <nameIdentifier typeURI="https://orcid.org" type="orcid">0000-0002-0666-0666</nameIdentifier>
             <role>
               <roleTerm type='text' authority='marcrelator'>Actor</roleTerm>
               <roleTerm type='code' authority='marcrelator'>cre</roleTerm>
@@ -363,6 +385,12 @@ RSpec.describe "Mods <name> Element" do
         have_attributes(role: have_attributes(value: ['CreatorFake', 'Actor'], code: ['cre'], authority: ['marcrelator', 'marcrelator'], size: 2)),
         have_attributes(role: have_attributes(value: ['Actor'], code: ['cre'], authority: ['marcrelator'], size: 1)),
       ])
+      expect(record.plain_name.last.nameIdentifier.first).to have_attributes(
+        text: '0000-0002-0666-0666',
+        typeURI: 'https://orcid.org',
+        type_at: 'orcid'
+      )
+      expect(record.plain_name.first.nameIdentifier).to be_empty
     end
   end
 end

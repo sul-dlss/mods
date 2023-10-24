@@ -143,6 +143,9 @@ module Mods
           end
           n.displayForm :path => 'm:displayForm'
           n.affiliation :path => 'm:affiliation'
+          n.nameIdentifier :path => 'm:nameIdentifier' do |ni|
+            with_attributes(ni, Mods::LANG_ATTRIBS | %w[displayLabel type typeURI invalid])
+          end
           n.description_el :path => 'm:description' # description is used by Nokogiri
           n.role :path => 'm:role' do |r|
             r.roleTerm :path => 'm:roleTerm' do |rt|
