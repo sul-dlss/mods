@@ -105,7 +105,7 @@ RSpec.describe 'Mods <language> Element' do
     end
   end
 
-  context 'wih a record with some authority attributes' do
+  context 'with a record with some authority attributes' do
     subject(:record) do
       mods_record(<<-XML)
         <language><languageTerm authorityURI='http://example.com' valueURI='http://example.com/zzz'>zzz</languageTerm></language>
@@ -117,6 +117,23 @@ RSpec.describe 'Mods <language> Element' do
         it 'recognizes other authority attributes' do
           expect(record.language.languageTerm).to have_attributes(authorityURI: ['http://example.com'], valueURI: ['http://example.com/zzz'])
         end
+      end
+    end
+  end
+
+  context 'when language code without authority' do
+    subject(:record) do
+      mods_record(<<-XML)
+        <language>
+          <languageTerm type="code">eng</languageTerm>
+          <languageTerm type="text">English</languageTerm>
+        </language>
+      XML
+    end
+
+    describe '#languages' do
+      it 'contains code and text value' do
+        expect(record.languages).to eq ['eng', 'English']
       end
     end
   end

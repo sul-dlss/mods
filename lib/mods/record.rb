@@ -168,13 +168,13 @@ module Mods
       @mods_ng_xml.language.each { |n|
         # get languageTerm codes and add their translations to the result
         n.code_term.each { |ct|
-          if ct.authority.match(/^iso639/)
+          if !ct.authority.empty? && ct.authority.match(/^iso639/)
             begin
               vals = ct.text.split(/[,|\ ]/).reject {|x| x.strip.length == 0 }
               vals.each do |v|
                 result << ISO_639.find(v.strip).english_name
               end
-            rescue => e
+            rescue StandardError
               p "Couldn't find english name for #{ct.text}"
               result << ct.text
             end
