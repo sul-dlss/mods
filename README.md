@@ -26,14 +26,34 @@ Or install it yourself as:
 
 ## Usage
 
-Create a new Mods::Record from a url:
+### Create a new `Mods::Record`
+
+#### from a url:
 ```ruby
-foo = Mods::Record.new.from_url('http://purl.stanford.edu/bb340tm8592.mods')
+record = Mods::Record.new.from_url('http://purl.stanford.edu/bb340tm8592.mods')
 ```
 
-Create a new Mods::Record from a file:
+#### from a file:
 ```ruby
-foo = Mods::Record.new.from_file('/path/to/mods/file.xml')
+record = Mods::Record.new.from_file('/path/to/mods/file.xml')
+```
+
+#### from a String:
+```ruby
+record = Mods::Record.new.from_str(<<-XML
+ <mods xmlns='#{Mods::MODS_NS}'>
+     <name><namePart>Fats Waller</namePart>
+        <role>
+            <roleTerm type='text' authority='marcrelator'>CreatorFake</roleTerm>
+            <roleTerm type='code' authority='marcrelator'>cre</roleTerm>
+        </role>
+        <role>
+            <roleTerm type='text'>Performer</roleTerm>
+        </role>
+    </name>
+  </mods>
+XML
+)
 ```
 
 ## Contributing
